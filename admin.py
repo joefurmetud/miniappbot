@@ -868,7 +868,17 @@ async def handle_confirm_add_drop(update: Update, context: ContextTypes.DEFAULT_
                 if "path" in media_item and "type" in media_item and "file_id" in media_item:
                     temp_file_path = media_item["path"]
                     if await asyncio.to_thread(os.path.exists, temp_file_path):
-                        new_filename = os.path.basename(temp_file_path); final_persistent_path = os.path.join(final_media_dir, new_filename)
+                        new_filename = os.path.basename(temp_file_path)
+                        final_persistent_path = os.path.join(final_media_dir, new_filename)
+                        
+                        # Handle file path conflicts by adding a unique suffix
+                        counter = 1
+                        original_path = final_persistent_path
+                        while await asyncio.to_thread(os.path.exists, final_persistent_path):
+                            name, ext = os.path.splitext(original_path)
+                            final_persistent_path = f"{name}_{counter}{ext}"
+                            counter += 1
+                        
                         try:
                             await asyncio.to_thread(shutil.copy2, temp_file_path, final_persistent_path)
                             media_inserts.append((product_id, media_item["type"], final_persistent_path, media_item["file_id"]))
@@ -879,11 +889,25 @@ async def handle_confirm_add_drop(update: Update, context: ContextTypes.DEFAULT_
                 else:
                     logger.warning(f"Incomplete media item: {media_item}")
                 
-                if media_inserts:
-                    c.executemany("INSERT INTO product_media (product_id, media_type, file_path, telegram_file_id) VALUES (?, ?, ?, ?)", media_inserts)
+            if media_inserts:
+                # Use INSERT OR IGNORE to handle any remaining duplicates gracefully
+                try:
+                    c.executemany("INSERT OR IGNORE INTO product_media (product_id, media_type, file_path, telegram_file_id) VALUES (?, ?, ?, ?)", media_inserts)
                     logger.info(f"Successfully inserted {len(media_inserts)} media records for bulk product {product_id}")
-                else:
-                    logger.warning(f"No media was inserted for product {product_id}. Media list: {media_list}, Temp dir: {temp_dir}")
+                except sqlite3.IntegrityError as e:
+                    logger.warning(f"Some media records already exist for product {product_id}: {e}")
+                    # Try inserting one by one to identify which ones are duplicates
+                    successful_inserts = 0
+                    for media_insert in media_inserts:
+                        try:
+                            c.execute("INSERT OR IGNORE INTO product_media (product_id, media_type, file_path, telegram_file_id) VALUES (?, ?, ?, ?)", media_insert)
+                            if c.rowcount > 0:
+                                successful_inserts += 1
+                        except sqlite3.IntegrityError:
+                            logger.warning(f"Duplicate media record skipped: {media_insert}")
+                    logger.info(f"Successfully inserted {successful_inserts} out of {len(media_inserts)} media records for product {product_id}")
+            else:
+                logger.warning(f"No media was inserted for product {product_id}. Media list: {media_list}, Temp dir: {temp_dir}")
 
         conn.commit(); logger.info(f"Added product {product_id} ({product_name}).")
         if temp_dir and await asyncio.to_thread(os.path.exists, temp_dir): await asyncio.to_thread(shutil.rmtree, temp_dir, ignore_errors=True); logger.info(f"Cleaned temp dir: {temp_dir}")
@@ -1452,6 +1476,15 @@ async def handle_adm_bulk_execute(update: Update, context: ContextTypes.DEFAULT_
                         if await asyncio.to_thread(os.path.exists, temp_file_path):
                             new_filename = os.path.basename(temp_file_path)
                             final_persistent_path = os.path.join(final_media_dir, new_filename)
+                            
+                            # Handle file path conflicts by adding a unique suffix
+                            counter = 1
+                            original_path = final_persistent_path
+                            while await asyncio.to_thread(os.path.exists, final_persistent_path):
+                                name, ext = os.path.splitext(original_path)
+                                final_persistent_path = f"{name}_{counter}{ext}"
+                                counter += 1
+                            
                             try:
                                 # Copy instead of move so we can reuse for other products
                                 await asyncio.to_thread(shutil.copy2, temp_file_path, final_persistent_path)
@@ -1464,7 +1497,7 @@ async def handle_adm_bulk_execute(update: Update, context: ContextTypes.DEFAULT_
                         logger.warning(f"Incomplete media item: {media_item}")
                 
                 if media_inserts:
-                    c.executemany("INSERT INTO product_media (product_id, media_type, file_path, telegram_file_id) VALUES (?, ?, ?, ?)", media_inserts)
+                    c.executemany("INSERT OR IGNORE INTO product_media (product_id, media_type, file_path, telegram_file_id) VALUES (?, ?, ?, ?)", media_inserts)
             
             conn.commit()
             created_count += 1
@@ -4349,6 +4382,15 @@ async def handle_adm_bulk_execute_messages(update: Update, context: ContextTypes
                         if await asyncio.to_thread(os.path.exists, temp_file_path):
                             new_filename = os.path.basename(temp_file_path)
                             final_persistent_path = os.path.join(final_media_dir, new_filename)
+                            
+                            # Handle file path conflicts by adding a unique suffix
+                            counter = 1
+                            original_path = final_persistent_path
+                            while await asyncio.to_thread(os.path.exists, final_persistent_path):
+                                name, ext = os.path.splitext(original_path)
+                                final_persistent_path = f"{name}_{counter}{ext}"
+                                counter += 1
+                            
                             try:
                                 await asyncio.to_thread(shutil.move, temp_file_path, final_persistent_path)
                                 media_inserts.append((product_id, media_item["type"], final_persistent_path, media_item["file_id"]))
@@ -4363,7 +4405,7 @@ async def handle_adm_bulk_execute_messages(update: Update, context: ContextTypes
                         raise Exception(f"Incomplete media data")
                 
                 if media_inserts:
-                    c.executemany("INSERT INTO product_media (product_id, media_type, file_path, telegram_file_id) VALUES (?, ?, ?, ?)", media_inserts)
+                    c.executemany("INSERT OR IGNORE INTO product_media (product_id, media_type, file_path, telegram_file_id) VALUES (?, ?, ?, ?)", media_inserts)
             
             conn.commit()
             created_count += 1
