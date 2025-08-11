@@ -32,6 +32,9 @@
             --glass-border: rgba(59, 130, 246, 0.2);
             --grid-color: rgba(59, 130, 246, 0.1);
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
         }
 
         body {
@@ -1091,6 +1094,85 @@
             animation-delay: 1.4s;
         }
 
+        /* ===== STYLE 5: SOVIET BRUTALISM CITY ===== */
+        .city-icon-3d-style5 {
+            width: 48px;
+            height: 48px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: brutalistFloat 7s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .city-building-style5 {
+            position: absolute;
+            background: linear-gradient(180deg, 
+                #8b8b8b 0%, 
+                #696969 30%, 
+                #4a4a4a 70%, 
+                #2d2d2d 100%);
+            border-radius: 0;
+            transform-origin: bottom center;
+            animation: brutalistPulse 5s ease-in-out infinite;
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+            border: 1px solid #555;
+        }
+
+        .city-building-style5:nth-child(1) {
+            width: 10px;
+            height: 36px;
+            left: 4px;
+            bottom: 0;
+            animation-delay: 0s;
+            background: linear-gradient(180deg, 
+                #a0a0a0 0%, 
+                #787878 30%, 
+                #5a5a5a 70%, 
+                #3a3a3a 100%);
+        }
+
+        .city-building-style5:nth-child(2) {
+            width: 14px;
+            height: 42px;
+            left: 16px;
+            bottom: 0;
+            animation-delay: 0.8s;
+            background: linear-gradient(180deg, 
+                #8b8b8b 0%, 
+                #696969 30%, 
+                #4a4a4a 70%, 
+                #2d2d2d 100%);
+        }
+
+        .city-building-style5:nth-child(3) {
+            width: 12px;
+            height: 38px;
+            left: 32px;
+            bottom: 0;
+            animation-delay: 1.6s;
+            background: linear-gradient(180deg, 
+                #787878 0%, 
+                #5a5a5a 30%, 
+                #3a3a3a 70%, 
+                #1a1a1a 100%);
+        }
+
+        .city-building-style5:nth-child(4) {
+            width: 8px;
+            height: 28px;
+            left: 46px;
+            bottom: 0;
+            animation-delay: 2.4s;
+            background: linear-gradient(180deg, 
+                #969696 0%, 
+                #787878 30%, 
+                #5a5a5a 70%, 
+                #3a3a3a 100%);
+        }
+
         /* Building windows for Style 1 */
         .city-building-style1::before {
             content: '';
@@ -1107,6 +1189,25 @@
                 0 8px 0 rgba(255, 255, 255, 0.4),
                 0 12px 0 rgba(255, 255, 255, 0.6);
             animation: windowGlow 3s ease-in-out infinite;
+        }
+
+        /* Brutalist windows for Style 5 */
+        .city-building-style5::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 0;
+            box-shadow: 
+                0 4px 0 rgba(255, 255, 255, 0.7),
+                0 8px 0 rgba(255, 255, 255, 0.5),
+                0 12px 0 rgba(255, 255, 255, 0.7),
+                0 16px 0 rgba(255, 255, 255, 0.5);
+            animation: brutalistWindowGlow 4s ease-in-out infinite;
         }
 
         /* Neon glow for Style 2 */
@@ -1161,6 +1262,11 @@
         .city-icon-3d-style4::after {
             background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
             animation: crystalGlow 5s ease-in-out infinite;
+        }
+
+        .city-icon-3d-style5::after {
+            background: radial-gradient(circle, rgba(139, 139, 139, 0.3) 0%, transparent 70%);
+            animation: brutalistGlow 6s ease-in-out infinite;
         }
 
         /* ===== ANIMATIONS FOR ALL STYLES ===== */
@@ -1291,6 +1397,41 @@
             }
         }
 
+        /* Style 5: Soviet Brutalism */
+        @keyframes brutalistFloat {
+            0%, 100% { 
+                transform: translateY(0) rotateY(0deg) scale(1);
+            }
+            25% { 
+                transform: translateY(-2px) rotateY(3deg) scale(1.01);
+            }
+            50% { 
+                transform: translateY(-1px) rotateY(0deg) scale(1.03);
+            }
+            75% { 
+                transform: translateY(-3px) rotateY(-3deg) scale(1.01);
+            }
+        }
+
+        @keyframes brutalistPulse {
+            0%, 100% { 
+                transform: scaleY(1) rotateZ(0deg);
+                opacity: 0.9;
+            }
+            25% { 
+                transform: scaleY(1.05) rotateZ(1deg);
+                opacity: 1;
+            }
+            50% { 
+                transform: scaleY(0.98) rotateZ(0deg);
+                opacity: 0.95;
+            }
+            75% { 
+                transform: scaleY(1.03) rotateZ(-1deg);
+                opacity: 1;
+            }
+        }
+
         /* Glow animations */
         @keyframes cityGlow {
             0%, 100% { 
@@ -1336,6 +1477,28 @@
             }
         }
 
+        @keyframes brutalistGlow {
+            0%, 100% { 
+                opacity: 0.4;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.8;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes brutalistWindowGlow {
+            0%, 100% { 
+                opacity: 0.7;
+                filter: brightness(1);
+            }
+            50% { 
+                opacity: 1;
+                filter: brightness(1.3);
+            }
+        }
+
         @keyframes windowGlow {
             0%, 100% { 
                 opacity: 0.6;
@@ -1351,7 +1514,8 @@
         .location-btn:hover .city-icon-3d-style1,
         .location-btn:hover .city-icon-3d-style2,
         .location-btn:hover .city-icon-3d-style3,
-        .location-btn:hover .city-icon-3d-style4 {
+        .location-btn:hover .city-icon-3d-style4,
+        .location-btn:hover .city-icon-3d-style5 {
             animation-duration: 2s;
             transform: translateY(-6px) rotateY(15deg) scale(1.1);
         }
@@ -1359,14 +1523,16 @@
         .location-btn:hover .city-building-style1,
         .location-btn:hover .city-building-style2,
         .location-btn:hover .city-building-style3,
-        .location-btn:hover .city-building-style4 {
+        .location-btn:hover .city-building-style4,
+        .location-btn:hover .city-building-style5 {
             animation-duration: 1s;
         }
 
                  .location-btn:hover .city-icon-3d-style1::after,
          .location-btn:hover .city-icon-3d-style2::after,
          .location-btn:hover .city-icon-3d-style3::after,
-         .location-btn:hover .city-icon-3d-style4::after {
+         .location-btn:hover .city-icon-3d-style4::after,
+         .location-btn:hover .city-icon-3d-style5::after {
              opacity: 0.8;
              transform: scale(1.3);
          }
@@ -1617,6 +1783,18 @@
                     cursor: pointer;
                     transition: all 0.2s ease;
                 " title="Fantasy Crystal">4</button>
+                <button onclick="updateCityIconStyle(5)" style="
+                    width: 32px;
+                    height: 32px;
+                    border: none;
+                    border-radius: 6px;
+                    background: linear-gradient(135deg, #8b8b8b 0%, #4a4a4a 100%);
+                    color: white;
+                    font-size: 12px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                " title="Soviet Brutalism">5</button>
             </div>
         </div>
 
