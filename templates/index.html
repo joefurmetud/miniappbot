@@ -14,30 +14,194 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--tg-theme-bg-color, #0f0f0f);
-            color: var(--tg-theme-text-color, #ffffff);
+            background: #0a0a0a;
+            color: #ffffff;
             overflow-x: hidden;
             line-height: 1.4;
             font-size: 16px;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            position: relative;
+        }
+
+        /* Premium Animated Background */
+        .premium-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #0a0a0a 0%, #1a0a2e 25%, #16213e 50%, #0f3460 75%, #533a7d 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        .premium-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            animation: floatingOrbs 20s ease-in-out infinite;
+        }
+
+        .premium-background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.02) 50%, transparent 60%),
+                linear-gradient(-45deg, transparent 40%, rgba(255, 255, 255, 0.02) 50%, transparent 60%);
+            background-size: 60px 60px;
+            animation: meshMove 25s linear infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes floatingOrbs {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1);
+                opacity: 0.7;
+            }
+            33% { 
+                transform: translate(30px, -30px) scale(1.1);
+                opacity: 0.9;
+            }
+            66% { 
+                transform: translate(-20px, 20px) scale(0.9);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes meshMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        /* Floating Particles */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #7877c6, #ff77c6);
+            border-radius: 50%;
+            animation: floatUp 15s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) translateX(0) scale(0);
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) translateX(10px) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(10vh) translateX(-10px) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(0) translateX(0) scale(0);
+            }
+        }
+
+        /* Floating Brand Elements */
+        .floating-brands {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .brand-logo {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.7;
+            animation: floatBrand 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(120, 119, 198, 0.5));
+        }
+
+        @keyframes floatBrand {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 0.7;
+            }
+            25% {
+                transform: translateY(-20px) rotate(5deg) scale(1.1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: translateY(-10px) rotate(-5deg) scale(0.95);
+                opacity: 0.8;
+            }
+            75% {
+                transform: translateY(-25px) rotate(3deg) scale(1.05);
+                opacity: 0.85;
+            }
+        }
+
+        /* Premium Ripple Effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            transform: scale(0);
+            animation: rippleEffect 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes rippleEffect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
         }
 
         .app {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(135deg, var(--tg-theme-bg-color, #0f0f0f) 0%, var(--tg-theme-secondary-bg-color, #1a1a1a) 100%);
+            position: relative;
+            backdrop-filter: blur(0.5px);
         }
 
         .header {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(15, 15, 15, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(30px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding: 20px 20px 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .header-content {
@@ -45,25 +209,75 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 16px;
+            position: relative;
         }
 
         .header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff77c6 0%, #7877c6 50%, #78dbff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-shadow: 0 0 30px rgba(120, 119, 198, 0.5);
+            animation: titleGlow 3s ease-in-out infinite alternate;
+            position: relative;
+        }
+
+        .header h1::before {
+            content: '✨';
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0% { filter: brightness(1) drop-shadow(0 0 10px rgba(120, 119, 198, 0.3)); }
+            100% { filter: brightness(1.2) drop-shadow(0 0 20px rgba(120, 119, 198, 0.6)); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: translateY(-50%) rotate(0deg) scale(1); }
+            50% { transform: translateY(-50%) rotate(180deg) scale(1.2); }
         }
 
         .balance {
-            background: linear-gradient(135deg, var(--tg-theme-button-color, #007aff) 0%, #0056cc 100%);
+            background: linear-gradient(135deg, #ff77c6 0%, #7877c6 50%, #78dbff 100%);
             color: #ffffff;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 
+                0 8px 32px rgba(120, 119, 198, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: balancePulse 4s ease-in-out infinite;
+        }
+
+        .balance::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: balanceShine 3s linear infinite;
+        }
+
+        @keyframes balancePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 32px rgba(120, 119, 198, 0.4); }
+            50% { transform: scale(1.02); box-shadow: 0 12px 40px rgba(120, 119, 198, 0.6); }
+        }
+
+        @keyframes balanceShine {
+            0% { transform: translate(-100%, -100%) rotate(45deg); }
+            100% { transform: translate(100%, 100%) rotate(45deg); }
         }
 
         .tabs {
@@ -213,19 +427,22 @@
         }
 
         .location-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--tg-theme-text-color, #ffffff);
-            padding: 20px 24px;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 600;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            padding: 24px 28px;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
             text-align: left;
             position: relative;
             overflow: hidden;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .location-btn::before {
@@ -235,25 +452,46 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, var(--tg-theme-button-color, #007aff) 0%, #0056cc 100%);
+            background: linear-gradient(135deg, 
+                rgba(120, 119, 198, 0.2) 0%, 
+                rgba(255, 119, 198, 0.15) 50%,
+                rgba(120, 219, 255, 0.2) 100%);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: all 0.4s ease;
             z-index: -1;
         }
 
-        .location-btn:hover::before,
-        .location-btn:active::before {
-            opacity: 0.1;
+        .location-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translate(-100%, -100%) rotate(45deg);
+            transition: transform 0.6s ease;
+        }
+
+        .location-btn:hover::before {
+            opacity: 1;
+        }
+
+        .location-btn:hover::after {
+            transform: translate(100%, 100%) rotate(45deg);
         }
 
         .location-btn:hover {
-            border-color: var(--tg-theme-button-color, #007aff);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 122, 255, 0.15);
+            border-color: rgba(120, 119, 198, 0.5);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .location-btn:active {
-            transform: translateY(0);
+            transform: translateY(-2px) scale(1.01);
         }
 
         .location-info {
@@ -291,14 +529,17 @@
         }
 
         .product-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s ease;
-            backdrop-filter: blur(20px);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(30px);
             position: relative;
             overflow: hidden;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .product-card::before {
@@ -308,20 +549,42 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            background: linear-gradient(135deg, 
+                rgba(120, 119, 198, 0.15) 0%, 
+                rgba(255, 119, 198, 0.1) 50%,
+                rgba(120, 219, 255, 0.15) 100%);
             opacity: 0;
-            transition: opacity 0.3s ease;
-            border-radius: 20px;
+            transition: all 0.5s ease;
+            border-radius: 24px;
+        }
+
+        .product-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: translate(-100%, -100%) rotate(45deg);
+            transition: transform 0.8s ease;
         }
 
         .product-card:hover::before {
             opacity: 1;
         }
 
+        .product-card:hover::after {
+            transform: translate(100%, 100%) rotate(45deg);
+        }
+
         .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgba(120, 119, 198, 0.5);
         }
 
         .product-header {
@@ -650,6 +913,22 @@
     </style>
 </head>
 <body>
+    <!-- Premium Animated Background -->
+    <div class="premium-background"></div>
+    
+    <!-- Floating Particles -->
+    <div class="floating-particles" id="particles"></div>
+    
+    <!-- Floating Brand Elements -->
+    <div class="floating-brands">
+        <div class="brand-logo" style="top: 10%; left: 5%; animation-delay: 0s;">💎</div>
+        <div class="brand-logo" style="top: 20%; right: 10%; animation-delay: 2s;">⭐</div>
+        <div class="brand-logo" style="top: 60%; left: 8%; animation-delay: 4s;">🔥</div>
+        <div class="brand-logo" style="top: 80%; right: 5%; animation-delay: 6s;">✨</div>
+        <div class="brand-logo" style="top: 40%; right: 15%; animation-delay: 1s;">💫</div>
+        <div class="brand-logo" style="top: 70%; left: 12%; animation-delay: 3s;">🚀</div>
+    </div>
+    
     <div class="app">
         <div class="header">
             <div class="header-content">
@@ -743,6 +1022,54 @@
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Create particles on load
+        createParticles();
+
+        // Add premium interaction effects
+        function addPremiumEffects() {
+            // Add ripple effect to buttons
+            document.addEventListener('click', function(e) {
+                if (e.target.matches('.location-btn, .btn, .tab')) {
+                    const ripple = document.createElement('span');
+                    const rect = e.target.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+                    
+                    e.target.style.position = 'relative';
+                    e.target.style.overflow = 'hidden';
+                    e.target.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                }
+            });
+        }
+
+        // Initialize premium effects
+        addPremiumEffects();
 
         // Get user data from Telegram
         const user = tg.initDataUnsafe.user;
