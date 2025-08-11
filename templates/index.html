@@ -1718,17 +1718,26 @@
         // Handle Buy Now button
         async function handleBuyNow(productId) {
             try {
+                console.log('Starting payment process for product:', productId);
                 // Show currency selection modal
-                showCurrencySelection(productId);
+                await showCurrencySelection(productId);
             } catch (error) {
-                showError('Failed to start payment process');
+                console.error('Error in handleBuyNow:', error);
+                showError('Failed to start payment process: ' + error.message);
             }
         }
 
         // Show currency selection modal
         async function showCurrencySelection(productId) {
             try {
+                console.log('Loading currencies for product:', productId);
                 const currencyData = await apiCall('/payment/currencies');
+                console.log('Currency data received:', currencyData);
+                
+                if (!currencyData.currencies) {
+                    throw new Error('No currencies received from server');
+                }
+                
                 const currencies = currencyData.currencies;
 
                 // Create modal HTML
@@ -1754,14 +1763,29 @@
 
                 document.body.insertAdjacentHTML('beforeend', modalHTML);
             } catch (error) {
-                showError('Failed to load payment currencies');
+                console.error('Error in showCurrencySelection:', error);
+                showError('Failed to load payment currencies: ' + error.message);
             }
         }
 
         // Create payment invoice
         async function createPayment(productId, type, currency) {
             try {
+                console.log('Creating payment:', { productId, type, currency });
                 closePaymentModal();
+                
+                // Show loading state
+                const loadingHTML = `
+                    <div class="payment-modal">
+                        <div class="payment-modal-content">
+                            <div class="loading">
+                                <div class="loading-spinner"></div>
+                                <p>Creating payment invoice...</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', loadingHTML);
                 
                 const paymentData = await apiCall('/payment/create', {
                     method: 'POST',
@@ -1772,13 +1796,18 @@
                     })
                 });
 
+                console.log('Payment response:', paymentData);
+                closePaymentModal(); // Close loading modal
+
                 if (paymentData.success) {
                     showPaymentInvoice(paymentData);
                 } else {
                     showError(paymentData.error || 'Payment creation failed');
                 }
             } catch (error) {
-                showError('Failed to create payment');
+                console.error('Error in createPayment:', error);
+                closePaymentModal(); // Close loading modal
+                showError('Failed to create payment: ' + error.message);
             }
         }
 

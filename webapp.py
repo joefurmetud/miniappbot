@@ -171,6 +171,9 @@ def get_user_profile(user):
                 'total_purchases': 0
             }
         else:
+            # Convert Row to dict for easier access
+            user_data = dict(user_data)
+            
             # If created_at is NULL for existing user, set it now
             if not user_data.get('created_at'):
                 current_time = datetime.now().isoformat()
@@ -178,7 +181,6 @@ def get_user_profile(user):
                     UPDATE users SET created_at = ? WHERE user_id = ?
                 """, (current_time, user_id))
                 conn.commit()
-                user_data = dict(user_data)  # Convert Row to dict
                 user_data['created_at'] = current_time
         
         return jsonify({
@@ -575,6 +577,8 @@ def create_payment(user):
             if not basket_snapshot:
                 return jsonify({'error': 'No valid items in basket'}), 400
         
+        logger.info(f"Creating payment for user {user_id}, amount: {final_price} EUR, currency: {currency}")
+        
         # Import the payment creation function from the bot
         import asyncio
         from payment import create_nowpayments_payment
@@ -593,11 +597,16 @@ def create_payment(user):
                     basket_snapshot=basket_snapshot
                 )
             )
+            logger.info(f"Payment creation result: {payment_result}")
+        except Exception as e:
+            logger.error(f"Exception during payment creation: {e}", exc_info=True)
+            return jsonify({'error': f'Payment creation failed: {str(e)}'}), 500
         finally:
             loop.close()
         
         if 'error' in payment_result:
             error_msg = payment_result.get('error', 'Payment creation failed')
+            logger.error(f"Payment creation error: {error_msg}")
             return jsonify({'error': error_msg}), 400
         
         # Return the payment invoice details
@@ -626,17 +635,16 @@ def create_payment(user):
 def get_payment_currencies():
     """Get available payment currencies"""
     try:
-        # Import the currency mapping from the bot
-        from user import SUPPORTED_CURRENCIES
-        
-        currencies = []
-        for code, info in SUPPORTED_CURRENCIES.items():
-            currencies.append({
-                'code': code,
-                'name': info['name'],
-                'network': info.get('network', ''),
-                'symbol': code.upper()
-            })
+        # Define supported currencies directly (matching the bot's currencies)
+        currencies = [
+            {'code': 'btc', 'name': 'Bitcoin', 'network': '', 'symbol': 'BTC'},
+            {'code': 'eth', 'name': 'Ethereum', 'network': 'ERC20', 'symbol': 'ETH'},
+            {'code': 'ltc', 'name': 'Litecoin', 'network': '', 'symbol': 'LTC'},
+            {'code': 'usdt', 'name': 'USDT', 'network': 'TRC20', 'symbol': 'USDT'},
+            {'code': 'usdttrc20', 'name': 'USDT', 'network': 'TRC20', 'symbol': 'USDT'},
+            {'code': 'usdterc20', 'name': 'USDT', 'network': 'ERC20', 'symbol': 'USDT'},
+            {'code': 'ton', 'name': 'TON', 'network': 'TON', 'symbol': 'TON'},
+        ]
         
         return jsonify({'currencies': currencies})
     except Exception as e:
