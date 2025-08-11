@@ -1388,6 +1388,9 @@ def init_db():
 
             conn.commit()
             logger.info(f"Database schema at {DATABASE_PATH} initialized/verified successfully.")
+            
+            # Add sample premium banner if none exist
+            add_sample_premium_banner()
     except sqlite3.Error as e:
         logger.critical(f"CRITICAL ERROR: Database initialization failed for {DATABASE_PATH}: {e}", exc_info=True)
         raise SystemExit("Database initialization failed.")
@@ -3034,6 +3037,41 @@ def toggle_promo_banner_status(banner_id: int) -> bool:
                 
     except sqlite3.Error as e:
         logger.error(f"Error toggling promotional banner {banner_id} status: {e}")
+        return False
+
+
+def add_sample_premium_banner():
+    """Add a sample premium banner if none exist"""
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            # Check if there are any banners
+            c.execute("SELECT COUNT(*) as count FROM promo_banners")
+            result = c.fetchone()
+            
+            if result['count'] == 0:
+                # Add a premium sample banner
+                current_time = datetime.now(timezone.utc).isoformat()
+                c.execute("""
+                    INSERT INTO promo_banners 
+                    (banner_text, created_at, is_active, priority, background_color, text_color, animation_speed) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    "Welcome to Premium Shop - Experience Luxury Shopping",
+                    current_time,
+                    1,  # active
+                    1,  # priority
+                    "#007AFF",  # Apple blue
+                    "#FFFFFF",  # white text
+                    25  # medium speed
+                ))
+                conn.commit()
+                logger.info("Added sample premium banner")
+                return True
+                
+    except sqlite3.Error as e:
+        logger.error(f"Error adding sample premium banner: {e}")
         return False
 
 
