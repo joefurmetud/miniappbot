@@ -1263,6 +1263,21 @@ def init_db():
                 priority INTEGER DEFAULT 1 CHECK(priority >= 1 AND priority <= 5)
             )''')
 
+            # Promotional Banners table for top slider announcements
+            c.execute('''CREATE TABLE IF NOT EXISTS promo_banners (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                banner_text TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                is_active INTEGER DEFAULT 1 CHECK(is_active IN (0, 1)),
+                display_start_time TEXT DEFAULT NULL,
+                display_end_time TEXT DEFAULT NULL,
+                priority INTEGER DEFAULT 1 CHECK(priority >= 1 AND priority <= 5),
+                background_color TEXT DEFAULT '#FF6B6B',
+                text_color TEXT DEFAULT '#FFFFFF',
+                animation_speed INTEGER DEFAULT 30 CHECK(animation_speed >= 10 AND animation_speed <= 100),
+                created_by INTEGER DEFAULT NULL
+            )''')
+
             # <<< ADDED: reseller_discounts table >>>
             c.execute('''CREATE TABLE IF NOT EXISTS reseller_discounts (
                 reseller_user_id INTEGER NOT NULL,
@@ -1345,6 +1360,12 @@ def init_db():
             c.execute("CREATE INDEX IF NOT EXISTS idx_admin_messages_active ON admin_messages(is_active)")
             c.execute("CREATE INDEX IF NOT EXISTS idx_admin_messages_display_time ON admin_messages(display_start_time, display_end_time)")
             c.execute("CREATE INDEX IF NOT EXISTS idx_admin_messages_priority ON admin_messages(priority)")
+            # <<< END ADDED >>>
+
+            # <<< ADDED Indices for promotional banners >>>
+            c.execute("CREATE INDEX IF NOT EXISTS idx_promo_banners_active ON promo_banners(is_active)")
+            c.execute("CREATE INDEX IF NOT EXISTS idx_promo_banners_display_time ON promo_banners(display_start_time, display_end_time)")
+            c.execute("CREATE INDEX IF NOT EXISTS idx_promo_banners_priority ON promo_banners(priority)")
             # <<< END ADDED >>>
 
             conn.commit()
@@ -2744,4 +2765,255 @@ def toggle_admin_message_status(message_id: int) -> bool:
                 
     except sqlite3.Error as e:
         logger.error(f"Error toggling admin message {message_id} status: {e}")
+        return False
+
+
+# ===== PROMOTIONAL BANNERS FUNCTIONS =====
+
+def add_promo_banner(banner_text: str, created_by: int, display_start_time: str = None, 
+                    display_end_time: str = None, priority: int = 1, background_color: str = '#FF6B6B', 
+                    text_color: str = '#FFFFFF', animation_speed: int = 30) -> bool:
+    """
+    Add a new promotional banner.
+    
+    Args:
+        banner_text (str): The banner text to display
+        created_by (int): Admin user ID who created this banner
+        display_start_time (str, optional): Start time in ISO format
+        display_end_time (str, optional): End time in ISO format  
+        priority (int): Priority level (1-5, higher = more important)
+        background_color (str): Banner background color (hex)
+        text_color (str): Banner text color (hex)
+        animation_speed (int): Scrolling speed in pixels per second (10-100)
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            current_time = datetime.now(timezone.utc).isoformat()
+            
+            c.execute("""
+                INSERT INTO promo_banners 
+                (banner_text, created_at, display_start_time, display_end_time, priority, 
+                 background_color, text_color, animation_speed, created_by)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (banner_text, current_time, display_start_time, display_end_time, priority, 
+                  background_color, text_color, animation_speed, created_by))
+            
+            conn.commit()
+            logger.info(f"Promotional banner added successfully by admin {created_by}")
+            return True
+            
+    except sqlite3.Error as e:
+        logger.error(f"Error adding promotional banner: {e}")
+        return False
+
+
+def get_active_promo_banners() -> list[dict]:
+    """
+    Get all currently active promotional banners that should be displayed.
+    
+    Returns:
+        list[dict]: List of active banner dictionaries
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            current_time = datetime.now(timezone.utc).isoformat()
+            
+            # Get banners that are active and within their display time window
+            c.execute("""
+                SELECT id, banner_text, priority, background_color, text_color, animation_speed, created_at
+                FROM promo_banners 
+                WHERE is_active = 1
+                AND (display_start_time IS NULL OR display_start_time <= ?)
+                AND (display_end_time IS NULL OR display_end_time >= ?)
+                ORDER BY priority DESC, created_at DESC
+            """, (current_time, current_time))
+            
+            results = c.fetchall()
+            
+            banners = []
+            for row in results:
+                banners.append({
+                    'id': row[0],
+                    'banner_text': row[1],
+                    'priority': row[2],
+                    'background_color': row[3],
+                    'text_color': row[4],
+                    'animation_speed': row[5],
+                    'created_at': row[6]
+                })
+            
+            return banners
+            
+    except sqlite3.Error as e:
+        logger.error(f"Error getting active promotional banners: {e}")
+        return []
+
+
+def get_all_promo_banners(limit: int = None, offset: int = 0) -> list[dict]:
+    """
+    Get all promotional banners (for admin panel management).
+    
+    Args:
+        limit (int, optional): Maximum number of banners to return
+        offset (int): Number of banners to skip
+    
+    Returns:
+        list[dict]: List of banner dictionaries
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            query = """
+                SELECT id, banner_text, created_at, is_active, display_start_time, display_end_time, 
+                       priority, background_color, text_color, animation_speed, created_by
+                FROM promo_banners 
+                ORDER BY created_at DESC
+            """
+            
+            if limit:
+                query += f" LIMIT {limit} OFFSET {offset}"
+            
+            c.execute(query)
+            results = c.fetchall()
+            
+            banners = []
+            for row in results:
+                banners.append({
+                    'id': row[0],
+                    'banner_text': row[1],
+                    'created_at': row[2],
+                    'is_active': bool(row[3]),
+                    'display_start_time': row[4],
+                    'display_end_time': row[5],
+                    'priority': row[6],
+                    'background_color': row[7],
+                    'text_color': row[8],
+                    'animation_speed': row[9],
+                    'created_by': row[10]
+                })
+            
+            return banners
+            
+    except sqlite3.Error as e:
+        logger.error(f"Error getting all promotional banners: {e}")
+        return []
+
+
+def update_promo_banner(banner_id: int, **kwargs) -> bool:
+    """
+    Update an existing promotional banner.
+    
+    Args:
+        banner_id (int): Banner ID to update
+        **kwargs: Fields to update (banner_text, is_active, display_start_time, 
+                 display_end_time, priority, background_color, text_color, animation_speed)
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            # Build dynamic update query
+            valid_fields = ['banner_text', 'is_active', 'display_start_time', 'display_end_time', 
+                           'priority', 'background_color', 'text_color', 'animation_speed']
+            updates = []
+            params = []
+            
+            for field, value in kwargs.items():
+                if field in valid_fields and value is not None:
+                    updates.append(f"{field} = ?")
+                    params.append(value)
+            
+            if not updates:
+                return False  # No updates to make
+            
+            params.append(banner_id)
+            query = f"UPDATE promo_banners SET {', '.join(updates)} WHERE id = ?"
+            
+            c.execute(query, params)
+            conn.commit()
+            
+            if c.rowcount > 0:
+                logger.info(f"Promotional banner {banner_id} updated successfully")
+                return True
+            else:
+                logger.warning(f"No promotional banner found with ID {banner_id}")
+                return False
+                
+    except sqlite3.Error as e:
+        logger.error(f"Error updating promotional banner {banner_id}: {e}")
+        return False
+
+
+def delete_promo_banner(banner_id: int) -> bool:
+    """
+    Delete a promotional banner.
+    
+    Args:
+        banner_id (int): Banner ID to delete
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            c.execute("DELETE FROM promo_banners WHERE id = ?", (banner_id,))
+            conn.commit()
+            
+            if c.rowcount > 0:
+                logger.info(f"Promotional banner {banner_id} deleted successfully")
+                return True
+            else:
+                logger.warning(f"No promotional banner found with ID {banner_id}")
+                return False
+                
+    except sqlite3.Error as e:
+        logger.error(f"Error deleting promotional banner {banner_id}: {e}")
+        return False
+
+
+def toggle_promo_banner_status(banner_id: int) -> bool:
+    """
+    Toggle the active/inactive status of a promotional banner.
+    
+    Args:
+        banner_id (int): Banner ID to toggle
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            # Get current status
+            c.execute("SELECT is_active FROM promo_banners WHERE id = ?", (banner_id,))
+            result = c.fetchone()
+            
+            if not result:
+                logger.warning(f"No promotional banner found with ID {banner_id}")
+                return False
+            
+            current_status = result[0]
+            new_status = 0 if current_status else 1
+            
+            # Update status
+            c.execute("UPDATE promo_banners SET is_active = ? WHERE id = ?", (new_status, banner_id))
+            conn.commit()
+            
+            logger.info(f"Promotional banner {banner_id} status toggled from {current_status} to {new_status}")
+            return True
+                
+    except sqlite3.Error as e:
+        logger.error(f"Error toggling promotional banner {banner_id} status: {e}")
         return False

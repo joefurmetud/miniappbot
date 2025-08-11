@@ -663,6 +663,18 @@ def get_admin_messages():
         logger.error(f"Error getting admin messages: {e}")
         return jsonify({'error': 'Failed to get admin messages'}), 500
 
+
+@miniapp_bp.route('/api/promo-banners')
+def get_promo_banners():
+    """Get active promotional banners for display in mini-app"""
+    try:
+        from utils import get_active_promo_banners
+        banners = get_active_promo_banners()
+        return jsonify({'banners': banners})
+    except Exception as e:
+        logger.error(f"Error getting promotional banners: {e}")
+        return jsonify({'error': 'Failed to get promotional banners'}), 500
+
 @miniapp_bp.route('/api/payment/refill', methods=['POST'])
 @require_auth
 def create_refill_payment(user):

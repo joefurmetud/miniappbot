@@ -516,6 +516,7 @@ async def handle_admin_menu(update: Update, context: ContextTypes.DEFAULT_TYPE, 
         [InlineKeyboardButton("🏷️ Manage Discount Codes", callback_data="adm_manage_discounts")],
         [InlineKeyboardButton("👋 Manage Welcome Msg", callback_data="adm_manage_welcome|0")],
         [InlineKeyboardButton("📢 Manage Newsletter", callback_data="adm_manage_newsletter|0")],
+        [InlineKeyboardButton("🎯 Manage Promo Banners", callback_data="adm_manage_promos|0")],
         [InlineKeyboardButton("📦 View Bot Stock", callback_data="view_stock")],
         [InlineKeyboardButton("📜 View Added Products Log", callback_data="viewer_added_products|0")],
         [InlineKeyboardButton("🗺️ Manage Districts", callback_data="adm_manage_districts")],
@@ -6273,4 +6274,438 @@ async def handle_adm_toggle_newsletter_execute(update: Update, context: ContextT
         
     except Exception as e:
         logger.error(f"Error toggling newsletter message status: {e}")
+        await query.answer("Error toggling status.", show_alert=True)
+
+
+# ===== PROMOTIONAL BANNERS MANAGEMENT =====
+
+async def handle_adm_manage_promos(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Main promotional banners management menu"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+
+    try:
+        from utils import get_all_promo_banners
+        banners = get_all_promo_banners(limit=10, offset=0)
+        
+        msg = "🎯 **Promotional Banners Management**\n\n"
+        msg += "Manage scrolling promotional banners that appear at the top of your mini-app.\n"
+        msg += "Perfect for discount codes, special offers, and announcements!\n\n"
+        
+        if banners:
+            msg += f"📊 **Active Banners: {len([b for b in banners if b['is_active']])}/{len(banners)}**\n\n"
+            for banner in banners[:5]:  # Show first 5
+                status = "✅" if banner['is_active'] else "❌"
+                text_preview = banner['banner_text'][:30] + "..." if len(banner['banner_text']) > 30 else banner['banner_text']
+                msg += f"{status} `{text_preview}`\n"
+            if len(banners) > 5:
+                msg += f"... and {len(banners) - 5} more\n"
+        else:
+            msg += "📭 No promotional banners created yet.\n"
+        
+        keyboard = [
+            [InlineKeyboardButton("➕ Add New Banner", callback_data="adm_add_promo")],
+            [InlineKeyboardButton("📝 Edit Banner", callback_data="adm_edit_promo")],
+            [InlineKeyboardButton("🗑️ Delete Banner", callback_data="adm_delete_promo")],
+            [InlineKeyboardButton("🔄 Toggle Status", callback_data="adm_toggle_promo")],
+            [InlineKeyboardButton("🔙 Back to Admin Menu", callback_data="admin_menu")]
+        ]
+        
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode='Markdown')
+        
+    except Exception as e:
+        logger.error(f"Error in promotional banners management: {e}")
+        await query.answer("Error loading promotional banners.", show_alert=True)
+
+
+async def handle_adm_add_promo(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Start adding a new promotional banner"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+
+    msg = "🎯 **Add New Promotional Banner**\n\n"
+    msg += "Please send the banner text you want to display.\n\n"
+    msg += "💡 **Examples:**\n"
+    msg += "• `🎉 Today's discount code: SUMMER20 - Get 20% off!`\n"
+    msg += "• `🔥 Flash Sale! 50% off all products until midnight!`\n"
+    msg += "• `🆕 New products added! Check them out now!`\n\n"
+    msg += "The text will scroll smoothly across the top of your mini-app."
+    
+    keyboard = [[InlineKeyboardButton("🔙 Cancel", callback_data="adm_manage_promos|0")]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode='Markdown')
+    
+    # Set state for text input
+    context.user_data['state'] = 'adding_promo'
+
+
+async def handle_adm_promo_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle the promotional banner text input"""
+    user = update.effective_user
+    if not user or not is_primary_admin(user.id):
+        return
+    
+    if context.user_data.get('state') != 'adding_promo':
+        return
+    
+    banner_text = update.message.text.strip()
+    if not banner_text:
+        await update.message.reply_text("❌ Banner text cannot be empty. Please try again.")
+        return
+    
+    if len(banner_text) > 200:
+        await update.message.reply_text("❌ Banner text is too long (max 200 characters). Please shorten it.")
+        return
+    
+    try:
+        from utils import add_promo_banner
+        success = add_promo_banner(
+            banner_text=banner_text,
+            created_by=user.id,
+            priority=1,
+            background_color='#FF6B6B',  # Default red
+            text_color='#FFFFFF',        # White text
+            animation_speed=30           # 30 pixels per second
+        )
+        
+        if success:
+            msg = f"✅ **Promotional Banner Added Successfully!**\n\n"
+            msg += f"📝 **Text:** `{banner_text}`\n"
+            msg += f"🎨 **Style:** Red background, white text\n"
+            msg += f"⚡ **Speed:** 30px/sec scrolling\n\n"
+            msg += "The banner is now active and will appear at the top of your mini-app!"
+            
+            keyboard = [[InlineKeyboardButton("🔙 Back to Promo Management", callback_data="adm_manage_promos|0")]]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await update.message.reply_text(msg, reply_markup=reply_markup, parse_mode='Markdown')
+        else:
+            await update.message.reply_text("❌ Failed to add promotional banner. Please try again.")
+        
+        # Clear state
+        context.user_data.pop('state', None)
+        
+    except Exception as e:
+        logger.error(f"Error adding promotional banner: {e}")
+        await update.message.reply_text("❌ Error adding promotional banner.")
+        context.user_data.pop('state', None)
+
+
+async def handle_adm_edit_promo(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Show list of banners to edit"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+
+    try:
+        from utils import get_all_promo_banners
+        banners = get_all_promo_banners(limit=20, offset=0)
+        
+        if not banners:
+            await query.answer("No banners to edit.", show_alert=True)
+            return
+        
+        msg = "📝 **Select Banner to Edit:**\n\n"
+        keyboard = []
+        
+        for banner in banners:
+            display_text = banner['banner_text'][:40] + "..." if len(banner['banner_text']) > 40 else banner['banner_text']
+            status = "✅" if banner['is_active'] else "❌"
+            keyboard.append([InlineKeyboardButton(
+                f"{status} {display_text}",
+                callback_data=f"adm_edit_promo_msg|{banner['id']}"
+            )])
+        
+        keyboard.append([InlineKeyboardButton("🔙 Back", callback_data="adm_manage_promos|0")])
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode='Markdown')
+        
+    except Exception as e:
+        logger.error(f"Error loading banners for edit: {e}")
+        await query.answer("Error loading banners.", show_alert=True)
+
+
+async def handle_adm_edit_promo_msg(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Start editing a specific promotional banner"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+
+    if not params or len(params) < 1:
+        await query.answer("Invalid banner ID.", show_alert=True)
+        return
+    
+    banner_id = int(params[0])
+    
+    try:
+        from utils import get_all_promo_banners
+        banners = get_all_promo_banners()
+        banner = next((b for b in banners if b['id'] == banner_id), None)
+        
+        if not banner:
+            await query.answer("Banner not found.", show_alert=True)
+            return
+        
+        msg = f"📝 **Edit Promotional Banner**\n\n"
+        msg += f"**Current Text:**\n`{banner['banner_text']}`\n\n"
+        msg += "Send the new banner text:"
+        
+        keyboard = [[InlineKeyboardButton("🔙 Cancel", callback_data="adm_edit_promo")]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode='Markdown')
+        
+        # Set state for text input
+        context.user_data['state'] = 'editing_promo'
+        context.user_data['editing_promo'] = banner_id
+        
+    except Exception as e:
+        logger.error(f"Error starting banner edit: {e}")
+        await query.answer("Error loading banner.", show_alert=True)
+
+
+async def handle_adm_promo_edit_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle the promotional banner edit text input"""
+    user = update.effective_user
+    if not user or not is_primary_admin(user.id):
+        return
+    
+    if context.user_data.get('state') != 'editing_promo':
+        return
+    
+    banner_id = context.user_data.get('editing_promo')
+    if not banner_id:
+        return
+    
+    new_text = update.message.text.strip()
+    if not new_text:
+        await update.message.reply_text("❌ Banner text cannot be empty. Please try again.")
+        return
+    
+    if len(new_text) > 200:
+        await update.message.reply_text("❌ Banner text is too long (max 200 characters). Please shorten it.")
+        return
+    
+    try:
+        from utils import update_promo_banner
+        success = update_promo_banner(
+            banner_id=banner_id,
+            banner_text=new_text
+        )
+        
+        if success:
+            msg = f"✅ **Banner Updated Successfully!**\n\n"
+            msg += f"📝 **New Text:** `{new_text}`"
+            
+            keyboard = [[InlineKeyboardButton("🔙 Back to Promo Management", callback_data="adm_manage_promos|0")]]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await update.message.reply_text(msg, reply_markup=reply_markup, parse_mode='Markdown')
+        else:
+            await update.message.reply_text("❌ Failed to update banner. Please try again.")
+        
+        # Clear state
+        context.user_data.pop('state', None)
+        context.user_data.pop('editing_promo', None)
+        
+    except Exception as e:
+        logger.error(f"Error updating promotional banner: {e}")
+        await update.message.reply_text("❌ Error updating banner.")
+        context.user_data.pop('state', None)
+        context.user_data.pop('editing_promo', None)
+
+
+async def handle_adm_delete_promo(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Show list of banners to delete"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+
+    try:
+        from utils import get_all_promo_banners
+        banners = get_all_promo_banners(limit=20, offset=0)
+        
+        if not banners:
+            await query.answer("No banners to delete.", show_alert=True)
+            return
+        
+        msg = "🗑️ **Select Banner to Delete:**\n\n"
+        keyboard = []
+        
+        for banner in banners:
+            display_text = banner['banner_text'][:40] + "..." if len(banner['banner_text']) > 40 else banner['banner_text']
+            status = "✅" if banner['is_active'] else "❌"
+            keyboard.append([InlineKeyboardButton(
+                f"{status} {display_text}",
+                callback_data=f"adm_delete_promo_confirm|{banner['id']}"
+            )])
+        
+        keyboard.append([InlineKeyboardButton("🔙 Back", callback_data="adm_manage_promos|0")])
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode='Markdown')
+        
+    except Exception as e:
+        logger.error(f"Error loading banners for delete: {e}")
+        await query.answer("Error loading banners.", show_alert=True)
+
+
+async def handle_adm_delete_promo_confirm(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Confirm banner deletion"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+
+    if not params or len(params) < 1:
+        await query.answer("Invalid banner ID.", show_alert=True)
+        return
+    
+    banner_id = int(params[0])
+    
+    try:
+        from utils import get_all_promo_banners
+        banners = get_all_promo_banners()
+        banner = next((b for b in banners if b['id'] == banner_id), None)
+        
+        if not banner:
+            await query.answer("Banner not found.", show_alert=True)
+            return
+        
+        msg = f"🗑️ **Confirm Deletion**\n\n"
+        msg += f"Are you sure you want to delete this banner?\n\n"
+        msg += f"**Text:** `{banner['banner_text']}`\n\n"
+        msg += "⚠️ This action cannot be undone!"
+        
+        keyboard = [
+            [InlineKeyboardButton("✅ Yes, Delete", callback_data=f"adm_delete_promo_execute|{banner_id}")],
+            [InlineKeyboardButton("❌ Cancel", callback_data="adm_delete_promo")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode='Markdown')
+        
+    except Exception as e:
+        logger.error(f"Error confirming banner deletion: {e}")
+        await query.answer("Error loading banner.", show_alert=True)
+
+
+async def handle_adm_delete_promo_execute(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Execute banner deletion"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+
+    if not params or len(params) < 1:
+        await query.answer("Invalid banner ID.", show_alert=True)
+        return
+    
+    banner_id = int(params[0])
+    
+    try:
+        from utils import delete_promo_banner
+        success = delete_promo_banner(banner_id)
+        
+        if success:
+            msg = "✅ Promotional banner deleted successfully!"
+            keyboard = [[InlineKeyboardButton("🔙 Back to Promo Management", callback_data="adm_manage_promos|0")]]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode=None)
+        else:
+            await query.answer("❌ Failed to delete banner.", show_alert=True)
+        
+    except Exception as e:
+        logger.error(f"Error deleting promotional banner: {e}")
+        await query.answer("Error deleting banner.", show_alert=True)
+
+
+async def handle_adm_toggle_promo(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Show list of banners to toggle status"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+
+    try:
+        from utils import get_all_promo_banners
+        banners = get_all_promo_banners(limit=50, offset=0)
+        
+        if not banners:
+            await query.answer("No banners to toggle.", show_alert=True)
+            return
+        
+        msg = "🔄 **Select Banner to Toggle Status:**\n\n"
+        keyboard = []
+        
+        for banner in banners:
+            display_text = banner['banner_text'][:40] + "..." if len(banner['banner_text']) > 40 else banner['banner_text']
+            status = "✅" if banner['is_active'] else "❌"
+            keyboard.append([InlineKeyboardButton(
+                f"{status} {display_text}",
+                callback_data=f"adm_toggle_promo_execute|{banner['id']}"
+            )])
+        
+        keyboard.append([InlineKeyboardButton("🔙 Back", callback_data="adm_manage_promos|0")])
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode='Markdown')
+        
+    except Exception as e:
+        logger.error(f"Error loading banners for toggle: {e}")
+        await query.answer("Error loading banners.", show_alert=True)
+
+
+async def handle_adm_toggle_promo_execute(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Execute banner status toggle"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+
+    if not params or len(params) < 1:
+        await query.answer("Invalid banner ID.", show_alert=True)
+        return
+    
+    banner_id = int(params[0])
+    
+    try:
+        from utils import toggle_promo_banner_status
+        success = toggle_promo_banner_status(banner_id)
+        
+        if success:
+            await query.answer("✅ Banner status toggled successfully!", show_alert=True)
+            # Refresh the toggle menu
+            await handle_adm_toggle_promo(update, context)
+        else:
+            await query.answer("❌ Failed to toggle status.", show_alert=True)
+        
+    except Exception as e:
+        logger.error(f"Error toggling promotional banner status: {e}")
         await query.answer("Error toggling status.", show_alert=True)

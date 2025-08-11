@@ -279,6 +279,73 @@
             background: var(--apple-gradient-ocean);
         }
 
+        /* Promotional Banner Slider */
+        .promo-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+            color: white;
+            z-index: 1000;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .promo-content {
+            position: relative;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .promo-text {
+            position: absolute;
+            white-space: nowrap;
+            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            padding: 0 20px;
+            animation: scrollText 15s linear infinite;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes scrollText {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Adjust container when banner is visible */
+        body.promo-active {
+            padding-top: 40px;
+        }
+
+        body.promo-active .container {
+            margin-top: 0;
+        }
+
+        /* Theme-specific banner colors */
+        .theme-purple .promo-banner {
+            background: var(--apple-gradient-purple);
+        }
+
+        .theme-sunset .promo-banner {
+            background: var(--apple-gradient-sunset);
+        }
+
+        .theme-ocean .promo-banner {
+            background: var(--apple-gradient-ocean);
+        }
+
         /* Newsletter Banner */
         .newsletter-banner {
             background: var(--bg-glass);
@@ -929,16 +996,22 @@
 </head>
 <body>
 
-
+    <!-- Promotional Banner Slider -->
+    <div id="promoBanner" class="promo-banner" style="display: none;">
+        <div class="promo-content">
+            <div class="promo-text" id="promoText"></div>
+        </div>
+            </div>
+            
     <div class="container">
                 <!-- Header -->
         <div class="header">
             <div class="theme-switcher">
                 <button id="themeSwitcher" class="theme-btn">🎨</button>
-            </div>
+                </div>
             <div class="logo">🛍️ Premium Shop</div>
             <div class="tagline">Experience luxury shopping</div>
-            </div>
+                </div>
             
         <!-- Newsletter Banner -->
         <div id="newsletterBanner" class="newsletter-banner" style="display: none;">
@@ -1042,6 +1115,79 @@
         let currentCity = null;
         let currentDistrict = null;
 
+        // Promotional banner variables
+        let currentBanners = [];
+        let currentBannerIndex = 0;
+        let bannerInterval = null;
+
+        // Promotional banner functions
+        async function loadPromoBanners() {
+            try {
+                const response = await fetch('/api/promo-banners');
+                const data = await response.json();
+                
+                if (data.banners && data.banners.length > 0) {
+                    currentBanners = data.banners;
+                    displayPromoBanner();
+                } else {
+                    hidePromoBanner();
+                }
+            } catch (error) {
+                console.error('Error loading promotional banners:', error);
+                hidePromoBanner();
+            }
+        }
+
+        function displayPromoBanner() {
+            if (currentBanners.length === 0) {
+                hidePromoBanner();
+                return;
+            }
+
+            const banner = currentBanners[currentBannerIndex];
+            const promoBanner = document.getElementById('promoBanner');
+            const promoText = document.getElementById('promoText');
+            
+            if (promoBanner && promoText) {
+                // Update banner content
+                promoText.textContent = banner.banner_text;
+                
+                // Update banner colors
+                promoBanner.style.background = `linear-gradient(135deg, ${banner.background_color} 0%, ${banner.background_color}CC 100%)`;
+                promoText.style.color = banner.text_color;
+                
+                // Update animation speed
+                const animationDuration = Math.max(10, Math.min(30, 100 - banner.animation_speed)) + 's';
+                promoText.style.animationDuration = animationDuration;
+                
+                // Show banner
+                promoBanner.style.display = 'block';
+                document.body.classList.add('promo-active');
+                
+                // If multiple banners, set up rotation
+                if (currentBanners.length > 1) {
+                    if (bannerInterval) clearInterval(bannerInterval);
+                    bannerInterval = setInterval(() => {
+                        currentBannerIndex = (currentBannerIndex + 1) % currentBanners.length;
+                        displayPromoBanner();
+                    }, 8000); // Switch every 8 seconds
+                }
+            }
+        }
+
+        function hidePromoBanner() {
+            const promoBanner = document.getElementById('promoBanner');
+            if (promoBanner) {
+                promoBanner.style.display = 'none';
+                document.body.classList.remove('promo-active');
+            }
+            
+            if (bannerInterval) {
+                clearInterval(bannerInterval);
+                bannerInterval = null;
+            }
+        }
+
         // Initialize app
         async function init() {
             try {
@@ -1060,6 +1206,7 @@
                 await loadUserBalance();
                 await updateBasketBadge();
                 await loadNewsletter();
+                await loadPromoBanners();
                 await loadCities();
                 
                 setupEventListeners();
@@ -1149,7 +1296,7 @@
                     const data = await response.json();
                     document.getElementById('profileBalance').textContent = `€${data.balance.toFixed(2)}`;
                 }
-            } catch (error) {
+                } catch (error) {
                 console.error('Error loading balance:', error);
             }
         }
@@ -1162,7 +1309,7 @@
                     const data = await response.json();
                     if (data.messages && data.messages.length > 0) {
                         displayNewsletter(data.messages[0]);
-                    } else {
+            } else {
                         hideNewsletter();
                     }
                 }
@@ -1338,7 +1485,7 @@
                     const data = await response.json();
                     products = data.products || [];
                     renderProducts();
-            } else {
+                } else {
                     console.log('API failed, using sample products for preview');
                     // Use sample products for preview
                     products = sampleProducts;
@@ -1393,28 +1540,28 @@
                             <div class="product-title">
                                 <div class="product-emoji">${product.emoji || '📦'}</div>
                                 ${product.type}
-                            </div>
+                    </div>
                             <div class="product-city">
                                 <div class="city-icon">🏙️</div>
                                 ${product.city} - ${product.district}
-                            </div>
-                        </div>
-                        <div class="product-price">€${product.price.toFixed(2)}</div>
                     </div>
+                    </div>
+                        <div class="product-price">€${product.price.toFixed(2)}</div>
+                </div>
                     <div class="product-details">
                         <div class="detail-item">
                             <div class="detail-label">Size</div>
                             <div class="detail-value">${product.size}</div>
-                        </div>
+                    </div>
                         <div class="detail-item">
                             <div class="detail-label">Stock</div>
                             <div class="detail-value">${product.stock}</div>
-                        </div>
+                </div>
                     </div>
                     <button class="btn btn-primary btn-full" onclick="addToBasket(${product.id})">
                         <span>Add to Basket</span>
                     </button>
-                `;
+            `;
                 grid.appendChild(card);
             });
         }
@@ -1503,19 +1650,19 @@
                             <div class="product-city">
                                 <div class="city-icon">🏙️</div>
                                 ${item.city}
-                    </div>
-                    </div>
+                        </div>
+                        </div>
                         <div class="product-price">€${(item.price * item.quantity).toFixed(2)}</div>
-                    </div>
+                        </div>
                     <div class="product-details">
                         <div class="detail-item">
                             <div class="detail-label">Quantity</div>
                             <div class="detail-value">${item.quantity}</div>
-                </div>
+                    </div>
                         <div class="detail-item">
                             <div class="detail-label">Unit Price</div>
                             <div class="detail-value">€${item.price}</div>
-                    </div>
+                </div>
                 </div>
                     <button class="btn btn-secondary btn-full" onclick="removeFromBasket(${item.basket_id})">
                         Remove from Basket
@@ -1532,7 +1679,7 @@
         async function removeFromBasket(basketId) {
             try {
                 const response = await fetch(`${API_BASE}/basket/remove`, {
-                    method: 'POST',
+                        method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ basket_id: basketId })
                 });
@@ -1541,11 +1688,11 @@
                     showSuccess('Product removed from basket');
                     await loadBasket();
                     await updateBasketBadge();
-                } else {
+                    } else {
                     const error = await response.json();
                     showError(error.error || 'Failed to remove product');
-                }
-            } catch (error) {
+                    }
+                } catch (error) {
                 console.error('Error removing from basket:', error);
                 showError('Failed to remove product');
             }
@@ -1577,14 +1724,14 @@
                     const data = await response.json();
                     if (data.payment_url) {
                         tg.openLink(data.payment_url);
-                    } else {
+                } else {
                         showError('Payment URL not available');
                     }
                 } else {
                     const error = await response.json();
                     showError(error.error || 'Failed to create payment');
-                    }
-                } catch (error) {
+                }
+            } catch (error) {
                 console.error('Error during checkout:', error);
                 showError('Checkout failed');
             } finally {

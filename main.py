@@ -103,6 +103,10 @@ from admin import (
     handle_adm_edit_newsletter_msg, handle_adm_newsletter_text_message, handle_adm_newsletter_edit_message,
     handle_adm_delete_newsletter, handle_adm_delete_newsletter_confirm,
     handle_adm_delete_newsletter_execute, handle_adm_toggle_newsletter, handle_adm_toggle_newsletter_execute,
+    # Promotional banner handlers
+    handle_adm_manage_promos, handle_adm_add_promo, handle_adm_edit_promo, handle_adm_edit_promo_msg,
+    handle_adm_promo_text_message, handle_adm_promo_edit_message, handle_adm_delete_promo,
+    handle_adm_delete_promo_confirm, handle_adm_delete_promo_execute, handle_adm_toggle_promo, handle_adm_toggle_promo_execute,
     cancel_bulk_add,
     # Message handlers that actually exist
     handle_adm_add_city_message, handle_adm_edit_city_message, handle_adm_add_district_message,
@@ -329,6 +333,17 @@ def callback_query_router(func):
                 "adm_delete_newsletter_execute": admin.handle_adm_delete_newsletter_execute,
                 "adm_toggle_newsletter": admin.handle_adm_toggle_newsletter,
                 "adm_toggle_newsletter_execute": admin.handle_adm_toggle_newsletter_execute,
+                
+                # Promotional Banner Handlers
+                "adm_manage_promos": admin.handle_adm_manage_promos,
+                "adm_add_promo": admin.handle_adm_add_promo,
+                "adm_edit_promo": admin.handle_adm_edit_promo,
+                "adm_edit_promo_msg": admin.handle_adm_edit_promo_msg,
+                "adm_delete_promo": admin.handle_adm_delete_promo,
+                "adm_delete_promo_confirm": admin.handle_adm_delete_promo_confirm,
+                "adm_delete_promo_execute": admin.handle_adm_delete_promo_execute,
+                "adm_toggle_promo": admin.handle_adm_toggle_promo,
+                "adm_toggle_promo_execute": admin.handle_adm_toggle_promo_execute,
             }
 
             target_func = KNOWN_HANDLERS.get(command)
@@ -416,6 +431,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Newsletter Message States (from admin.py)
         'adding_newsletter': admin.handle_adm_newsletter_text_message,
         'editing_newsletter': admin.handle_adm_newsletter_edit_message,
+        
+        # Promotional Banner Message States (from admin.py)
+        'adding_promo': admin.handle_adm_promo_text_message,
+        'editing_promo': admin.handle_adm_promo_edit_message,
     }
 
     handler_func = STATE_HANDLERS.get(state)
