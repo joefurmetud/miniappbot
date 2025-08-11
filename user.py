@@ -313,27 +313,40 @@ async def mini_app(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     from utils import WEBHOOK_URL
+    # Use the Render URL for the Mini App
     mini_app_url = f"{WEBHOOK_URL}"
     
     # Create inline keyboard with Mini App button
+    open_shop_button = lang_data.get("mini_app_open_shop_button", "🛍️ Open Shop (Mini App)")
     keyboard = [[
         InlineKeyboardButton(
-            "🛍️ Open Shop (Mini App)",
+            open_shop_button,
             web_app={"url": mini_app_url}
         )
     ]]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
+    # Get localized welcome message
+    welcome_title = lang_data.get("mini_app_welcome_title", "🛍️ <b>Welcome to Bot Shop Mini App!</b>")
+    welcome_subtitle = lang_data.get("mini_app_welcome_subtitle", "Click the button below to open our modern shopping interface.")
+    features_title = lang_data.get("mini_app_features_title", "✨ <b>Features:</b>")
+    feature_browse = lang_data.get("mini_app_feature_browse", "• Browse products by location")
+    feature_basket = lang_data.get("mini_app_feature_basket", "• Add items to your basket")
+    feature_checkout = lang_data.get("mini_app_feature_checkout", "• Quick checkout and payments")
+    feature_profile = lang_data.get("mini_app_feature_profile", "• View your profile and balance")
+    feature_mobile = lang_data.get("mini_app_feature_mobile", "• Mobile-optimized interface")
+    mobile_tip = lang_data.get("mini_app_mobile_tip", "💡 <i>The Mini App works best on mobile devices!</i>")
+    
     welcome_msg = (
-        "🛍️ <b>Welcome to Bot Shop Mini App!</b>\n\n"
-        "Click the button below to open our modern shopping interface.\n\n"
-        "✨ <b>Features:</b>\n"
-        "• Browse products by location\n"
-        "• Add items to your basket\n"
-        "• Quick checkout and payments\n"
-        "• View your profile and balance\n"
-        "• Mobile-optimized interface\n\n"
-        "💡 <i>The Mini App works best on mobile devices!</i>"
+        f"{welcome_title}\n\n"
+        f"{welcome_subtitle}\n\n"
+        f"{features_title}\n"
+        f"{feature_browse}\n"
+        f"{feature_basket}\n"
+        f"{feature_checkout}\n"
+        f"{feature_profile}\n"
+        f"{feature_mobile}\n\n"
+        f"{mobile_tip}"
     )
     
     await update.message.reply_text(

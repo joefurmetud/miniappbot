@@ -492,6 +492,228 @@
             backdrop-filter: blur(10px);
         }
 
+        /* Payment Modal Styles */
+        .payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+        }
+
+        .payment-modal-content {
+            background: linear-gradient(135deg, #21262d 0%, #161b22 100%);
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid #30363d;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .payment-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .payment-modal-header h3 {
+            margin: 0;
+            color: #f0f6fc;
+            font-size: 18px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #8b949e;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .close-modal:hover {
+            background: rgba(139, 148, 158, 0.1);
+            color: #f0f6fc;
+        }
+
+        .currency-list {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .currency-btn {
+            background: linear-gradient(135deg, rgba(33, 38, 45, 0.5) 0%, rgba(22, 27, 34, 0.5) 100%);
+            border: 1px solid #30363d;
+            color: #f0f6fc;
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .currency-btn:hover {
+            border-color: #8b949e;
+            background: linear-gradient(135deg, rgba(33, 38, 45, 0.8) 0%, rgba(22, 27, 34, 0.8) 100%);
+            transform: translateY(-2px);
+        }
+
+        .currency-symbol {
+            font-weight: bold;
+            font-size: 16px;
+            color: #58a6ff;
+            min-width: 60px;
+        }
+
+        .currency-name {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .currency-network {
+            font-size: 12px;
+            color: #8b949e;
+            background: rgba(139, 148, 158, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .invoice-content {
+            padding: 20px;
+        }
+
+        .invoice-section {
+            margin-bottom: 24px;
+        }
+
+        .invoice-section h4 {
+            color: #f0f6fc;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .payment-info {
+            background: rgba(13, 17, 23, 0.6);
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #21262d;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(48, 54, 61, 0.3);
+        }
+
+        .payment-row:last-child {
+            border-bottom: none;
+        }
+
+        .payment-row span:first-child {
+            color: #8b949e;
+            font-size: 14px;
+        }
+
+        .payment-row span:last-child {
+            color: #f0f6fc;
+            font-weight: 600;
+        }
+
+        .payment-amount {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+            color: #58a6ff !important;
+        }
+
+        .payment-id {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+            font-size: 12px !important;
+        }
+
+        .wallet-address-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(13, 17, 23, 0.6);
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #21262d;
+        }
+
+        .wallet-address {
+            flex: 1;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+            font-size: 14px;
+            color: #58a6ff;
+            word-break: break-all;
+            background: rgba(88, 166, 255, 0.1);
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #21262d 0%, #161b22 100%);
+            border: 1px solid #30363d;
+            color: #f0f6fc;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            border-color: #8b949e;
+            background: linear-gradient(135deg, #30363d 0%, #21262d 100%);
+        }
+
+        .payment-instructions {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .payment-instructions h4 {
+            color: #ffc107;
+            margin-bottom: 12px;
+        }
+
+        .payment-instructions ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #f0f6fc;
+        }
+
+        .payment-instructions li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
         @media (max-width: 480px) {
             .button-grid {
                 grid-template-columns: 1fr;
@@ -505,6 +727,22 @@
             
             .step-title {
                 font-size: 18px;
+            }
+
+            .payment-modal-content {
+                width: 95%;
+                max-height: 90vh;
+            }
+
+            .wallet-address-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .currency-btn {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
             }
         }
 
@@ -1240,6 +1478,174 @@
             }
         }
 
+        // Handle Buy Now button
+        async function handleBuyNow(productId) {
+            try {
+                // Show currency selection modal
+                showCurrencySelection(productId);
+            } catch (error) {
+                showError('Failed to start payment process');
+            }
+        }
+
+        // Show currency selection modal
+        async function showCurrencySelection(productId) {
+            try {
+                const currencyData = await apiCall('/payment/currencies');
+                const currencies = currencyData.currencies;
+
+                // Create modal HTML
+                const modalHTML = `
+                    <div class="payment-modal">
+                        <div class="payment-modal-content">
+                            <div class="payment-modal-header">
+                                <h3>Select Payment Currency</h3>
+                                <button class="close-modal" onclick="closePaymentModal()">×</button>
+                            </div>
+                            <div class="currency-list">
+                                ${currencies.map(currency => `
+                                    <button class="currency-btn" onclick="createPayment('${productId}', 'single', '${currency.code}')">
+                                        <span class="currency-symbol">${currency.symbol}</span>
+                                        <span class="currency-name">${currency.name}</span>
+                                        ${currency.network ? `<span class="currency-network">${currency.network}</span>` : ''}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+            } catch (error) {
+                showError('Failed to load payment currencies');
+            }
+        }
+
+        // Create payment invoice
+        async function createPayment(productId, type, currency) {
+            try {
+                closePaymentModal();
+                
+                const paymentData = await apiCall('/payment/create', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: type,
+                        product_id: productId,
+                        currency: currency
+                    })
+                });
+
+                if (paymentData.success) {
+                    showPaymentInvoice(paymentData);
+                } else {
+                    showError(paymentData.error || 'Payment creation failed');
+                }
+            } catch (error) {
+                showError('Failed to create payment');
+            }
+        }
+
+        // Show payment invoice modal
+        function showPaymentInvoice(paymentData) {
+            const expiryDate = paymentData.expiration_estimate_date ? 
+                new Date(paymentData.expiration_estimate_date).toLocaleString() : 'N/A';
+
+            const invoiceHTML = `
+                <div class="payment-modal invoice-modal">
+                    <div class="payment-modal-content">
+                        <div class="payment-modal-header">
+                            <h3>💳 Payment Invoice</h3>
+                            <button class="close-modal" onclick="closePaymentModal()">×</button>
+                        </div>
+                        <div class="invoice-content">
+                            <div class="invoice-section">
+                                <h4>Payment Details</h4>
+                                <div class="payment-info">
+                                    <div class="payment-row">
+                                        <span>Amount:</span>
+                                        <span class="payment-amount">${paymentData.pay_amount} ${paymentData.pay_currency}</span>
+                                    </div>
+                                    <div class="payment-row">
+                                        <span>EUR Value:</span>
+                                        <span>€${paymentData.price_amount}</span>
+                                    </div>
+                                    <div class="payment-row">
+                                        <span>Payment ID:</span>
+                                        <span class="payment-id">${paymentData.payment_id}</span>
+                                    </div>
+                                    <div class="payment-row">
+                                        <span>Expires:</span>
+                                        <span>${expiryDate}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="invoice-section">
+                                <h4>Wallet Address</h4>
+                                <div class="wallet-address-container">
+                                    <div class="wallet-address" id="walletAddress">${paymentData.pay_address}</div>
+                                    <button class="copy-btn" onclick="copyToClipboard('walletAddress')">📋 Copy</button>
+                                </div>
+                            </div>
+
+                            <div class="invoice-section">
+                                <div class="payment-instructions">
+                                    <h4>⚠️ Payment Instructions</h4>
+                                    <ul>
+                                        <li>Send exactly <strong>${paymentData.pay_amount} ${paymentData.pay_currency}</strong> to the address above</li>
+                                        <li>Payment will be automatically confirmed when received</li>
+                                        <li>Do not send from an exchange - use a personal wallet</li>
+                                        <li>Your order will be processed after confirmation</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', invoiceHTML);
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                // Show success feedback
+                const copyBtn = element.nextElementSibling;
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const copyBtn = element.nextElementSibling;
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Close payment modal
+        function closePaymentModal() {
+            const modal = document.querySelector('.payment-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
         // Display products
         function displayProducts(products) {
             const container = document.getElementById('productsContainer');
@@ -1273,7 +1679,7 @@
                         <button class="btn btn-secondary" onclick="addToBasket(${product.id}, '${product.type}', '${product.size}', ${product.price})">
                             Add to Basket
                         </button>
-                        <button class="btn btn-primary" onclick="buyNow(${product.id})">
+                        <button class="btn btn-primary" onclick="handleBuyNow(${product.id})">
                             Buy Now
                         </button>
                     </div>

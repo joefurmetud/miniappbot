@@ -485,11 +485,12 @@ def remove_from_basket(user):
 @miniapp_bp.route('/api/payment/create', methods=['POST'])
 @require_auth
 def create_payment(user):
-    """Create payment for basket or single item"""
+    """Create NOWPayments invoice for basket or single item"""
     try:
         user_id = user['id']
         data = request.get_json()
         payment_type = data.get('type', 'basket')  # 'basket' or 'single'
+        currency = data.get('currency', 'btc')  # Default to BTC
         
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -501,7 +502,8 @@ def create_payment(user):
             
             # Get product details and create single payment
             cursor.execute("""
-                SELECT product_type, price FROM products WHERE id = ? AND reserved_by IS NULL
+                SELECT id, product_type, price, city, district, size, name FROM products 
+                WHERE id = ? AND available = 1 AND reserved_by IS NULL
             """, (product_id,))
             product = cursor.fetchone()
             
@@ -514,24 +516,103 @@ def create_payment(user):
             discount_amount = (original_price * discount_percent / Decimal('100')).quantize(Decimal('0.01'))
             final_price = original_price - discount_amount
             
-            # Create payment URL (simplified - in real implementation, integrate with NOWPayments)
-            payment_url = f"https://t.me/your_bot?start=pay_{product_id}"
+            # Create basket snapshot for single item
+            basket_snapshot = [{
+                'product_id': product['id'],
+                'product_type': product['product_type'],
+                'price': float(original_price),
+                'city': product['city'],
+                'district': product['district'],
+                'size': product['size'],
+                'name': product['name']
+            }]
             
         else:  # basket payment
-            # Get basket total
+            # Get basket items and calculate total
             cursor.execute("SELECT basket FROM users WHERE user_id = ?", (user_id,))
             result = cursor.fetchone()
             
             if not result or not result['basket']:
                 return jsonify({'error': 'Basket is empty'}), 400
             
-            # Calculate total (simplified)
-            payment_url = f"https://t.me/your_bot?start=pay_basket_{user_id}"
+            basket_items = result['basket'].split(',')
+            basket_snapshot = []
+            final_price = Decimal('0.0')
+            
+            for item_str in basket_items:
+                if ':' in item_str:
+                    product_id, timestamp = item_str.split(':', 1)
+                    try:
+                        product_id = int(product_id)
+                        
+                        # Get product details
+                        cursor.execute("""
+                            SELECT id, product_type, price, city, district, size, name
+                            FROM products WHERE id = ? AND available = 1
+                        """, (product_id,))
+                        product = cursor.fetchone()
+                        
+                        if product:
+                            # Apply reseller discount
+                            discount_percent = get_reseller_discount(user_id, product['product_type'])
+                            original_price = Decimal(str(product['price']))
+                            discount_amount = (original_price * discount_percent / Decimal('100')).quantize(Decimal('0.01'))
+                            item_price = original_price - discount_amount
+                            final_price += item_price
+                            
+                            basket_snapshot.append({
+                                'product_id': product['id'],
+                                'product_type': product['product_type'],
+                                'price': float(original_price),
+                                'city': product['city'],
+                                'district': product['district'],
+                                'size': product['size'],
+                                'name': product['name']
+                            })
+                    except (ValueError, TypeError):
+                        continue
+            
+            if not basket_snapshot:
+                return jsonify({'error': 'No valid items in basket'}), 400
         
+        # Import the payment creation function from the bot
+        import asyncio
+        from payment import create_nowpayments_payment
+        
+        # Create the NOWPayments invoice
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
+        try:
+            payment_result = loop.run_until_complete(
+                create_nowpayments_payment(
+                    user_id=user_id,
+                    target_eur_amount=final_price,
+                    pay_currency_code=currency,
+                    is_purchase=True,
+                    basket_snapshot=basket_snapshot
+                )
+            )
+        finally:
+            loop.close()
+        
+        if 'error' in payment_result:
+            error_msg = payment_result.get('error', 'Payment creation failed')
+            return jsonify({'error': error_msg}), 400
+        
+        # Return the payment invoice details
         return jsonify({
             'success': True,
-            'payment_url': payment_url,
-            'message': 'Payment created successfully'
+            'payment_id': payment_result['payment_id'],
+            'pay_address': payment_result['pay_address'],
+            'pay_amount': payment_result['pay_amount'],
+            'pay_currency': payment_result['pay_currency'].upper(),
+            'price_amount': float(final_price),
+            'price_currency': 'EUR',
+            'order_id': payment_result['order_id'],
+            'expiration_estimate_date': payment_result.get('expiration_estimate_date'),
+            'payment_status': payment_result['payment_status'],
+            'message': 'Payment invoice created successfully'
         })
         
     except Exception as e:
@@ -540,6 +621,27 @@ def create_payment(user):
     finally:
         if 'conn' in locals():
             conn.close()
+
+@miniapp_bp.route('/api/payment/currencies')
+def get_payment_currencies():
+    """Get available payment currencies"""
+    try:
+        # Import the currency mapping from the bot
+        from user import SUPPORTED_CURRENCIES
+        
+        currencies = []
+        for code, info in SUPPORTED_CURRENCIES.items():
+            currencies.append({
+                'code': code,
+                'name': info['name'],
+                'network': info.get('network', ''),
+                'symbol': code.upper()
+            })
+        
+        return jsonify({'currencies': currencies})
+    except Exception as e:
+        logger.error(f"Error getting currencies: {e}")
+        return jsonify({'error': 'Failed to get currencies'}), 500
 
 @miniapp_bp.route('/api/payment/refill', methods=['POST'])
 @require_auth

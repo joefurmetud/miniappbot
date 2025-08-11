@@ -463,6 +463,18 @@ LANGUAGES = {
         "welcome_save_error_context": "❌ Error: Save data lost. Cannot save template.", # <<< NEW
         "welcome_invalid_placeholder": "⚠️ Formatting Error! Missing placeholder: `{key}`\n\nRaw Text:\n{text}", # <<< NEW
         "welcome_formatting_error": "⚠️ Unexpected Formatting Error!\n\nRaw Text:\n{text}", # <<< NEW
+        
+        # --- Mini App Translations ---
+        "mini_app_open_shop_button": "🛍️ Open Shop (Mini App)",
+        "mini_app_welcome_title": "🛍️ <b>Welcome to Bot Shop Mini App!</b>",
+        "mini_app_welcome_subtitle": "Click the button below to open our modern shopping interface.",
+        "mini_app_features_title": "✨ <b>Features:</b>",
+        "mini_app_feature_browse": "• Browse products by location",
+        "mini_app_feature_basket": "• Add items to your basket",
+        "mini_app_feature_checkout": "• Quick checkout and payments",
+        "mini_app_feature_profile": "• View your profile and balance",
+        "mini_app_feature_mobile": "• Mobile-optimized interface",
+        "mini_app_mobile_tip": "💡 <i>The Mini App works best on mobile devices!</i>",
     },
     # --- Lithuanian ---
     "lt": {
@@ -493,6 +505,18 @@ LANGUAGES = {
         "choose_city_title": "Pasirinkite miestą",
         "select_location_prompt": "Pasirinkite savo vietą:",
         "no_cities_available": "Šiuo metu nėra miestų. Patikrinkite vėliau.",
+        
+        # --- Mini App Translations ---
+        "mini_app_open_shop_button": "🛍️ Atidaryti parduotuvę (Mini programa)",
+        "mini_app_welcome_title": "🛍️ <b>Sveiki atvykę į Bot Shop Mini programą!</b>",
+        "mini_app_welcome_subtitle": "Spustelėkite mygtuką žemiau, kad atidarytumėte mūsų modernų apsipirkimo sąsają.",
+        "mini_app_features_title": "✨ <b>Funkcijos:</b>",
+        "mini_app_feature_browse": "• Naršykite produktus pagal vietovę",
+        "mini_app_feature_basket": "• Pridėkite prekes į krepšelį",
+        "mini_app_feature_checkout": "• Greitas mokėjimas ir apmokėjimas",
+        "mini_app_feature_profile": "• Peržiūrėkite savo profilį ir balansą",
+        "mini_app_feature_mobile": "• Mobiliesiems įrenginiams optimizuota sąsaja",
+        "mini_app_mobile_tip": "💡 <i>Mini programa geriausia veikia mobiliuosiuose įrenginiuose!</i>",
         "error_city_not_found": "Klaida: Miestas nerastas.",
         "choose_district_prompt": "Pasirinkite rajoną:",
         "no_districts_available": "Šiame mieste dar nėra rajonų.",
