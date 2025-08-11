@@ -220,16 +220,29 @@ def get_products(user, city_id, district_id):
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        # Get products with stock count
+        # First, get the city and district names from IDs
+        cursor.execute("SELECT name FROM cities WHERE id = ?", (city_id,))
+        city_row = cursor.fetchone()
+        if not city_row:
+            return jsonify({'error': 'City not found'}), 404
+        city_name = city_row['name']
+        
+        cursor.execute("SELECT name FROM districts WHERE id = ? AND city_id = ?", (district_id, city_id))
+        district_row = cursor.fetchone()
+        if not district_row:
+            return jsonify({'error': 'District not found'}), 404
+        district_name = district_row['name']
+        
+        # Get products with stock count using the actual names
         cursor.execute("""
-            SELECT p.id, p.product_type, p.size, p.price, p.city_id, p.district_id,
-                   COUNT(CASE WHEN p.reserved_by IS NULL THEN 1 END) as stock_count
+            SELECT p.id, p.product_type, p.size, p.price, p.city, p.district,
+                   COUNT(CASE WHEN p.reserved = 0 AND p.available = 1 THEN 1 END) as stock_count
             FROM products p
-            WHERE p.city_id = ? AND p.district_id = ?
-            GROUP BY p.product_type, p.size, p.price, p.city_id, p.district_id
+            WHERE p.city = ? AND p.district = ?
+            GROUP BY p.product_type, p.size, p.price, p.city, p.district
             HAVING stock_count > 0
             ORDER BY p.product_type, p.size
-        """, (city_id, district_id))
+        """, (city_name, district_name))
         
         products = []
         for row in cursor.fetchall():
@@ -248,8 +261,8 @@ def get_products(user, city_id, district_id):
                 'price': float(final_price),
                 'original_price': float(original_price),
                 'discount_percent': float(discount_percent),
-                'city': CITIES.get(city_id, city_id),
-                'district': DISTRICTS.get(city_id, {}).get(district_id, district_id),
+                'city': row['city'],
+                'district': row['district'],
                 'stock': row['stock_count'],
                 'emoji': PRODUCT_TYPES.get(product_type, DEFAULT_PRODUCT_EMOJI)
             })
@@ -260,7 +273,7 @@ def get_products(user, city_id, district_id):
         logger.error(f"Error getting products: {e}")
         return jsonify({'error': 'Failed to get products'}), 500
     finally:
-        if 'conn' in locals():
+        if 'conn' in locals() and conn:
             conn.close()
 
 @miniapp_bp.route('/api/basket')
@@ -291,7 +304,7 @@ def get_basket(user):
                     
                     # Get product details
                     cursor.execute("""
-                        SELECT product_type, size, price, city_id, district_id
+                        SELECT product_type, size, price, city, district
                         FROM products WHERE id = ?
                     """, (product_id,))
                     product = cursor.fetchone()
@@ -308,8 +321,8 @@ def get_basket(user):
                             'type': product['product_type'],
                             'size': product['size'],
                             'price': float(final_price),
-                            'city': CITIES.get(product['city_id'], product['city_id']),
-                            'district': DISTRICTS.get(product['city_id'], {}).get(product['district_id'], product['district_id']),
+                            'city': product['city'],
+                            'district': product['district'],
                             'emoji': PRODUCT_TYPES.get(product['product_type'], DEFAULT_PRODUCT_EMOJI),
                             'timestamp': timestamp
                         })
