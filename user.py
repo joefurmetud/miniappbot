@@ -298,6 +298,50 @@ async def handle_back_start(update: Update, context: ContextTypes.DEFAULT_TYPE, 
     """Handles 'Back' button presses that should return to the main start menu."""
     await start(update, context)
 
+# Mini App command handler
+async def mini_app(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /miniapp command to open the Mini App"""
+    user_id = update.effective_user.id
+    lang, lang_data = _get_lang_data(context)
+    
+    # Check if user is admin - redirect to regular bot interface
+    if is_any_admin(user_id):
+        await update.message.reply_text(
+            "🔧 Admin users should use the regular bot interface.\nUse /admin to access the admin panel.",
+            parse_mode=None
+        )
+        return
+
+    from utils import WEBHOOK_URL
+    mini_app_url = f"{WEBHOOK_URL}"
+    
+    # Create inline keyboard with Mini App button
+    keyboard = [[
+        InlineKeyboardButton(
+            "🛍️ Open Shop (Mini App)",
+            web_app={"url": mini_app_url}
+        )
+    ]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    welcome_msg = (
+        "🛍️ <b>Welcome to Bot Shop Mini App!</b>\n\n"
+        "Click the button below to open our modern shopping interface.\n\n"
+        "✨ <b>Features:</b>\n"
+        "• Browse products by location\n"
+        "• Add items to your basket\n"
+        "• Quick checkout and payments\n"
+        "• View your profile and balance\n"
+        "• Mobile-optimized interface\n\n"
+        "💡 <i>The Mini App works best on mobile devices!</i>"
+    )
+    
+    await update.message.reply_text(
+        welcome_msg,
+        reply_markup=reply_markup,
+        parse_mode=ParseMode.HTML
+    )
+
 # --- Shopping Handlers ---
 async def handle_shop(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
     query = update.callback_query

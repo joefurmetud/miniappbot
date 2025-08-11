@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Shop - Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 16px 0;
+            background: var(--tg-theme-secondary-bg-color, #f8f8f8);
+            border-radius: 12px;
+        }
+
+        .header h1 {
+            color: var(--tg-theme-text-color, #000000);
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .balance {
+            background: var(--tg-theme-button-color, #007aff);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .city-selector {
+            margin-bottom: 20px;
+        }
+
+        .city-selector select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--tg-theme-hint-color, #999999);
+            border-radius: 8px;
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            font-size: 16px;
+        }
+
+        .district-selector {
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: var(--tg-theme-secondary-bg-color, #f8f8f8);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid var(--tg-theme-hint-color, #e0e0e0);
+            transition: transform 0.2s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .product-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .product-emoji {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--tg-theme-text-color, #000000);
+        }
+
+        .product-info {
+            margin-bottom: 16px;
+        }
+
+        .product-location {
+            color: var(--tg-theme-hint-color, #999999);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--tg-theme-button-color, #007aff);
+            margin-bottom: 8px;
+        }
+
+        .product-stock {
+            font-size: 14px;
+            color: var(--tg-theme-hint-color, #999999);
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn-primary {
+            background: var(--tg-theme-button-color, #007aff);
+            color: var(--tg-theme-button-text-color, #ffffff);
+        }
+
+        .btn-secondary {
+            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            color: var(--tg-theme-text-color, #000000);
+            border: 1px solid var(--tg-theme-hint-color, #e0e0e0);
+        }
+
+        .basket-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--tg-theme-button-color, #007aff);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .basket-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff3b30;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--tg-theme-hint-color, #999999);
+        }
+
+        .error {
+            text-align: center;
+            padding: 20px;
+            color: #ff3b30;
+            background: rgba(255, 59, 48, 0.1);
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--tg-theme-hint-color, #999999);
+        }
+
+        .empty-state-emoji {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .tabs {
+            display: flex;
+            background: var(--tg-theme-secondary-bg-color, #f8f8f8);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 4px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 8px 16px;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: var(--tg-theme-button-color, #007aff);
+            color: var(--tg-theme-button-text-color, #ffffff);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛍️ Bot Shop</h1>
+            <div class="balance" id="userBalance">Balance: Loading...</div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="shop">🛒 Shop</div>
+            <div class="tab" data-tab="basket">🛍️ Basket</div>
+            <div class="tab" data-tab="profile">👤 Profile</div>
+        </div>
+
+        <!-- Shop Tab -->
+        <div class="tab-content active" id="shop-content">
+            <div class="city-selector">
+                <select id="citySelect">
+                    <option value="">Select City...</option>
+                </select>
+            </div>
+
+            <div class="district-selector" id="districtSelector">
+                <select id="districtSelect">
+                    <option value="">Select District...</option>
+                </select>
+            </div>
+
+            <div id="productsContainer">
+                <div class="loading">Loading products...</div>
+            </div>
+        </div>
+
+        <!-- Basket Tab -->
+        <div class="tab-content" id="basket-content">
+            <div id="basketContainer">
+                <div class="empty-state">
+                    <div class="empty-state-emoji">🛒</div>
+                    <p>Your basket is empty</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Tab -->
+        <div class="tab-content" id="profile-content">
+            <div id="profileContainer">
+                <div class="loading">Loading profile...</div>
+            </div>
+        </div>
+    </div>
+
+    <button class="basket-fab" id="basketFab">
+        🛒
+        <span class="basket-badge" id="basketBadge">0</span>
+    </button>
+
+    <script>
+        // Initialize Telegram Web App
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        // Get user data from Telegram
+        const user = tg.initDataUnsafe.user;
+        const userId = user ? user.id : null;
+
+        // API base URL
+        const API_BASE = '/api';
+
+        // Global state
+        let currentCity = '';
+        let currentDistrict = '';
+        let basketItems = [];
+        let userBalance = 0;
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+                switchTab(targetTab);
+            });
+        });
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`${tabName}-content`).classList.add('active');
+
+            // Load content based on tab
+            switch(tabName) {
+                case 'shop':
+                    loadCities();
+                    break;
+                case 'basket':
+                    loadBasket();
+                    break;
+                case 'profile':
+                    loadProfile();
+                    break;
+            }
+        }
+
+        // API calls
+        async function apiCall(endpoint, options = {}) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    ...options,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Telegram-Init-Data': tg.initData,
+                        ...options.headers
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('API call failed:', error);
+                throw error;
+            }
+        }
+
+        // Load user balance
+        async function loadUserBalance() {
+            try {
+                const data = await apiCall('/user/balance');
+                userBalance = data.balance;
+                document.getElementById('userBalance').textContent = `Balance: €${userBalance}`;
+            } catch (error) {
+                document.getElementById('userBalance').textContent = 'Balance: Error';
+            }
+        }
+
+        // Load cities
+        async function loadCities() {
+            try {
+                const data = await apiCall('/cities');
+                const citySelect = document.getElementById('citySelect');
+                citySelect.innerHTML = '<option value="">Select City...</option>';
+                
+                data.cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city.id;
+                    option.textContent = city.name;
+                    citySelect.appendChild(option);
+                });
+
+                citySelect.addEventListener('change', handleCityChange);
+            } catch (error) {
+                showError('Failed to load cities');
+            }
+        }
+
+        // Handle city change
+        async function handleCityChange(event) {
+            currentCity = event.target.value;
+            currentDistrict = '';
+            
+            const districtSelector = document.getElementById('districtSelector');
+            const districtSelect = document.getElementById('districtSelect');
+            
+            if (currentCity) {
+                try {
+                    const data = await apiCall(`/districts/${currentCity}`);
+                    districtSelect.innerHTML = '<option value="">Select District...</option>';
+                    
+                    data.districts.forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district.id;
+                        option.textContent = district.name;
+                        districtSelect.appendChild(option);
+                    });
+                    
+                    districtSelector.style.display = 'block';
+                    districtSelect.addEventListener('change', handleDistrictChange);
+                } catch (error) {
+                    showError('Failed to load districts');
+                }
+            } else {
+                districtSelector.style.display = 'none';
+                clearProducts();
+            }
+        }
+
+        // Handle district change
+        function handleDistrictChange(event) {
+            currentDistrict = event.target.value;
+            if (currentDistrict) {
+                loadProducts();
+            } else {
+                clearProducts();
+            }
+        }
+
+        // Load products
+        async function loadProducts() {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '<div class="loading">Loading products...</div>';
+
+            try {
+                const data = await apiCall(`/products/${currentCity}/${currentDistrict}`);
+                displayProducts(data.products);
+            } catch (error) {
+                showError('Failed to load products');
+            }
+        }
+
+        // Display products
+        function displayProducts(products) {
+            const container = document.getElementById('productsContainer');
+            
+            if (products.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-emoji">📦</div>
+                        <p>No products available in this location</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const productsHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-header">
+                        <span class="product-emoji">${product.emoji}</span>
+                        <h3 class="product-title">${product.type} - ${product.size}</h3>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-location">📍 ${product.city} - ${product.district}</div>
+                        <div class="product-price">€${product.price}</div>
+                        <div class="product-stock">📦 ${product.stock} available</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-secondary" onclick="addToBasket(${product.id}, '${product.type}', '${product.size}', ${product.price})">
+                            Add to Basket
+                        </button>
+                        <button class="btn btn-primary" onclick="buyNow(${product.id})">
+                            Buy Now
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            container.innerHTML = `<div class="products-grid">${productsHTML}</div>`;
+        }
+
+        // Add to basket
+        async function addToBasket(productId, type, size, price) {
+            try {
+                await apiCall('/basket/add', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        product_id: productId,
+                        type: type,
+                        size: size,
+                        price: price
+                    })
+                });
+
+                updateBasketBadge();
+                tg.showAlert('Product added to basket!');
+            } catch (error) {
+                tg.showAlert('Failed to add product to basket');
+            }
+        }
+
+        // Buy now
+        async function buyNow(productId) {
+            try {
+                const data = await apiCall('/payment/create', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        product_id: productId,
+                        type: 'single'
+                    })
+                });
+
+                if (data.payment_url) {
+                    tg.openLink(data.payment_url);
+                } else {
+                    tg.showAlert('Payment creation failed');
+                }
+            } catch (error) {
+                tg.showAlert('Failed to create payment');
+            }
+        }
+
+        // Load basket
+        async function loadBasket() {
+            try {
+                const data = await apiCall('/basket');
+                displayBasket(data.items, data.total);
+            } catch (error) {
+                showError('Failed to load basket');
+            }
+        }
+
+        // Display basket
+        function displayBasket(items, total) {
+            const container = document.getElementById('basketContainer');
+            
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-emoji">🛒</div>
+                        <p>Your basket is empty</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const itemsHTML = items.map(item => `
+                <div class="product-card">
+                    <div class="product-header">
+                        <span class="product-emoji">${item.emoji}</span>
+                        <h3 class="product-title">${item.type} - ${item.size}</h3>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-location">📍 ${item.city} - ${item.district}</div>
+                        <div class="product-price">€${item.price}</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-secondary" onclick="removeFromBasket(${item.id})">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            container.innerHTML = `
+                <div class="products-grid">${itemsHTML}</div>
+                <div style="margin-top: 20px; text-align: center;">
+                    <div style="font-size: 20px; font-weight: bold; margin-bottom: 16px;">
+                        Total: €${total}
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; max-width: 300px;" onclick="checkoutBasket()">
+                        Checkout Basket
+                    </button>
+                </div>
+            `;
+        }
+
+        // Remove from basket
+        async function removeFromBasket(itemId) {
+            try {
+                await apiCall('/basket/remove', {
+                    method: 'POST',
+                    body: JSON.stringify({ item_id: itemId })
+                });
+
+                loadBasket();
+                updateBasketBadge();
+                tg.showAlert('Item removed from basket');
+            } catch (error) {
+                tg.showAlert('Failed to remove item from basket');
+            }
+        }
+
+        // Checkout basket
+        async function checkoutBasket() {
+            try {
+                const data = await apiCall('/payment/create', {
+                    method: 'POST',
+                    body: JSON.stringify({ type: 'basket' })
+                });
+
+                if (data.payment_url) {
+                    tg.openLink(data.payment_url);
+                } else {
+                    tg.showAlert('Payment creation failed');
+                }
+            } catch (error) {
+                tg.showAlert('Failed to create payment');
+            }
+        }
+
+        // Load profile
+        async function loadProfile() {
+            try {
+                const data = await apiCall('/user/profile');
+                displayProfile(data);
+            } catch (error) {
+                showError('Failed to load profile');
+            }
+        }
+
+        // Display profile
+        function displayProfile(profile) {
+            const container = document.getElementById('profileContainer');
+            container.innerHTML = `
+                <div class="product-card">
+                    <h3>👤 Profile Information</h3>
+                    <div style="margin-top: 16px;">
+                        <div style="margin-bottom: 8px;"><strong>User ID:</strong> ${profile.user_id}</div>
+                        <div style="margin-bottom: 8px;"><strong>Username:</strong> ${profile.username || 'N/A'}</div>
+                        <div style="margin-bottom: 8px;"><strong>Balance:</strong> €${profile.balance}</div>
+                        <div style="margin-bottom: 8px;"><strong>Total Purchases:</strong> ${profile.total_purchases}</div>
+                        <div style="margin-bottom: 8px;"><strong>Member Since:</strong> ${profile.joined_date}</div>
+                    </div>
+                    <div style="margin-top: 16px;">
+                        <button class="btn btn-primary" onclick="refillBalance()" style="width: 100%;">
+                            💰 Refill Balance
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Refill balance
+        async function refillBalance() {
+            const amount = prompt('Enter amount to refill (EUR):');
+            if (amount && !isNaN(amount) && parseFloat(amount) > 0) {
+                try {
+                    const data = await apiCall('/payment/refill', {
+                        method: 'POST',
+                        body: JSON.stringify({ amount: parseFloat(amount) })
+                    });
+
+                    if (data.payment_url) {
+                        tg.openLink(data.payment_url);
+                    } else {
+                        tg.showAlert('Payment creation failed');
+                    }
+                } catch (error) {
+                    tg.showAlert('Failed to create refill payment');
+                }
+            }
+        }
+
+        // Update basket badge
+        async function updateBasketBadge() {
+            try {
+                const data = await apiCall('/basket/count');
+                const badge = document.getElementById('basketBadge');
+                const fab = document.getElementById('basketFab');
+                
+                if (data.count > 0) {
+                    badge.textContent = data.count;
+                    fab.style.display = 'flex';
+                } else {
+                    fab.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Failed to update basket badge');
+            }
+        }
+
+        // Show error
+        function showError(message) {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = `<div class="error">${message}</div>`;
+        }
+
+        // Clear products
+        function clearProducts() {
+            document.getElementById('productsContainer').innerHTML = '';
+        }
+
+        // Basket FAB click
+        document.getElementById('basketFab').addEventListener('click', () => {
+            switchTab('basket');
+        });
+
+        // Initialize app
+        async function init() {
+            if (!userId) {
+                tg.showAlert('User authentication failed');
+                return;
+            }
+
+            await loadUserBalance();
+            await updateBasketBadge();
+            await loadCities();
+        }
+
+        // Start the app
+        init();
+
+        // Set up main button for payments
+        tg.MainButton.setText('Continue in Telegram');
+        tg.MainButton.show();
+        tg.MainButton.onClick(() => {
+            tg.close();
+        });
+    </script>
+</body>
+</html>

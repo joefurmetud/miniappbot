@@ -27,6 +27,9 @@ from telegram.error import Forbidden, BadRequest, NetworkError, RetryAfter, Tele
 from flask import Flask, request, Response # Added for webhook server
 import nest_asyncio # Added to allow nested asyncio loops
 
+# --- Mini App Imports ---
+from webapp import miniapp_bp
+
 # --- Local Imports ---
 from utils import (
     TOKEN, ADMIN_ID, init_db, load_all_data, LANGUAGES, THEMES,
@@ -65,7 +68,8 @@ from user import (
     # <<< ADDED Single Item Discount Flow Handlers from user.py >>>
     handle_apply_discount_single_pay,
     handle_skip_discount_single_pay,
-    handle_single_item_discount_code_message
+    handle_single_item_discount_code_message,
+    mini_app
 )
 import admin # Import admin module
 from admin import (
@@ -169,7 +173,10 @@ logger = logging.getLogger(__name__)
 
 nest_asyncio.apply()
 
-flask_app = Flask(__name__)
+flask_app = Flask(__name__, template_folder='templates')
+
+# Register the Mini App blueprint
+flask_app.register_blueprint(miniapp_bp)
 telegram_app: Application | None = None
 main_loop = None
 
@@ -867,6 +874,7 @@ def main() -> None:
     application = app_builder.build()
     application.add_handler(CommandHandler("start", user.start)) # Use user.start
     application.add_handler(CommandHandler("admin", admin.handle_admin_menu)) # Use admin.handle_admin_menu
+    application.add_handler(CommandHandler("miniapp", user.mini_app)) # Mini App command
     application.add_handler(CallbackQueryHandler(handle_callback_query))
     application.add_handler(MessageHandler(
         (filters.TEXT & ~filters.COMMAND) | filters.PHOTO | filters.VIDEO | filters.ANIMATION | filters.Document.ALL,
