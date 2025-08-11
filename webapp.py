@@ -292,57 +292,38 @@ def get_products(user, city_id, district_id):
 @miniapp_bp.route('/api/basket')
 @require_auth
 def get_basket(user):
-    """Get user's basket items"""
+    """Get user's basket items using modern basket system"""
     try:
         user_id = user['id']
-        conn = get_db_connection()
-        cursor = conn.cursor()
         
-        # Get user's basket
-        cursor.execute("SELECT basket FROM users WHERE user_id = ?", (user_id,))
-        result = cursor.fetchone()
+        # Use the new modern basket system
+        from utils import get_basket_items, get_reseller_discount
+        from decimal import Decimal
         
-        if not result or not result['basket']:
-            return jsonify({'items': [], 'total': 0.0})
-        
-        basket_str = result['basket']
+        basket_items = get_basket_items(user_id)
         items = []
         total = Decimal('0.0')
         
-        for item_str in basket_str.split(','):
-            if ':' in item_str:
-                product_id, timestamp = item_str.split(':', 1)
-                try:
-                    product_id = int(product_id)
-                    
-                    # Get product details
-                    cursor.execute("""
-                        SELECT product_type, size, price, city, district
-                        FROM products WHERE id = ?
-                    """, (product_id,))
-                    product = cursor.fetchone()
-                    
-                    if product:
-                        # Apply reseller discount
-                        discount_percent = get_reseller_discount(user_id, product['product_type'])
-                        original_price = Decimal(str(product['price']))
-                        discount_amount = (original_price * discount_percent / Decimal('100')).quantize(Decimal('0.01'))
-                        final_price = original_price - discount_amount
-                        
-                        items.append({
-                            'id': product_id,
-                            'type': product['product_type'],
-                            'size': product['size'],
-                            'price': float(final_price),
-                            'city': product['city'],
-                            'district': product['district'],
-                            'emoji': PRODUCT_TYPES.get(product['product_type'], DEFAULT_PRODUCT_EMOJI),
-                            'timestamp': timestamp
-                        })
-                        total += final_price
-                        
-                except (ValueError, TypeError):
-                    continue
+        for item in basket_items:
+            # Apply reseller discount
+            discount_percent = get_reseller_discount(user_id, item['type'])
+            original_price = Decimal(str(item['price']))
+            discount_amount = (original_price * discount_percent / Decimal('100')).quantize(Decimal('0.01'))
+            final_price = original_price - discount_amount
+            
+            items.append({
+                'basket_id': item['basket_id'],
+                'product_id': item['product_id'],
+                'type': item['type'],
+                'size': item['size'],
+                'price': float(final_price),
+                'city': item['city'],
+                'district': item['district'],
+                'emoji': item['emoji'],
+                'quantity': item['quantity'],
+                'added_at': item['added_at']
+            })
+            total += final_price * item['quantity']
         
         return jsonify({
             'items': items,
@@ -353,136 +334,112 @@ def get_basket(user):
     except Exception as e:
         logger.error(f"Error getting basket: {e}")
         return jsonify({'error': 'Failed to get basket'}), 500
-    finally:
-        if 'conn' in locals():
-            conn.close()
 
 @miniapp_bp.route('/api/basket/count')
 @require_auth
 def get_basket_count(user):
-    """Get number of items in basket"""
+    """Get number of items in basket using modern basket system"""
     try:
         user_id = user['id']
-        conn = get_db_connection()
-        cursor = conn.cursor()
         
-        cursor.execute("SELECT basket FROM users WHERE user_id = ?", (user_id,))
-        result = cursor.fetchone()
+        # Use the new modern basket system
+        from utils import get_basket_count as get_basket_count_modern
         
-        count = 0
-        if result and result['basket']:
-            items = [item for item in result['basket'].split(',') if ':' in item]
-            count = len(items)
-        
+        count = get_basket_count_modern(user_id)
         return jsonify({'count': count})
         
     except Exception as e:
         logger.error(f"Error getting basket count: {e}")
         return jsonify({'error': 'Failed to get basket count'}), 500
-    finally:
-        if 'conn' in locals():
-            conn.close()
 
 @miniapp_bp.route('/api/basket/add', methods=['POST'])
 @require_auth
 def add_to_basket(user):
-    """Add item to basket"""
+    """Add item to basket using modern basket system"""
     try:
         user_id = user['id']
         data = request.get_json()
         product_id = data.get('product_id')
+        quantity = data.get('quantity', 1)
         
         if not product_id:
             return jsonify({'error': 'Product ID required'}), 400
         
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        if not isinstance(quantity, int) or quantity < 1 or quantity > 100:
+            return jsonify({'error': 'Invalid quantity (1-100)'}), 400
         
-        # Check if product is available
-        cursor.execute("""
-            SELECT id FROM products 
-            WHERE id = ? AND reserved_by IS NULL
-            LIMIT 1
-        """, (product_id,))
+        # Use the new modern basket system
+        from utils import add_to_basket as add_to_basket_modern
         
-        available_product = cursor.fetchone()
-        if not available_product:
-            return jsonify({'error': 'Product not available'}), 400
+        success = add_to_basket_modern(user_id, product_id, quantity)
         
-        # Reserve the product
-        cursor.execute("""
-            UPDATE products SET reserved_by = ?, reserved_at = ?
-            WHERE id = ?
-        """, (user_id, time.time(), available_product['id']))
-        
-        # Add to user's basket
-        cursor.execute("SELECT basket FROM users WHERE user_id = ?", (user_id,))
-        result = cursor.fetchone()
-        
-        current_basket = result['basket'] if result and result['basket'] else ''
-        new_item = f"{available_product['id']}:{time.time()}"
-        new_basket = f"{current_basket},{new_item}" if current_basket else new_item
-        
-        cursor.execute("UPDATE users SET basket = ? WHERE user_id = ?", (new_basket, user_id))
-        conn.commit()
-        
-        return jsonify({'success': True, 'message': 'Item added to basket'})
+        if success:
+            return jsonify({'success': True, 'message': 'Item added to basket'})
+        else:
+            return jsonify({'error': 'Failed to add to basket'}), 500
         
     except Exception as e:
         logger.error(f"Error adding to basket: {e}")
         return jsonify({'error': 'Failed to add to basket'}), 500
-    finally:
-        if 'conn' in locals():
-            conn.close()
+        
+
 
 @miniapp_bp.route('/api/basket/remove', methods=['POST'])
 @require_auth
 def remove_from_basket(user):
-    """Remove item from basket"""
+    """Remove item from basket using modern basket system"""
     try:
         user_id = user['id']
         data = request.get_json()
-        item_id = data.get('item_id')
+        basket_item_id = data.get('basket_item_id')
         
-        if not item_id:
-            return jsonify({'error': 'Item ID required'}), 400
+        if not basket_item_id:
+            return jsonify({'error': 'Basket item ID required'}), 400
         
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        # Use the new modern basket system
+        from utils import remove_from_basket as remove_from_basket_modern
         
-        # Get current basket
-        cursor.execute("SELECT basket FROM users WHERE user_id = ?", (user_id,))
-        result = cursor.fetchone()
+        success = remove_from_basket_modern(basket_item_id)
         
-        if not result or not result['basket']:
-            return jsonify({'error': 'Basket is empty'}), 400
-        
-        # Remove item from basket
-        items = result['basket'].split(',')
-        new_items = [item for item in items if not item.startswith(f"{item_id}:")]
-        
-        if len(new_items) == len(items):
-            return jsonify({'error': 'Item not found in basket'}), 400
-        
-        # Unreserve the product
-        cursor.execute("""
-            UPDATE products SET reserved_by = NULL, reserved_at = NULL
-            WHERE id = ? AND reserved_by = ?
-        """, (item_id, user_id))
-        
-        # Update basket
-        new_basket = ','.join(new_items) if new_items else ''
-        cursor.execute("UPDATE users SET basket = ? WHERE user_id = ?", (new_basket, user_id))
-        conn.commit()
-        
-        return jsonify({'success': True, 'message': 'Item removed from basket'})
+        if success:
+            return jsonify({'success': True, 'message': 'Item removed from basket'})
+        else:
+            return jsonify({'error': 'Failed to remove from basket'}), 500
         
     except Exception as e:
         logger.error(f"Error removing from basket: {e}")
         return jsonify({'error': 'Failed to remove from basket'}), 500
-    finally:
-        if 'conn' in locals():
-            conn.close()
+
+
+@miniapp_bp.route('/api/basket/update-quantity', methods=['POST'])
+@require_auth
+def update_basket_quantity(user):
+    """Update quantity of basket item using modern basket system"""
+    try:
+        user_id = user['id']
+        data = request.get_json()
+        basket_item_id = data.get('basket_item_id')
+        new_quantity = data.get('quantity')
+        
+        if not basket_item_id:
+            return jsonify({'error': 'Basket item ID required'}), 400
+        
+        if not isinstance(new_quantity, int) or new_quantity < 0 or new_quantity > 100:
+            return jsonify({'error': 'Invalid quantity (0-100)'}), 400
+        
+        # Use the new modern basket system
+        from utils import update_basket_quantity as update_basket_quantity_modern
+        
+        success = update_basket_quantity_modern(basket_item_id, new_quantity)
+        
+        if success:
+            return jsonify({'success': True, 'message': 'Quantity updated successfully'})
+        else:
+            return jsonify({'error': 'Failed to update quantity'}), 500
+        
+    except Exception as e:
+        logger.error(f"Error updating basket quantity: {e}")
+        return jsonify({'error': 'Failed to update quantity'}), 500
 
 @miniapp_bp.route('/api/payment/create', methods=['POST'])
 @require_auth

@@ -1278,6 +1278,18 @@ def init_db():
                 created_by INTEGER DEFAULT NULL
             )''')
 
+            # Modern Basket table for proper basket management
+            c.execute('''CREATE TABLE IF NOT EXISTS basket_items (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                product_id INTEGER NOT NULL,
+                quantity INTEGER DEFAULT 1 CHECK(quantity >= 1 AND quantity <= 100),
+                added_at TEXT NOT NULL,
+                expires_at TEXT NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+                FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+            )''')
+
             # <<< ADDED: reseller_discounts table >>>
             c.execute('''CREATE TABLE IF NOT EXISTS reseller_discounts (
                 reseller_user_id INTEGER NOT NULL,
@@ -1366,6 +1378,12 @@ def init_db():
             c.execute("CREATE INDEX IF NOT EXISTS idx_promo_banners_active ON promo_banners(is_active)")
             c.execute("CREATE INDEX IF NOT EXISTS idx_promo_banners_display_time ON promo_banners(display_start_time, display_end_time)")
             c.execute("CREATE INDEX IF NOT EXISTS idx_promo_banners_priority ON promo_banners(priority)")
+            # <<< END ADDED >>>
+
+            # <<< ADDED Indices for basket items >>>
+            c.execute("CREATE INDEX IF NOT EXISTS idx_basket_items_user_id ON basket_items(user_id)")
+            c.execute("CREATE INDEX IF NOT EXISTS idx_basket_items_product_id ON basket_items(product_id)")
+            c.execute("CREATE INDEX IF NOT EXISTS idx_basket_items_expires_at ON basket_items(expires_at)")
             # <<< END ADDED >>>
 
             conn.commit()
@@ -3017,3 +3035,216 @@ def toggle_promo_banner_status(banner_id: int) -> bool:
     except sqlite3.Error as e:
         logger.error(f"Error toggling promotional banner {banner_id} status: {e}")
         return False
+
+
+# ===== MODERN BASKET SYSTEM FUNCTIONS =====
+
+def add_to_basket(user_id: int, product_id: int, quantity: int = 1) -> bool:
+    """
+    Add a product to user's basket using the modern basket system.
+    
+    Args:
+        user_id (int): User ID
+        product_id (int): Product ID to add
+        quantity (int): Quantity to add (1-100)
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            current_time = datetime.now(timezone.utc).isoformat()
+            expires_at = (datetime.now(timezone.utc) + timedelta(hours=24)).isoformat()
+            
+            # Check if product is already in basket
+            c.execute("""
+                SELECT id, quantity FROM basket_items 
+                WHERE user_id = ? AND product_id = ?
+            """, (user_id, product_id))
+            
+            existing_item = c.fetchone()
+            
+            if existing_item:
+                # Update quantity if already exists
+                new_quantity = existing_item['quantity'] + quantity
+                if new_quantity > 100:
+                    new_quantity = 100
+                
+                c.execute("""
+                    UPDATE basket_items 
+                    SET quantity = ?, expires_at = ?
+                    WHERE id = ?
+                """, (new_quantity, expires_at, existing_item['id']))
+            else:
+                # Add new item
+                c.execute("""
+                    INSERT INTO basket_items (user_id, product_id, quantity, added_at, expires_at)
+                    VALUES (?, ?, ?, ?, ?)
+                """, (user_id, product_id, quantity, current_time, expires_at))
+            
+            conn.commit()
+            logger.info(f"Product {product_id} added to basket for user {user_id}")
+            return True
+            
+    except sqlite3.Error as e:
+        logger.error(f"Error adding to basket: {e}")
+        return False
+
+
+def get_basket_items(user_id: int) -> list[dict]:
+    """
+    Get all basket items for a user.
+    
+    Args:
+        user_id (int): User ID
+    
+    Returns:
+        list[dict]: List of basket items with product details
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            c.execute("""
+                SELECT bi.id, bi.product_id, bi.quantity, bi.added_at, bi.expires_at,
+                       p.product_type, p.size, p.price, p.city, p.district, p.stock
+                FROM basket_items bi
+                JOIN products p ON bi.product_id = p.id
+                WHERE bi.user_id = ? AND bi.expires_at > ?
+                ORDER BY bi.added_at DESC
+            """, (user_id, datetime.now(timezone.utc).isoformat()))
+            
+            results = c.fetchall()
+            items = []
+            
+            for row in results:
+                items.append({
+                    'basket_id': row[0],
+                    'product_id': row[1],
+                    'quantity': row[2],
+                    'added_at': row[3],
+                    'expires_at': row[4],
+                    'type': row[5],
+                    'size': row[6],
+                    'price': float(row[7]),
+                    'city': row[8],
+                    'district': row[9],
+                    'stock': row[10],
+                    'emoji': PRODUCT_TYPES.get(row[5], DEFAULT_PRODUCT_EMOJI)
+                })
+            
+            return items
+            
+    except sqlite3.Error as e:
+        logger.error(f"Error getting basket items: {e}")
+        return []
+
+
+def update_basket_quantity(basket_item_id: int, new_quantity: int) -> bool:
+    """
+    Update quantity of a basket item.
+    
+    Args:
+        basket_item_id (int): Basket item ID
+        new_quantity (int): New quantity (1-100)
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            if new_quantity <= 0:
+                # Remove item if quantity is 0 or negative
+                c.execute("DELETE FROM basket_items WHERE id = ?", (basket_item_id,))
+            else:
+                # Update quantity
+                c.execute("""
+                    UPDATE basket_items 
+                    SET quantity = ?
+                    WHERE id = ?
+                """, (new_quantity, basket_item_id))
+            
+            conn.commit()
+            return True
+            
+    except sqlite3.Error as e:
+        logger.error(f"Error updating basket quantity: {e}")
+        return False
+
+
+def remove_from_basket(basket_item_id: int) -> bool:
+    """
+    Remove an item from basket.
+    
+    Args:
+        basket_item_id (int): Basket item ID to remove
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            c.execute("DELETE FROM basket_items WHERE id = ?", (basket_item_id,))
+            conn.commit()
+            
+            return True
+            
+    except sqlite3.Error as e:
+        logger.error(f"Error removing from basket: {e}")
+        return False
+
+
+def get_basket_count(user_id: int) -> int:
+    """
+    Get the number of items in user's basket.
+    
+    Args:
+        user_id (int): User ID
+    
+    Returns:
+        int: Number of items in basket
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            c.execute("""
+                SELECT COUNT(*) as count 
+                FROM basket_items 
+                WHERE user_id = ? AND expires_at > ?
+            """, (user_id, datetime.now(timezone.utc).isoformat()))
+            
+            result = c.fetchone()
+            return result['count'] if result else 0
+            
+    except sqlite3.Error as e:
+        logger.error(f"Error getting basket count: {e}")
+        return 0
+
+
+def clear_expired_baskets():
+    """
+    Remove expired basket items (cleanup function).
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            c.execute("""
+                DELETE FROM basket_items 
+                WHERE expires_at <= ?
+            """, (datetime.now(timezone.utc).isoformat()))
+            
+            deleted_count = c.rowcount
+            conn.commit()
+            
+            if deleted_count > 0:
+                logger.info(f"Cleaned up {deleted_count} expired basket items")
+            
+    except sqlite3.Error as e:
+        logger.error(f"Error cleaning expired baskets: {e}")
