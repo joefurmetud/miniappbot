@@ -157,18 +157,29 @@ def get_user_profile(user):
         
         if not user_data:
             # Create user if doesn't exist
+            current_time = datetime.now().isoformat()
             cursor.execute("""
-                INSERT OR IGNORE INTO users (user_id, username, balance) 
-                VALUES (?, ?, ?)
-            """, (user_id, user.get('username', ''), 0.0))
+                INSERT OR IGNORE INTO users (user_id, username, balance, created_at, total_spent) 
+                VALUES (?, ?, ?, ?, ?)
+            """, (user_id, user.get('username', ''), 0.0, current_time, 0.0))
             conn.commit()
             
             user_data = {
                 'balance': 0.0,
-                'created_at': datetime.now().isoformat(),
+                'created_at': current_time,
                 'total_spent': 0.0,
                 'total_purchases': 0
             }
+        else:
+            # If created_at is NULL for existing user, set it now
+            if not user_data.get('created_at'):
+                current_time = datetime.now().isoformat()
+                cursor.execute("""
+                    UPDATE users SET created_at = ? WHERE user_id = ?
+                """, (current_time, user_id))
+                conn.commit()
+                user_data = dict(user_data)  # Convert Row to dict
+                user_data['created_at'] = current_time
         
         return jsonify({
             'user_id': user_id,

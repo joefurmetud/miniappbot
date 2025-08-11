@@ -1102,6 +1102,22 @@ def init_db():
                  if "duplicate column name: is_reseller" in str(alter_e): pass # Ignore if already exists
                  else: raise # Reraise other errors
             # <<< END ADDED >>>
+            
+            # Add created_at column if missing
+            try:
+                c.execute("ALTER TABLE users ADD COLUMN created_at TEXT")
+                logger.info("Added 'created_at' column to users table.")
+            except sqlite3.OperationalError as alter_e:
+                if "duplicate column name: created_at" in str(alter_e): pass # Ignore if already exists
+                else: raise # Reraise other errors
+                
+            # Add total_spent column if missing
+            try:
+                c.execute("ALTER TABLE users ADD COLUMN total_spent REAL DEFAULT 0.0")
+                logger.info("Added 'total_spent' column to users table.")
+            except sqlite3.OperationalError as alter_e:
+                if "duplicate column name: total_spent" in str(alter_e): pass # Ignore if already exists
+                else: raise # Reraise other errors
 
             # cities table
             c.execute('''CREATE TABLE IF NOT EXISTS cities (
@@ -1132,6 +1148,22 @@ def init_db():
                 available INTEGER DEFAULT 1, reserved INTEGER DEFAULT 0, original_text TEXT,
                 added_by INTEGER, added_date TEXT
             )''')
+            
+            # Add reserved_by column if missing
+            try:
+                c.execute("ALTER TABLE products ADD COLUMN reserved_by INTEGER")
+                logger.info("Added 'reserved_by' column to products table.")
+            except sqlite3.OperationalError as alter_e:
+                if "duplicate column name: reserved_by" in str(alter_e): pass # Ignore if already exists
+                else: raise # Reraise other errors
+                
+            # Add reserved_at column if missing
+            try:
+                c.execute("ALTER TABLE products ADD COLUMN reserved_at REAL")
+                logger.info("Added 'reserved_at' column to products table.")
+            except sqlite3.OperationalError as alter_e:
+                if "duplicate column name: reserved_at" in str(alter_e): pass # Ignore if already exists
+                else: raise # Reraise other errors
             # product_media table (Fixed: No CASCADE deletion, manual cleanup only)
             c.execute('''CREATE TABLE IF NOT EXISTS product_media (
                 id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER NOT NULL,
