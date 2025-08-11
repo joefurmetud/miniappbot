@@ -1245,8 +1245,10 @@
             }
         }
 
-        /* 3D Animated City Icons */
-        .city-icon-3d {
+        /* 3D Animated City Icons - 4 DIFFERENT STYLES */
+        
+        /* ===== STYLE 1: MODERN SKYSCRAPER CITY ===== */
+        .city-icon-3d-style1 {
             width: 48px;
             height: 48px;
             position: relative;
@@ -1255,7 +1257,7 @@
             flex-shrink: 0;
         }
 
-        .city-building {
+        .city-building-style1 {
             position: absolute;
             background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
             border-radius: 2px;
@@ -1266,7 +1268,7 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
-        .city-building:nth-child(1) {
+        .city-building-style1:nth-child(1) {
             width: 8px;
             height: 24px;
             left: 4px;
@@ -1274,7 +1276,7 @@
             animation-delay: 0s;
         }
 
-        .city-building:nth-child(2) {
+        .city-building-style1:nth-child(2) {
             width: 12px;
             height: 32px;
             left: 14px;
@@ -1283,7 +1285,7 @@
             background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-pink) 100%);
         }
 
-        .city-building:nth-child(3) {
+        .city-building-style1:nth-child(3) {
             width: 10px;
             height: 28px;
             left: 28px;
@@ -1291,7 +1293,7 @@
             animation-delay: 1s;
         }
 
-        .city-building:nth-child(4) {
+        .city-building-style1:nth-child(4) {
             width: 6px;
             height: 20px;
             left: 40px;
@@ -1300,8 +1302,160 @@
             background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-blue) 100%);
         }
 
-        /* Building windows */
-        .city-building::before {
+        /* ===== STYLE 2: CYBERPUNK NEON CITY ===== */
+        .city-icon-3d-style2 {
+            width: 48px;
+            height: 48px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: cyberFloat 4s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .city-building-style2 {
+            position: absolute;
+            background: linear-gradient(180deg, #00ff88 0%, #0088ff 50%, #ff0088 100%);
+            border-radius: 1px;
+            transform-origin: bottom center;
+            animation: cyberPulse 2s ease-in-out infinite;
+            box-shadow: 
+                0 0 8px currentColor,
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .city-building-style2:nth-child(1) {
+            width: 6px;
+            height: 36px;
+            left: 6px;
+            bottom: 0;
+            animation-delay: 0s;
+            color: #00ff88;
+        }
+
+        .city-building-style2:nth-child(2) {
+            width: 8px;
+            height: 42px;
+            left: 16px;
+            bottom: 0;
+            animation-delay: 0.3s;
+            color: #0088ff;
+        }
+
+        .city-building-style2:nth-child(3) {
+            width: 10px;
+            height: 38px;
+            left: 28px;
+            bottom: 0;
+            animation-delay: 0.6s;
+            color: #ff0088;
+        }
+
+        .city-building-style2:nth-child(4) {
+            width: 7px;
+            height: 32px;
+            left: 42px;
+            bottom: 0;
+            animation-delay: 0.9s;
+            color: #ffff00;
+        }
+
+        /* ===== STYLE 3: MINIMALIST GEOMETRIC CITY ===== */
+        .city-icon-3d-style3 {
+            width: 48px;
+            height: 48px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: minimalFloat 8s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .city-building-style3 {
+            position: absolute;
+            background: var(--accent-blue);
+            border-radius: 0;
+            transform-origin: bottom center;
+            animation: minimalPulse 6s ease-in-out infinite;
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .city-building-style3:nth-child(1) {
+            width: 10px;
+            height: 20px;
+            left: 8px;
+            bottom: 0;
+            animation-delay: 0s;
+        }
+
+        .city-building-style3:nth-child(2) {
+            width: 14px;
+            height: 28px;
+            left: 20px;
+            bottom: 0;
+            animation-delay: 1.5s;
+        }
+
+        .city-building-style3:nth-child(3) {
+            width: 12px;
+            height: 24px;
+            left: 36px;
+            bottom: 0;
+            animation-delay: 3s;
+        }
+
+        /* ===== STYLE 4: FANTASY CRYSTAL CITY ===== */
+        .city-icon-3d-style4 {
+            width: 48px;
+            height: 48px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: crystalFloat 5s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .city-building-style4 {
+            position: absolute;
+            background: linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.9) 0%, 
+                rgba(88, 166, 255, 0.8) 25%, 
+                rgba(255, 119, 198, 0.8) 50%, 
+                rgba(255, 255, 255, 0.9) 100%);
+            border-radius: 50% 50% 0 0;
+            transform-origin: bottom center;
+            animation: crystalPulse 3s ease-in-out infinite;
+            box-shadow: 
+                0 0 12px rgba(255, 255, 255, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(2px);
+        }
+
+        .city-building-style4:nth-child(1) {
+            width: 12px;
+            height: 26px;
+            left: 6px;
+            bottom: 0;
+            animation-delay: 0s;
+        }
+
+        .city-building-style4:nth-child(2) {
+            width: 16px;
+            height: 34px;
+            left: 20px;
+            bottom: 0;
+            animation-delay: 0.7s;
+        }
+
+        .city-building-style4:nth-child(3) {
+            width: 14px;
+            height: 30px;
+            left: 38px;
+            bottom: 0;
+            animation-delay: 1.4s;
+        }
+
+        /* Building windows for Style 1 */
+        .city-building-style1::before {
             content: '';
             position: absolute;
             top: 20%;
@@ -1318,20 +1472,63 @@
             animation: windowGlow 3s ease-in-out infinite;
         }
 
+        /* Neon glow for Style 2 */
+        .city-building-style2::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 1px;
+            background: currentColor;
+            border-radius: 50%;
+            box-shadow: 
+                0 3px 0 currentColor,
+                0 6px 0 currentColor,
+                0 9px 0 currentColor,
+                0 12px 0 currentColor;
+            animation: neonGlow 1.5s ease-in-out infinite;
+        }
+
         /* Floating effect around city */
-        .city-icon-3d::after {
+        .city-icon-3d-style1::after,
+        .city-icon-3d-style2::after,
+        .city-icon-3d-style3::after,
+        .city-icon-3d-style4::after {
             content: '';
             position: absolute;
             top: -4px;
             left: -4px;
             right: -4px;
             bottom: -4px;
-            background: radial-gradient(circle, rgba(88, 166, 255, 0.2) 0%, transparent 70%);
             border-radius: 50%;
-            animation: cityGlow 4s ease-in-out infinite;
             z-index: -1;
         }
 
+        .city-icon-3d-style1::after {
+            background: radial-gradient(circle, rgba(88, 166, 255, 0.2) 0%, transparent 70%);
+            animation: cityGlow 4s ease-in-out infinite;
+        }
+
+        .city-icon-3d-style2::after {
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.3) 0%, transparent 70%);
+            animation: cyberGlow 2s ease-in-out infinite;
+        }
+
+        .city-icon-3d-style3::after {
+            background: radial-gradient(circle, rgba(88, 166, 255, 0.1) 0%, transparent 70%);
+            animation: minimalGlow 8s ease-in-out infinite;
+        }
+
+        .city-icon-3d-style4::after {
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            animation: crystalGlow 5s ease-in-out infinite;
+        }
+
+        /* ===== ANIMATIONS FOR ALL STYLES ===== */
+        
+        /* Style 1: Modern Skyscraper */
         @keyframes cityFloat {
             0%, 100% { 
                 transform: translateY(0) rotateY(0deg) scale(1);
@@ -1366,17 +1563,98 @@
             }
         }
 
-        @keyframes windowGlow {
+        /* Style 2: Cyberpunk */
+        @keyframes cyberFloat {
             0%, 100% { 
-                opacity: 0.6;
+                transform: translateY(0) rotateX(0deg) scale(1);
+            }
+            33% { 
+                transform: translateY(-4px) rotateX(10deg) scale(1.03);
+            }
+            66% { 
+                transform: translateY(-2px) rotateX(-5deg) scale(1.01);
+            }
+        }
+
+        @keyframes cyberPulse {
+            0%, 100% { 
+                transform: scaleY(1) rotateZ(0deg);
                 filter: brightness(1);
             }
             50% { 
-                opacity: 1;
+                transform: scaleY(1.15) rotateZ(2deg);
                 filter: brightness(1.5);
             }
         }
 
+        @keyframes neonGlow {
+            0%, 100% { 
+                opacity: 0.7;
+                filter: brightness(1);
+            }
+            50% { 
+                opacity: 1;
+                filter: brightness(2);
+            }
+        }
+
+        /* Style 3: Minimalist */
+        @keyframes minimalFloat {
+            0%, 100% { 
+                transform: translateY(0) rotateY(0deg) scale(1);
+            }
+            50% { 
+                transform: translateY(-2px) rotateY(3deg) scale(1.02);
+            }
+        }
+
+        @keyframes minimalPulse {
+            0%, 100% { 
+                transform: scaleY(1);
+                opacity: 0.9;
+            }
+            50% { 
+                transform: scaleY(1.05);
+                opacity: 1;
+            }
+        }
+
+        /* Style 4: Fantasy Crystal */
+        @keyframes crystalFloat {
+            0%, 100% { 
+                transform: translateY(0) rotateZ(0deg) scale(1);
+            }
+            25% { 
+                transform: translateY(-3px) rotateZ(5deg) scale(1.03);
+            }
+            50% { 
+                transform: translateY(-1px) rotateZ(0deg) scale(1.05);
+            }
+            75% { 
+                transform: translateY(-4px) rotateZ(-5deg) scale(1.02);
+            }
+        }
+
+        @keyframes crystalPulse {
+            0%, 100% { 
+                transform: scaleY(1) rotateZ(0deg);
+                opacity: 0.8;
+            }
+            25% { 
+                transform: scaleY(1.1) rotateZ(2deg);
+                opacity: 1;
+            }
+            50% { 
+                transform: scaleY(0.95) rotateZ(0deg);
+                opacity: 0.9;
+            }
+            75% { 
+                transform: scaleY(1.05) rotateZ(-2deg);
+                opacity: 1;
+            }
+        }
+
+        /* Glow animations */
         @keyframes cityGlow {
             0%, 100% { 
                 opacity: 0.3;
@@ -1388,159 +1666,209 @@
             }
         }
 
-        /* Hover effects for city icons */
-        .location-btn:hover .city-icon-3d {
+        @keyframes cyberGlow {
+            0%, 100% { 
+                opacity: 0.4;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.8;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes minimalGlow {
+            0%, 100% { 
+                opacity: 0.2;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.4;
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes crystalGlow {
+            0%, 100% { 
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.7;
+                transform: scale(1.15);
+            }
+        }
+
+        @keyframes windowGlow {
+            0%, 100% { 
+                opacity: 0.6;
+                filter: brightness(1);
+            }
+            50% { 
+                opacity: 1;
+                filter: brightness(1.5);
+            }
+        }
+
+        /* Hover effects for all styles */
+        .location-btn:hover .city-icon-3d-style1,
+        .location-btn:hover .city-icon-3d-style2,
+        .location-btn:hover .city-icon-3d-style3,
+        .location-btn:hover .city-icon-3d-style4 {
             animation-duration: 2s;
             transform: translateY(-6px) rotateY(15deg) scale(1.1);
         }
 
-        .location-btn:hover .city-building {
+        .location-btn:hover .city-building-style1,
+        .location-btn:hover .city-building-style2,
+        .location-btn:hover .city-building-style3,
+        .location-btn:hover .city-building-style4 {
             animation-duration: 1s;
-            box-shadow: 
-                0 8px 16px rgba(88, 166, 255, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
 
-        .location-btn:hover .city-icon-3d::after {
-            opacity: 0.8;
-            transform: scale(1.3);
-        }
+                 .location-btn:hover .city-icon-3d-style1::after,
+         .location-btn:hover .city-icon-3d-style2::after,
+         .location-btn:hover .city-icon-3d-style3::after,
+         .location-btn:hover .city-icon-3d-style4::after {
+             opacity: 0.8;
+             transform: scale(1.3);
+         }
 
-        /* Location pin animation */
-        @keyframes pinPulse {
-            0%, 100% { 
-                transform: rotate(-45deg) scale(1);
-                opacity: 1;
-            }
-            50% { 
-                transform: rotate(-45deg) scale(1.1);
-                opacity: 0.8;
-            }
-        }
+         /* Location pin animation */
+         @keyframes pinPulse {
+             0%, 100% { 
+                 transform: rotate(-45deg) scale(1);
+                 opacity: 1;
+             }
+             50% { 
+                 transform: rotate(-45deg) scale(1.1);
+                 opacity: 0.8;
+             }
+         }
 
-        .error {
-            text-align: center;
-            padding: 24px;
-            color: #ff3b30;
-            background: rgba(255, 59, 48, 0.1);
-            border: 1px solid rgba(255, 59, 48, 0.2);
-            border-radius: 16px;
-            margin: 20px 0;
-            backdrop-filter: blur(10px);
-        }
+         .error {
+             text-align: center;
+             padding: 24px;
+             color: #ff3b30;
+             background: rgba(255, 59, 48, 0.1);
+             border: 1px solid rgba(255, 59, 48, 0.2);
+             border-radius: 16px;
+             margin: 20px 0;
+             backdrop-filter: blur(10px);
+         }
 
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--tg-theme-hint-color, #8e8e93);
-        }
+         .empty-state {
+             text-align: center;
+             padding: 60px 20px;
+             color: var(--tg-theme-hint-color, #8e8e93);
+         }
 
-        .empty-state-emoji {
-            font-size: 64px;
-            margin-bottom: 20px;
-            filter: grayscale(50%);
-        }
+         .empty-state-emoji {
+             font-size: 64px;
+             margin-bottom: 20px;
+             filter: grayscale(50%);
+         }
 
-        .empty-state h3 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #ffffff;
-        }
+         .empty-state h3 {
+             font-size: 20px;
+             font-weight: 600;
+             margin-bottom: 8px;
+             color: #ffffff;
+         }
 
-        .empty-state p {
-            font-size: 16px;
-            opacity: 0.7;
-        }
+         .empty-state p {
+             font-size: 16px;
+             opacity: 0.7;
+         }
 
-        .tab-content {
-            display: none;
-        }
+         .tab-content {
+             display: none;
+         }
 
-        .tab-content.active {
-            display: block;
-        }
+         .tab-content.active {
+             display: block;
+         }
 
-        .profile-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            margin-bottom: 20px;
-        }
+         .profile-card {
+             background: rgba(255, 255, 255, 0.05);
+             border-radius: 20px;
+             padding: 24px;
+             border: 1px solid rgba(255, 255, 255, 0.1);
+             backdrop-filter: blur(20px);
+             margin-bottom: 20px;
+         }
 
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--tg-theme-button-color, #007aff) 0%, #0056cc 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: white;
-            margin: 0 auto 20px;
-            box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3);
-        }
+         .profile-avatar {
+             width: 80px;
+             height: 80px;
+             border-radius: 50%;
+             background: linear-gradient(135deg, var(--tg-theme-button-color, #007aff) 0%, #0056cc 100%);
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             font-size: 32px;
+             color: white;
+             margin: 0 auto 20px;
+             box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3);
+         }
 
-        .profile-info {
-            text-align: center;
-        }
+         .profile-info {
+             text-align: center;
+         }
 
-        .profile-name {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
+         .profile-name {
+             font-size: 24px;
+             font-weight: 700;
+             color: #ffffff;
+             margin-bottom: 8px;
+         }
 
-        .profile-balance {
-            font-size: 32px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #00d4aa 0%, #00a86b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-        }
+         .profile-balance {
+             font-size: 32px;
+             font-weight: 800;
+             background: linear-gradient(135deg, #00d4aa 0%, #00a86b 100%);
+             -webkit-background-clip: text;
+             -webkit-text-fill-color: transparent;
+             background-clip: text;
+             margin-bottom: 20px;
+         }
 
-        .profile-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin-top: 20px;
-        }
+         .profile-stats {
+             display: grid;
+             grid-template-columns: repeat(2, 1fr);
+             gap: 16px;
+             margin-top: 20px;
+         }
 
-        .stat-item {
-            text-align: center;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+         .stat-item {
+             text-align: center;
+             padding: 16px;
+             background: rgba(255, 255, 255, 0.05);
+             border-radius: 12px;
+             border: 1px solid rgba(255, 255, 255, 0.1);
+         }
 
-        .stat-value {
-            font-size: 20px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 4px;
-        }
+         .stat-value {
+             font-size: 20px;
+             font-weight: 700;
+             color: #ffffff;
+             margin-bottom: 4px;
+         }
 
-        .stat-label {
-            font-size: 14px;
-            color: var(--tg-theme-hint-color, #8e8e93);
-        }
+         .stat-label {
+             font-size: 14px;
+             color: var(--tg-theme-hint-color, #8e8e93);
+         }
 
-        @media (max-width: 480px) {
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .container {
-                padding: 12px;
-            }
-        }
+         @media (max-width: 480px) {
+             .products-grid {
+                 grid-template-columns: 1fr;
+             }
+             
+             .container {
+                 padding: 12px;
+             }
+         }
     </style>
 </head>
 <body>
@@ -1580,6 +1908,80 @@
                 </div>
             </div>
         </div>
+        
+        <!-- City Icon Style Selector -->
+        <div style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+            padding: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        ">
+            <div style="
+                font-size: 12px;
+                color: #ffffff;
+                margin-bottom: 8px;
+                text-align: center;
+                font-weight: 600;
+            ">City Icon Style</div>
+            <div style="
+                display: flex;
+                gap: 8px;
+            ">
+                <button onclick="updateCityIconStyle(1)" style="
+                    width: 32px;
+                    height: 32px;
+                    border: none;
+                    border-radius: 6px;
+                    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+                    color: white;
+                    font-size: 12px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                " title="Modern Skyscraper">1</button>
+                <button onclick="updateCityIconStyle(2)" style="
+                    width: 32px;
+                    height: 32px;
+                    border: none;
+                    border-radius: 6px;
+                    background: linear-gradient(135deg, #00ff88 0%, #ff0088 100%);
+                    color: white;
+                    font-size: 12px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                " title="Cyberpunk Neon">2</button>
+                <button onclick="updateCityIconStyle(3)" style="
+                    width: 32px;
+                    height: 32px;
+                    border: none;
+                    border-radius: 6px;
+                    background: linear-gradient(135deg, var(--accent-blue) 0%, #ffffff 100%);
+                    color: white;
+                    font-size: 12px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                " title="Minimalist">3</button>
+                <button onclick="updateCityIconStyle(4)" style="
+                    width: 32px;
+                    height: 32px;
+                    border: none;
+                    border-radius: 6px;
+                    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(88, 166, 255, 0.8) 100%);
+                    color: #000;
+                    font-size: 12px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                " title="Fantasy Crystal">4</button>
+            </div>
+        </div>
 
         <div class="content">
             <!-- Shop Tab -->
@@ -1587,11 +1989,11 @@
                 <!-- City Selection -->
                 <div class="selection-step" id="cityStep">
                     <h3 class="step-title">
-                        <div class="city-icon-3d" style="display: inline-block; width: 32px; height: 32px; margin-right: 12px; vertical-align: middle;">
-                            <div class="city-building"></div>
-                            <div class="city-building"></div>
-                            <div class="city-building"></div>
-                            <div class="city-building"></div>
+                        <div id="titleCityIcon" class="city-icon-3d-style1" style="display: inline-block; width: 32px; height: 32px; margin-right: 12px; vertical-align: middle;">
+                            <div class="city-building-style1"></div>
+                            <div class="city-building-style1"></div>
+                            <div class="city-building-style1"></div>
+                            <div class="city-building-style1"></div>
                         </div>
                         Choose Your City
                     </h3>
@@ -1723,6 +2125,33 @@
         let currentDistrict = '';
         let basketItems = [];
         let userBalance = 0;
+        
+        // City icon style selector (change this number 1-4 to switch styles)
+        let currentCityIconStyle = 1; // 1=Modern, 2=Cyberpunk, 3=Minimalist, 4=Fantasy
+        
+        // Function to update city icon style
+        function updateCityIconStyle(styleNumber) {
+            currentCityIconStyle = styleNumber;
+            
+            // Update title icon
+            const titleIcon = document.getElementById('titleCityIcon');
+            if (titleIcon) {
+                titleIcon.className = `city-icon-3d-style${styleNumber}`;
+                titleIcon.innerHTML = '';
+                
+                const buildingCount = styleNumber === 3 ? 3 : 4;
+                for (let i = 1; i <= buildingCount; i++) {
+                    const building = document.createElement('div');
+                    building.className = `city-building-style${styleNumber}`;
+                    titleIcon.appendChild(building);
+                }
+            }
+            
+            // Reload cities to update their icons
+            if (currentCity === '') {
+                loadCities();
+            }
+        }
 
         // Tab switching
         document.querySelectorAll('.tab').forEach(tab => {
@@ -1805,14 +2234,15 @@
                     const button = document.createElement('button');
                     button.className = 'location-btn';
                     
-                    // Create 3D animated city icon
+                    // Create 3D animated city icon with dynamic style
                     const cityIcon = document.createElement('div');
-                    cityIcon.className = 'city-icon-3d';
+                    cityIcon.className = `city-icon-3d-style${currentCityIconStyle}`;
                     
-                    // Create buildings
-                    for (let i = 1; i <= 4; i++) {
+                    // Create buildings with dynamic style
+                    const buildingCount = currentCityIconStyle === 3 ? 3 : 4; // Style 3 has 3 buildings
+                    for (let i = 1; i <= buildingCount; i++) {
                         const building = document.createElement('div');
-                        building.className = 'city-building';
+                        building.className = `city-building-style${currentCityIconStyle}`;
                         cityIcon.appendChild(building);
                     }
                     
