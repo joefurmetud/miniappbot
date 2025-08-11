@@ -5924,10 +5924,10 @@ async def handle_adm_add_newsletter(update: Update, context: ContextTypes.DEFAUL
     if query:
         await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode=None)
         # Set state for next message
-        context.user_data['adding_newsletter'] = True
+        context.user_data['state'] = 'adding_newsletter'
     else:
         await send_message_with_retry(context.bot, update.effective_chat.id, msg, reply_markup=reply_markup, parse_mode=None)
-        context.user_data['adding_newsletter'] = True
+        context.user_data['state'] = 'adding_newsletter'
 
 
 async def handle_adm_newsletter_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -5936,7 +5936,7 @@ async def handle_adm_newsletter_text_message(update: Update, context: ContextTyp
     if not user or not is_primary_admin(user.id):
         return
     
-    if not context.user_data.get('adding_newsletter'):
+    if not context.user_data.get('state') == 'adding_newsletter':
         return
     
     message_text = update.message.text.strip()
@@ -5962,12 +5962,12 @@ async def handle_adm_newsletter_text_message(update: Update, context: ContextTyp
             await update.message.reply_text("❌ Failed to add newsletter message. Please try again.")
         
         # Clear state
-        context.user_data.pop('adding_newsletter', None)
+        context.user_data.pop('state', None)
         
     except Exception as e:
         logger.error(f"Error adding newsletter message: {e}")
         await update.message.reply_text("❌ Error adding newsletter message. Please try again.")
-        context.user_data.pop('adding_newsletter', None)
+        context.user_data.pop('state', None)
 
 
 async def handle_adm_edit_newsletter(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
@@ -6045,6 +6045,7 @@ async def handle_adm_edit_newsletter_msg(update: Update, context: ContextTypes.D
         await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode=None)
         
         # Set state for editing
+        context.user_data['state'] = 'editing_newsletter'
         context.user_data['editing_newsletter'] = message_id
         
     except Exception as e:
@@ -6056,6 +6057,9 @@ async def handle_adm_newsletter_edit_message(update: Update, context: ContextTyp
     """Handle the newsletter edit text input"""
     user = update.effective_user
     if not user or not is_primary_admin(user.id):
+        return
+    
+    if not context.user_data.get('state') == 'editing_newsletter':
         return
     
     message_id = context.user_data.get('editing_newsletter')
@@ -6083,11 +6087,13 @@ async def handle_adm_newsletter_edit_message(update: Update, context: ContextTyp
             await update.message.reply_text("❌ Failed to update newsletter message. Please try again.")
         
         # Clear state
+        context.user_data.pop('state', None)
         context.user_data.pop('editing_newsletter', None)
         
     except Exception as e:
         logger.error(f"Error updating newsletter message: {e}")
         await update.message.reply_text("❌ Error updating newsletter message. Please try again.")
+        context.user_data.pop('state', None)
         context.user_data.pop('editing_newsletter', None)
 
 
