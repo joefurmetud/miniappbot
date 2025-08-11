@@ -865,7 +865,7 @@ def nowpayments_webhook():
     return Response(status=200)
 
 @flask_app.route(f"/telegram/{TOKEN}", methods=['POST'])
-async def telegram_webhook():
+def telegram_webhook():
     global telegram_app, main_loop
     if not telegram_app or not main_loop:
         logger.error("Telegram webhook received but app/loop not ready.")

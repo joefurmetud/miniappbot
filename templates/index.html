@@ -2232,127 +2232,7 @@
             </div>
         </div>
         
-        <!-- City Icon Style Selector -->
-        <div style="
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 12px;
-            padding: 12px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        ">
-            <div style="
-                font-size: 12px;
-                color: #ffffff;
-                margin-bottom: 8px;
-                text-align: center;
-                font-weight: 600;
-            ">City Icon Style</div>
-            <div style="
-                display: flex;
-                gap: 8px;
-            ">
-                <button onclick="updateCityIconStyle(1)" style="
-                    width: 32px;
-                    height: 32px;
-                    border: none;
-                    border-radius: 6px;
-                    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
-                    color: white;
-                    font-size: 12px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                " title="Modern Skyscraper">1</button>
-                <button onclick="updateCityIconStyle(2)" style="
-                    width: 32px;
-                    height: 32px;
-                    border: none;
-                    border-radius: 6px;
-                    background: linear-gradient(135deg, #00ff88 0%, #ff0088 100%);
-                    color: white;
-                    font-size: 12px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                " title="Cyberpunk Neon">2</button>
-                <button onclick="updateCityIconStyle(3)" style="
-                    width: 32px;
-                    height: 32px;
-                    border: none;
-                    border-radius: 6px;
-                    background: linear-gradient(135deg, var(--accent-blue) 0%, #ffffff 100%);
-                    color: white;
-                    font-size: 12px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                " title="Minimalist">3</button>
-                <button onclick="updateCityIconStyle(4)" style="
-                    width: 32px;
-                    height: 32px;
-                    border: none;
-                    border-radius: 6px;
-                    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(88, 166, 255, 0.8) 100%);
-                    color: #000;
-                    font-size: 12px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                " title="Fantasy Crystal">4</button>
-                <button onclick="updateCityIconStyle(5)" style="
-                    width: 32px;
-                    height: 32px;
-                    border: none;
-                    border-radius: 6px;
-                    background: linear-gradient(135deg, #8b8b8b 0%, #4a4a4a 100%);
-                    color: white;
-                    font-size: 12px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                " title="Soviet Brutalism">5</button>
-                <button onclick="updateCityIconStyle(6)" style="
-                    width: 32px;
-                    height: 32px;
-                    border: none;
-                    border-radius: 6px;
-                    background: linear-gradient(135deg, #00d4ff 0%, #0066aa 100%);
-                    color: white;
-                    font-size: 12px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                " title="Cyber Floating City">6</button>
-                <button onclick="updateCityIconStyle(7)" style="
-                    width: 32px;
-                    height: 32px;
-                    border: none;
-                    border-radius: 6px;
-                    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
-                    color: #333;
-                    font-size: 12px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                " title="Graffiti Clean White">7</button>
-                <button onclick="updateCityIconStyle(8)" style="
-                    width: 32px;
-                    height: 32px;
-                    border: none;
-                    border-radius: 6px;
-                    background: linear-gradient(135deg, #4ade80 0%, #16a34a 100%);
-                    color: white;
-                    font-size: 12px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                " title="Weed/Snoop Dog">8</button>
-            </div>
-        </div>
+
 
         <div class="content">
             <!-- Shop Tab -->
@@ -2453,32 +2333,8 @@
         let basketItems = [];
         let userBalance = 0;
         
-        // City icon style selector (change this number 1-4 to switch styles)
-        let currentCityIconStyle = 1; // 1=Modern, 2=Cyberpunk, 3=Minimalist, 4=Fantasy
-        
-        // Function to update city icon style
-        function updateCityIconStyle(styleNumber) {
-            currentCityIconStyle = styleNumber;
-            
-            // Update title icon
-            const titleIcon = document.getElementById('titleCityIcon');
-            if (titleIcon) {
-                titleIcon.className = `city-icon-3d-style${styleNumber}`;
-                titleIcon.innerHTML = '';
-                
-                const buildingCount = styleNumber === 3 ? 3 : 4;
-                for (let i = 1; i <= buildingCount; i++) {
-                    const building = document.createElement('div');
-                    building.className = `city-building-style${styleNumber}`;
-                    titleIcon.appendChild(building);
-                }
-            }
-            
-            // Reload cities to update their icons
-            if (currentCity === '') {
-                loadCities();
-            }
-        }
+        // City icon style (fixed to style 1 - Modern)
+        let currentCityIconStyle = 1;
 
         // Tab switching
         document.querySelectorAll('.tab').forEach(tab => {
