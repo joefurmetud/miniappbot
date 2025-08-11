@@ -93,7 +93,7 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Apple-style background with subtle gradient */
+        /* Enhanced Apple-style background with dynamic effects */
         body::before {
             content: '';
             position: fixed;
@@ -101,8 +101,43 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, var(--apple-bg-grouped-primary) 0%, rgba(242, 242, 247, 0.8) 100%);
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 122, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(88, 86, 214, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(255, 45, 146, 0.06) 0%, transparent 50%),
+                linear-gradient(135deg, #f2f2f7 0%, rgba(242, 242, 247, 0.95) 100%);
+            z-index: -2;
+            animation: backgroundFlow 20s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.03) 50%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(0, 122, 255, 0.02) 50%, transparent 52%);
+            background-size: 60px 60px;
             z-index: -1;
+            animation: subtleMove 15s linear infinite;
+        }
+
+        @keyframes backgroundFlow {
+            0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+            25% { filter: hue-rotate(5deg) brightness(1.02); }
+            50% { filter: hue-rotate(-3deg) brightness(0.98); }
+            75% { filter: hue-rotate(8deg) brightness(1.01); }
+        }
+
+        @keyframes subtleMove {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(10px, -5px); }
+            50% { transform: translate(-5px, 10px); }
+            75% { transform: translate(5px, -8px); }
+            100% { transform: translate(0, 0); }
         }
 
 
@@ -121,7 +156,7 @@
             -webkit-backdrop-filter: blur(20px);
         }
 
-        /* Apple-style Header */
+        /* Enhanced Apple-style Header */
         .header {
             background: var(--apple-gradient-blue);
             padding: 60px 24px 40px;
@@ -129,6 +164,9 @@
             position: relative;
             overflow: hidden;
             border-radius: var(--apple-radius-xl) var(--apple-radius-xl) 0 0;
+            box-shadow: 
+                0 10px 30px rgba(0, 122, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .header::before {
@@ -138,8 +176,26 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(255, 255, 255, 0.05) 100%);
+            background: 
+                linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 40%, rgba(255, 255, 255, 0.08) 100%),
+                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
             pointer-events: none;
+            animation: headerShimmer 8s ease-in-out infinite;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        @keyframes headerShimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
 
         .logo {
@@ -159,6 +215,68 @@
             position: relative;
             z-index: 1;
             opacity: 0.9;
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        .theme-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--apple-transition-smooth);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .theme-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Color Theme Variations */
+        .theme-purple .header {
+            background: var(--apple-gradient-purple);
+        }
+
+        .theme-sunset .header {
+            background: var(--apple-gradient-sunset);
+        }
+
+        .theme-ocean .header {
+            background: var(--apple-gradient-ocean);
+        }
+
+        .theme-purple .nav-tab.active,
+        .theme-purple .btn-primary {
+            background: var(--apple-gradient-purple);
+        }
+
+        .theme-sunset .nav-tab.active,
+        .theme-sunset .btn-primary {
+            background: var(--apple-gradient-sunset);
+        }
+
+        .theme-ocean .nav-tab.active,
+        .theme-ocean .btn-primary {
+            background: var(--apple-gradient-ocean);
         }
 
         /* Newsletter Banner */
@@ -342,12 +460,31 @@
         }
 
         .product-title {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 700;
             color: var(--apple-text-primary);
-            margin-bottom: 6px;
-            letter-spacing: -0.3px;
+            margin-bottom: 8px;
+            letter-spacing: -0.4px;
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .product-emoji {
+            font-size: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--apple-gray-6);
+            transition: var(--apple-transition-smooth);
+        }
+
+        .product-card:hover .product-emoji {
+            transform: scale(1.1) rotate(5deg);
         }
 
         .product-city {
@@ -794,8 +931,11 @@
 
 
     <div class="container">
-        <!-- Header -->
+                <!-- Header -->
         <div class="header">
+            <div class="theme-switcher">
+                <button id="themeSwitcher" class="theme-btn">🎨</button>
+            </div>
             <div class="logo">🛍️ Premium Shop</div>
             <div class="tagline">Experience luxury shopping</div>
             </div>
@@ -905,9 +1045,9 @@
         // Initialize app
         async function init() {
             try {
-                tg.ready();
-                tg.expand();
-                
+        tg.ready();
+        tg.expand();
+
                 // Get user from Telegram
                 if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
                     currentUser = tg.initDataUnsafe.user;
@@ -930,6 +1070,11 @@
             }
         }
 
+        // Theme management
+        let currentTheme = 0;
+        const themes = ['theme-blue', 'theme-purple', 'theme-sunset', 'theme-ocean'];
+        const themeNames = ['Blue', 'Purple', 'Sunset', 'Ocean'];
+
         // Setup event listeners
         function setupEventListeners() {
             // Tab navigation
@@ -943,6 +1088,35 @@
             
             // Checkout button
             document.getElementById('checkoutBtn').addEventListener('click', handleCheckout);
+
+            // Theme switcher
+            document.getElementById('themeSwitcher').addEventListener('click', switchTheme);
+        }
+
+        // Switch themes
+        function switchTheme() {
+            const container = document.querySelector('.container');
+            
+            // Remove current theme
+            themes.forEach(theme => container.classList.remove(theme));
+            
+            // Add next theme
+            currentTheme = (currentTheme + 1) % themes.length;
+            container.classList.add(themes[currentTheme]);
+            
+            // Update button with theme name briefly
+            const btn = document.getElementById('themeSwitcher');
+            const originalText = btn.textContent;
+            btn.textContent = themeNames[currentTheme];
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 1000);
+            
+            // Add a little celebration effect
+            btn.style.transform = 'scale(1.2) rotate(360deg)';
+            setTimeout(() => {
+                btn.style.transform = '';
+            }, 300);
         }
 
         // Tab switching
@@ -1020,7 +1194,61 @@
             }
         }
 
-                // Load cities
+                        // Sample products for preview
+        const sampleProducts = [
+            {
+                id: 1,
+                type: 'Premium Cannabis',
+                emoji: '🌿',
+                city: 'Vilnius',
+                district: 'Senamiestis',
+                price: 25.99,
+                size: '3.5g',
+                stock: 12
+            },
+            {
+                id: 2,
+                type: 'Blue Dream',
+                emoji: '💙',
+                city: 'Vilnius',
+                district: 'Senamiestis',
+                price: 32.50,
+                size: '5g',
+                stock: 8
+            },
+            {
+                id: 3,
+                type: 'OG Kush',
+                emoji: '🔥',
+                city: 'Vilnius',
+                district: 'Senamiestis',
+                price: 28.75,
+                size: '3.5g',
+                stock: 15
+            },
+            {
+                id: 4,
+                type: 'White Widow',
+                emoji: '❄️',
+                city: 'Vilnius',
+                district: 'Senamiestis',
+                price: 30.00,
+                size: '5g',
+                stock: 6
+            },
+            {
+                id: 5,
+                type: 'Sour Diesel',
+                emoji: '⚡',
+                city: 'Vilnius',
+                district: 'Senamiestis',
+                price: 27.25,
+                size: '3.5g',
+                stock: 10
+            }
+        ];
+
+        // Load cities
         async function loadCities() {
             try {
                 const response = await fetch(`${API_BASE}/cities`);
@@ -1037,7 +1265,7 @@
                     ];
                     renderCities();
                 }
-                } catch (error) {
+            } catch (error) {
                 console.error('Error loading cities:', error);
                 // Fallback cities with IDs
                 cities = [
@@ -1110,13 +1338,17 @@
                     const data = await response.json();
                     products = data.products || [];
                     renderProducts();
-                } else {
-                    console.error('Failed to load products:', response.status);
-                    showError('Failed to load products');
+            } else {
+                    console.log('API failed, using sample products for preview');
+                    // Use sample products for preview
+                    products = sampleProducts;
+                    renderProducts();
                 }
             } catch (error) {
-                console.error('Error loading products:', error);
-                showError('Failed to load products');
+                console.log('Error loading products, using sample products:', error);
+                // Use sample products for preview
+                products = sampleProducts;
+                renderProducts();
             }
         }
 
@@ -1155,14 +1387,17 @@
             products.forEach(product => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
-                card.innerHTML = `
+                                card.innerHTML = `
                     <div class="product-header">
                         <div>
-                            <div class="product-title">${product.emoji || '📦'} ${product.type}</div>
+                            <div class="product-title">
+                                <div class="product-emoji">${product.emoji || '📦'}</div>
+                                ${product.type}
+                            </div>
                             <div class="product-city">
                                 <div class="city-icon">🏙️</div>
                                 ${product.city} - ${product.district}
-                    </div>
+                            </div>
                         </div>
                         <div class="product-price">€${product.price.toFixed(2)}</div>
                     </div>
@@ -1170,14 +1405,14 @@
                         <div class="detail-item">
                             <div class="detail-label">Size</div>
                             <div class="detail-value">${product.size}</div>
-                    </div>
+                        </div>
                         <div class="detail-item">
                             <div class="detail-label">Stock</div>
                             <div class="detail-value">${product.stock}</div>
-                </div>
+                        </div>
                     </div>
                     <button class="btn btn-primary btn-full" onclick="addToBasket(${product.id})">
-                        Add to Basket
+                        <span>Add to Basket</span>
                     </button>
                 `;
                 grid.appendChild(card);
