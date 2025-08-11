@@ -429,36 +429,30 @@
             background: var(--apple-blue);
             color: var(--apple-text-white);
             box-shadow: var(--apple-shadow-button);
-            transform: scale(1.02);
         }
 
         .nav-tab:hover:not(.active) {
             background: var(--apple-gray-6);
             color: var(--apple-text-primary);
-            transform: scale(1.01);
         }
 
-        /* 3D Animated Icons */
+        .nav-tab:active {
+            transform: scale(0.98);
+        }
+
+        /* Clean Navigation Icons */
         .nav-icon {
             width: 20px;
             height: 20px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: var(--transition-smooth);
+            font-size: 18px;
+            transition: var(--apple-transition-smooth);
         }
 
         .nav-tab.active .nav-icon {
-            animation: rotate3d 2s ease-in-out infinite;
-        }
-
-        @keyframes rotate3d {
-            0%, 100% { transform: rotateY(0deg) rotateX(0deg); }
-            25% { transform: rotateY(90deg) rotateX(15deg); }
-            50% { transform: rotateY(180deg) rotateX(0deg); }
-            75% { transform: rotateY(270deg) rotateX(-15deg); }
+            transform: scale(1.1);
         }
 
         /* Content Sections */
@@ -728,27 +722,26 @@
         /* Basket Badge */
         .basket-badge {
             position: absolute;
-            top: -8px;
-            right: -8px;
-            background: var(--secondary-gradient);
-            color: white;
+            top: -6px;
+            right: -6px;
+            background: var(--apple-red);
+            color: var(--apple-text-white);
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
+            min-width: 18px;
+            height: 18px;
+            font-size: 11px;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: var(--shadow-md);
-            animation: bounce 2s ease-in-out infinite;
+            padding: 0 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            border: 2px solid var(--apple-bg-primary);
+            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+            transition: var(--apple-transition-smooth);
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-5px); }
-            60% { transform: translateY(-3px); }
-        }
+
 
         /* Loading States */
         .loading {
@@ -1424,6 +1417,23 @@
             }
         }
 
+        // Get city-specific icon
+        function getCityIcon(cityName) {
+            const cityIcons = {
+                'Vilnius': '🏛️',      // Capital with historic buildings
+                'Kaunas': '🌉',       // Known for bridges and rivers
+                'Klaipėda': '⚓',     // Port city
+                'Šiauliai': '🌟',    // Hill of Crosses
+                'Panevėžys': '🏭',   // Industrial city
+                'Alytus': '🌲',      // Forest city
+                'Marijampolė': '🌾', // Agricultural region
+                'Mažeikiai': '⚡',    // Oil refinery
+                'Jonava': '🏗️',      // Industrial center
+                'Utena': '🏞️'        // Lake region
+            };
+            return cityIcons[cityName] || '🏘️'; // Default city icon
+        }
+
         // Render cities
         function renderCities() {
             const grid = document.getElementById('citiesGrid');
@@ -1433,7 +1443,7 @@
                 const card = document.createElement('div');
                 card.className = 'city-card';
                 card.innerHTML = `
-                    <div class="city-icon-container">🏙️</div>
+                    <div class="city-icon-container">${getCityIcon(city.name)}</div>
                     <div class="city-name">${city.name}</div>
                     <div class="city-count">${city.districts?.length || 0} districts</div>
                 `;
