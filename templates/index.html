@@ -2,215 +2,200 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Shop - Mini App</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Shop - Retro Edition</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=VT323&display=swap');
+        
+        :root {
+            /* Retro 80s Theme */
+            --primary-bg: #0a0a0a;
+            --secondary-bg: #1a1a1a;
+            --accent-neon: #00ffff;
+            --accent-pink: #ff00ff;
+            --accent-yellow: #ffff00;
+            --accent-green: #00ff00;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --glass-bg: rgba(0, 255, 255, 0.1);
+            --glass-border: rgba(0, 255, 255, 0.3);
+            --glass-shadow: 0 8px 32px rgba(0, 255, 255, 0.2);
+            --neon-glow: 0 0 20px rgba(0, 255, 255, 0.8);
+            --neon-text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        /* Cyberpunk Theme */
+        .theme-cyberpunk {
+            --primary-bg: #0a0a0a;
+            --secondary-bg: #1a1a1a;
+            --accent-neon: #00ffff;
+            --accent-pink: #ff00ff;
+            --accent-yellow: #ffff00;
+            --accent-green: #00ff00;
+        }
+
+        /* Synthwave Theme */
+        .theme-synthwave {
+            --primary-bg: #2d1b69;
+            --secondary-bg: #1a1a2e;
+            --accent-neon: #ff0080;
+            --accent-pink: #ff6b9d;
+            --accent-yellow: #ffd700;
+            --accent-green: #00ff88;
+        }
+
+        /* Outrun Theme */
+        .theme-outrun {
+            --primary-bg: #ff6b35;
+            --secondary-bg: #f7931e;
+            --accent-neon: #00ffff;
+            --accent-pink: #ff00ff;
+            --accent-yellow: #ffff00;
+            --accent-green: #00ff00;
+        }
+
+        /* Vaporwave Theme */
+        .theme-vaporwave {
+            --primary-bg: #ff006e;
+            --secondary-bg: #8338ec;
+            --accent-neon: #3a86ff;
+            --accent-pink: #ffbe0b;
+            --accent-yellow: #fb5607;
+            --accent-green: #00f5d4;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
-
-        :root {
-            --primary-color: #3b82f6;
-            --secondary-color: #1e40af;
-            --accent-color: #0ea5e9;
-            --success-color: #059669;
-            --warning-color: #d97706;
-            --error-color: #dc2626;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-tertiary: #334155;
-            --border-color: #475569;
-            --shadow-color: rgba(0, 0, 0, 0.2);
-            --glass-bg: rgba(30, 41, 59, 0.9);
-            --glass-border: rgba(59, 130, 246, 0.2);
-            --grid-color: rgba(59, 130, 246, 0.1);
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            --accent-blue: #3b82f6;
-            --accent-purple: #8b5cf6;
-            --accent-pink: #ec4899;
-        }
-
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            font-weight: 400;
-            background: #000000;
+            font-family: 'Orbitron', monospace;
+            background: var(--primary-bg);
             color: var(--text-primary);
             overflow-x: hidden;
-            line-height: 1.6;
-            font-size: 15px;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
             position: relative;
-            font-feature-settings: 'kern' 1, 'liga' 1;
-            letter-spacing: -0.011em;
         }
 
-        /* Cyber Grid Minimal Background */
-        .premium-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -3;
-            background: var(--bg-primary);
-            background-attachment: fixed;
-        }
-
-        .premium-background::before {
+        body::before {
             content: '';
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: 
-                linear-gradient(90deg, transparent 98%, var(--grid-color) 100%),
-                linear-gradient(0deg, transparent 98%, var(--grid-color) 100%),
-                repeating-linear-gradient(
-                    90deg,
-                    transparent,
-                    transparent 98px,
-                    var(--grid-color) 100px
-                );
-            background-size: 100px 100px, 100px 100px;
-            animation: premiumGrid 120s linear infinite;
-            opacity: 0.3;
+                linear-gradient(45deg, transparent 30%, var(--accent-neon) 30%, var(--accent-neon) 31%, transparent 31%),
+                linear-gradient(-45deg, transparent 30%, var(--accent-pink) 30%, var(--accent-pink) 31%, transparent 31%);
+            background-size: 60px 60px;
+            opacity: 0.05;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
         }
 
-        /* Fun floating elements for weed/Snoop Dog theme */
-        .floating-weed {
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
             position: fixed;
-            z-index: -2;
-            opacity: 0.1;
-            pointer-events: none;
-            animation: weedFloat 20s linear infinite;
-        }
-
-        .floating-weed:nth-child(1) {
-            top: 10%;
-            left: 5%;
-            font-size: 24px;
-            animation-delay: 0s;
-        }
-
-        .floating-weed:nth-child(2) {
-            top: 20%;
-            right: 10%;
-            font-size: 20px;
-            animation-delay: -5s;
-        }
-
-        .floating-weed:nth-child(3) {
-            top: 60%;
-            left: 15%;
-            font-size: 18px;
-            animation-delay: -10s;
-        }
-
-        .floating-weed:nth-child(4) {
-            top: 80%;
-            right: 20%;
-            font-size: 22px;
-            animation-delay: -15s;
-        }
-
-        @keyframes weedFloat {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.1;
-            }
-            90% {
-                opacity: 0.1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-
-        .app {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            backdrop-filter: blur(0.5px);
-        }
-
-        .header {
-            position: sticky;
-            top: 0;
+            top: 20px;
+            right: 20px;
             z-index: 1000;
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            padding: 20px;
+            border-radius: 10px;
+            padding: 10px;
+            backdrop-filter: blur(20px);
             box-shadow: var(--glass-shadow);
-            transition: all 0.3s ease;
         }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
+        .theme-switcher select {
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--accent-neon);
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .theme-switcher select:focus {
+            outline: none;
+            box-shadow: var(--neon-glow);
+        }
+
+        /* Header */
+        .header {
+            background: var(--glass-bg);
+            border-bottom: 2px solid var(--accent-neon);
+            padding: 20px;
+            text-align: center;
             position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent-neon), transparent);
+            animation: neonSweep 3s ease-in-out infinite;
+        }
+
+        @keyframes neonSweep {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
         }
 
         .header h1 {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--text-primary);
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: -0.02em;
-            text-align: center;
+            font-size: 2.5em;
+            font-weight: 900;
+            color: var(--accent-neon);
+            text-shadow: var(--neon-text-shadow);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Newsletter Banner Styles */
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Newsletter Banner - Smaller and more compact */
         .newsletter-banner {
-            background: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+            background: linear-gradient(135deg, var(--accent-neon) 0%, var(--accent-pink) 100%);
             border: 1px solid var(--glass-border);
             border-radius: 8px;
-            margin: 0 20px 16px 20px;
-            padding: 12px 16px;
+            margin: 0 20px 10px 20px;
+            padding: 8px 12px;
             box-shadow: var(--glass-shadow);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             overflow: hidden;
             position: relative;
             z-index: 999;
+            max-height: 40px;
         }
 
         .newsletter-content {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
 
         .newsletter-icon {
-            font-size: 18px;
+            font-size: 14px;
             flex-shrink: 0;
             animation: newsletterPulse 2s ease-in-out infinite;
         }
@@ -222,13 +207,13 @@
         }
 
         .newsletter-text {
-            color: white;
-            font-weight: 500;
-            font-size: 14px;
+            color: var(--primary-bg);
+            font-weight: 700;
+            font-size: 12px;
             white-space: nowrap;
-            animation: newsletterScroll 20s linear infinite;
+            animation: newsletterScroll 15s linear infinite;
             display: inline-block;
-            padding-right: 50px;
+            padding-right: 30px;
         }
 
         @keyframes newsletterPulse {
@@ -241,2156 +226,491 @@
             100% { transform: translateX(-100%); }
         }
 
-
-
-
-
-        .balance {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            color: var(--accent-color);
-            padding: 16px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            font-family: 'JetBrains Mono', monospace;
-            box-shadow: var(--glass-shadow);
-            position: relative;
-            transition: all 0.3s ease;
-            letter-spacing: 0.02em;
-            min-width: 140px;
-            text-align: center;
-        }
-
-
-
-        .balance:hover {
-            transform: translateY(-1px);
-            border-color: var(--accent-color);
-            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.2);
-        }
-
-
-
-        .tabs {
+        /* Navigation Tabs */
+        .nav-tabs {
             display: flex;
             background: var(--glass-bg);
-            border-radius: 8px;
-            padding: 4px;
-            margin-bottom: 0;
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
+            border-bottom: 2px solid var(--accent-neon);
+            margin: 0 20px;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
         }
 
-        .tab {
+        .nav-tab {
             flex: 1;
-            padding: 12px 16px;
-            text-align: center;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 14px;
+            padding: 15px;
+            background: transparent;
+            border: none;
             color: var(--text-secondary);
-            position: relative;
-        }
-
-
-
-        .tab.active {
-            color: var(--text-primary);
-            background: var(--accent-color);
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-        }
-
-        .content {
-            flex: 1;
-            padding: 20px;
-        }
-
-        .selector-group {
-            margin-bottom: 24px;
-        }
-
-        .selector {
-            position: relative;
-            margin-bottom: 16px;
-        }
-
-        .selector select {
-            width: 100%;
-            padding: 16px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--tg-theme-text-color, #ffffff);
-            font-size: 16px;
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            appearance: none;
-            cursor: pointer;
-        }
-
-        .selector select:focus {
-            outline: none;
-            border-color: var(--tg-theme-button-color, #007aff);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .selector::after {
-            content: '▼';
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: var(--tg-theme-hint-color, #8e8e93);
-            font-size: 12px;
-        }
-
-        /* New button-based selection styles */
-        .selection-step {
-            margin-bottom: 24px;
-        }
-
-        .step-title {
-            font-size: 20px;
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
             font-weight: 700;
-            margin-bottom: 20px;
-            text-align: center;
-            background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .step-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .back-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--tg-theme-text-color, #ffffff);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateX(-2px);
-        }
-
-        .button-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-
-        .location-btn {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--text-primary);
-            padding: 16px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(20px);
-            text-align: left;
-            position: relative;
-            box-shadow: var(--glass-shadow);
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-
-
-        .location-btn:hover {
-            border-color: var(--accent-color);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.2);
-        }
-
-        .location-info {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 16px;
-            text-align: center;
-            backdrop-filter: blur(20px);
-            color: var(--text-secondary);
-        }
-
-        /* Payment Modal Styles */
-        .payment-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            backdrop-filter: blur(10px);
-        }
-
-        .payment-modal-content {
-            background: linear-gradient(135deg, #21262d 0%, #161b22 100%);
-            border-radius: 16px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 1px solid #30363d;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-        }
-
-        .payment-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            border-bottom: 1px solid #30363d;
-        }
-
-        .payment-modal-header h3 {
-            margin: 0;
-            color: #f0f6fc;
-            font-size: 18px;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            color: #8b949e;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 0;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-        }
-
-        .close-modal:hover {
-            background: rgba(139, 148, 158, 0.1);
-            color: #f0f6fc;
-        }
-
-        .currency-list {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .currency-btn {
-            background: linear-gradient(135deg, rgba(33, 38, 45, 0.5) 0%, rgba(22, 27, 34, 0.5) 100%);
-            border: 1px solid #30363d;
-            color: #f0f6fc;
-            padding: 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-align: left;
-        }
-
-        .currency-btn:hover {
-            border-color: #8b949e;
-            background: linear-gradient(135deg, rgba(33, 38, 45, 0.8) 0%, rgba(22, 27, 34, 0.8) 100%);
-            transform: translateY(-2px);
-        }
-
-        .currency-symbol {
-            font-weight: bold;
-            font-size: 16px;
-            color: #58a6ff;
-            min-width: 60px;
-        }
-
-        .currency-name {
-            flex: 1;
-            font-size: 14px;
-        }
-
-        .currency-network {
-            font-size: 12px;
-            color: #8b949e;
-            background: rgba(139, 148, 158, 0.1);
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
-        .invoice-content {
-            padding: 20px;
-        }
-
-        .invoice-section {
-            margin-bottom: 24px;
-        }
-
-        .invoice-section h4 {
-            color: #f0f6fc;
-            margin-bottom: 12px;
-            font-size: 16px;
-        }
-
-        .payment-info {
-            background: rgba(13, 17, 23, 0.6);
-            border-radius: 8px;
-            padding: 16px;
-            border: 1px solid #21262d;
-        }
-
-        .payment-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(48, 54, 61, 0.3);
-        }
-
-        .payment-row:last-child {
-            border-bottom: none;
-        }
-
-        .payment-row span:first-child {
-            color: #8b949e;
-            font-size: 14px;
-        }
-
-        .payment-row span:last-child {
-            color: #f0f6fc;
-            font-weight: 600;
-        }
-
-        .payment-amount {
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-            color: #58a6ff !important;
-        }
-
-        .payment-id {
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-            font-size: 12px !important;
-        }
-
-        .wallet-address-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(13, 17, 23, 0.6);
-            border-radius: 8px;
-            padding: 16px;
-            border: 1px solid #21262d;
-        }
-
-        .wallet-address {
-            flex: 1;
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-            font-size: 14px;
-            color: #58a6ff;
-            word-break: break-all;
-            background: rgba(88, 166, 255, 0.1);
-            padding: 8px;
-            border-radius: 4px;
-        }
-
-        .copy-btn {
-            background: linear-gradient(135deg, #21262d 0%, #161b22 100%);
-            border: 1px solid #30363d;
-            color: #f0f6fc;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .copy-btn:hover {
-            border-color: #8b949e;
-            background: linear-gradient(135deg, #30363d 0%, #21262d 100%);
-        }
-
-        .payment-instructions {
-            background: rgba(255, 193, 7, 0.1);
-            border: 1px solid rgba(255, 193, 7, 0.3);
-            border-radius: 8px;
-            padding: 16px;
-        }
-
-        .payment-instructions h4 {
-            color: #ffc107;
-            margin-bottom: 12px;
-        }
-
-        .payment-instructions ul {
-            margin: 0;
-            padding-left: 20px;
-            color: #f0f6fc;
-        }
-
-        .payment-instructions li {
-            margin-bottom: 8px;
-            line-height: 1.5;
-        }
-
-        @media (max-width: 480px) {
-            .button-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .step-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-            
-            .step-title {
-                font-size: 18px;
-            }
-
-            .payment-modal-content {
-                width: 95%;
-                max-height: 90vh;
-            }
-
-            .wallet-address-container {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .currency-btn {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 24px;
-        }
-
-        .product-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            padding: 20px;
-            transition: all 0.3s ease;
-            position: relative;
-            box-shadow: var(--glass-shadow);
-            cursor: pointer;
-        }
-
-
-
-        .product-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
-            border-color: var(--accent-color);
-        }
-
-        .product-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 16px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .product-emoji {
-            font-size: 32px;
-            margin-right: 16px;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-        }
-
-        .product-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .product-info {
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .product-location {
-            color: var(--tg-theme-hint-color, #8e8e93);
-            font-size: 14px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .product-price {
-            font-size: 24px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #00d4aa 0%, #00a86b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 4px rgba(0, 212, 170, 0.3);
-        }
-
-        .product-stock {
-            font-size: 14px;
-            color: var(--tg-theme-hint-color, #8e8e93);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .stock-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #00d4aa;
-            box-shadow: 0 0 8px rgba(0, 212, 170, 0.5);
-        }
-
-        .product-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 16px;
-            font-size: 15px;
-            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .btn::before {
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent-neon), transparent);
+            transition: left 0.3s ease;
+        }
+
+        .nav-tab:hover::before {
+            left: 100%;
+        }
+
+        .nav-tab.active {
+            background: var(--accent-neon);
+            color: var(--primary-bg);
+            text-shadow: none;
+        }
+
+        .nav-tab:hover {
+            color: var(--accent-neon);
+            text-shadow: var(--neon-text-shadow);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            padding: 20px;
+            background: var(--glass-bg);
+            margin: 0 20px 20px 20px;
+            border-radius: 0 0 10px 10px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: var(--secondary-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--accent-neon), var(--accent-pink));
             opacity: 0;
             transition: opacity 0.3s ease;
-            border-radius: 16px;
-        }
-
-        .btn:hover::before {
-            opacity: 1;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--tg-theme-button-color, #007aff) 0%, #0056cc 100%);
-            color: #ffffff;
-            box-shadow: 0 8px 20px rgba(0, 122, 255, 0.4);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .basket-fab {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--tg-theme-button-color, #007aff) 0%, #0056cc 100%);
-            color: #ffffff;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            box-shadow: 0 12px 24px rgba(0, 122, 255, 0.4);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(20px);
-        }
-
-        .basket-fab:hover {
-            transform: scale(1.1);
-            box-shadow: 0 16px 32px rgba(0, 122, 255, 0.5);
-        }
-
-        .basket-fab:active {
-            transform: scale(0.95);
-        }
-
-        .basket-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: linear-gradient(135deg, #ff3b30 0%, #d70015 100%);
-            color: white;
-            border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 700;
-            box-shadow: 0 4px 8px rgba(255, 59, 48, 0.4);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        /* Premium Loading States */
-        .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 80px 20px;
-            color: var(--text-secondary);
-            font-size: 16px;
-            font-weight: 500;
-            gap: 24px;
-            text-align: center;
-        }
-
-        .loading-spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--surface-2);
-            border-top: 4px solid var(--accent-blue);
-            border-radius: 50%;
-            animation: premiumSpin 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            position: relative;
-        }
-
-        .loading-spinner::after {
-            content: '';
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            border: 2px solid transparent;
-            border-top: 2px solid var(--accent-purple);
-            border-radius: 50%;
-            animation: premiumSpin 2s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
-        }
-
-        .skeleton {
-            background: linear-gradient(90deg, 
-                var(--surface-2) 25%, 
-                var(--surface-3) 50%, 
-                var(--surface-2) 75%);
-            background-size: 200% 100%;
-            animation: shimmerSkeleton 2s infinite;
-            border-radius: 8px;
-        }
-
-        .skeleton-card {
-            background: 
-                linear-gradient(135deg, var(--glass-bg) 0%, rgba(22, 27, 34, 0.05) 100%),
-                linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.02) 100%);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 16px;
-        }
-
-        .skeleton-line {
-            height: 20px;
-            margin-bottom: 12px;
-        }
-
-        .skeleton-line.short { width: 60%; }
-        .skeleton-line.medium { width: 80%; }
-        .skeleton-line.long { width: 100%; }
-
-        @keyframes premiumSpin {
-            0% { 
-                transform: rotate(0deg);
-                filter: hue-rotate(0deg);
-            }
-            100% { 
-                transform: rotate(360deg);
-                filter: hue-rotate(360deg);
-            }
-        }
-
-        @keyframes shimmerSkeleton {
-            0% { 
-                background-position: -200% 0;
-                opacity: 0.6;
-            }
-            50% {
-                opacity: 0.8;
-            }
-            100% { 
-                background-position: 200% 0;
-                opacity: 0.6;
-            }
-        }
-
-        /* 3D Animated City Icons - 4 DIFFERENT STYLES */
-        
-        /* ===== STYLE 1: MODERN SKYSCRAPER CITY ===== */
-        .city-icon-3d-style1 {
-            width: 48px;
-            height: 48px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: cityFloat 6s ease-in-out infinite;
-            flex-shrink: 0;
-        }
-
-        .city-building-style1 {
-            position: absolute;
-            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
-            border-radius: 2px;
-            transform-origin: bottom center;
-            animation: buildingPulse 4s ease-in-out infinite;
-            box-shadow: 
-                0 4px 8px rgba(88, 166, 255, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-
-        .city-building-style1:nth-child(1) {
-            width: 8px;
-            height: 24px;
-            left: 4px;
-            bottom: 0;
-            animation-delay: 0s;
-        }
-
-        .city-building-style1:nth-child(2) {
-            width: 12px;
-            height: 32px;
-            left: 14px;
-            bottom: 0;
-            animation-delay: 0.5s;
-            background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-pink) 100%);
-        }
-
-        .city-building-style1:nth-child(3) {
-            width: 10px;
-            height: 28px;
-            left: 28px;
-            bottom: 0;
-            animation-delay: 1s;
-        }
-
-        .city-building-style1:nth-child(4) {
-            width: 6px;
-            height: 20px;
-            left: 40px;
-            bottom: 0;
-            animation-delay: 1.5s;
-            background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-blue) 100%);
-        }
-
-        /* ===== STYLE 2: CYBERPUNK NEON CITY ===== */
-        .city-icon-3d-style2 {
-            width: 48px;
-            height: 48px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: cyberFloat 4s ease-in-out infinite;
-            flex-shrink: 0;
-        }
-
-        .city-building-style2 {
-            position: absolute;
-            background: linear-gradient(180deg, #00ff88 0%, #0088ff 50%, #ff0088 100%);
-            border-radius: 1px;
-            transform-origin: bottom center;
-            animation: cyberPulse 2s ease-in-out infinite;
-            box-shadow: 
-                0 0 8px currentColor,
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
-
-        .city-building-style2:nth-child(1) {
-            width: 6px;
-            height: 36px;
-            left: 6px;
-            bottom: 0;
-            animation-delay: 0s;
-            color: #00ff88;
-        }
-
-        .city-building-style2:nth-child(2) {
-            width: 8px;
-            height: 42px;
-            left: 16px;
-            bottom: 0;
-            animation-delay: 0.3s;
-            color: #0088ff;
-        }
-
-        .city-building-style2:nth-child(3) {
-            width: 10px;
-            height: 38px;
-            left: 28px;
-            bottom: 0;
-            animation-delay: 0.6s;
-            color: #ff0088;
-        }
-
-        .city-building-style2:nth-child(4) {
-            width: 7px;
-            height: 32px;
-            left: 42px;
-            bottom: 0;
-            animation-delay: 0.9s;
-            color: #ffff00;
-        }
-
-        /* ===== STYLE 3: MINIMALIST GEOMETRIC CITY ===== */
-        .city-icon-3d-style3 {
-            width: 48px;
-            height: 48px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: minimalFloat 8s ease-in-out infinite;
-            flex-shrink: 0;
-        }
-
-        .city-building-style3 {
-            position: absolute;
-            background: var(--accent-blue);
-            border-radius: 0;
-            transform-origin: bottom center;
-            animation: minimalPulse 6s ease-in-out infinite;
-            box-shadow: 
-                0 2px 4px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-
-        .city-building-style3:nth-child(1) {
-            width: 10px;
-            height: 20px;
-            left: 8px;
-            bottom: 0;
-            animation-delay: 0s;
-        }
-
-        .city-building-style3:nth-child(2) {
-            width: 14px;
-            height: 28px;
-            left: 20px;
-            bottom: 0;
-            animation-delay: 1.5s;
-        }
-
-        .city-building-style3:nth-child(3) {
-            width: 12px;
-            height: 24px;
-            left: 36px;
-            bottom: 0;
-            animation-delay: 3s;
-        }
-
-        /* ===== STYLE 4: FANTASY CRYSTAL CITY ===== */
-        .city-icon-3d-style4 {
-            width: 48px;
-            height: 48px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: crystalFloat 5s ease-in-out infinite;
-            flex-shrink: 0;
-        }
-
-        .city-building-style4 {
-            position: absolute;
-            background: linear-gradient(45deg, 
-                rgba(255, 255, 255, 0.9) 0%, 
-                rgba(88, 166, 255, 0.8) 25%, 
-                rgba(255, 119, 198, 0.8) 50%, 
-                rgba(255, 255, 255, 0.9) 100%);
-            border-radius: 50% 50% 0 0;
-            transform-origin: bottom center;
-            animation: crystalPulse 3s ease-in-out infinite;
-            box-shadow: 
-                0 0 12px rgba(255, 255, 255, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(2px);
-        }
-
-        .city-building-style4:nth-child(1) {
-            width: 12px;
-            height: 26px;
-            left: 6px;
-            bottom: 0;
-            animation-delay: 0s;
-        }
-
-        .city-building-style4:nth-child(2) {
-            width: 16px;
-            height: 34px;
-            left: 20px;
-            bottom: 0;
-            animation-delay: 0.7s;
-        }
-
-        .city-building-style4:nth-child(3) {
-            width: 14px;
-            height: 30px;
-            left: 38px;
-            bottom: 0;
-            animation-delay: 1.4s;
-        }
-
-        /* ===== STYLE 5: SOVIET BRUTALISM CITY ===== */
-        .city-icon-3d-style5 {
-            width: 48px;
-            height: 48px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: brutalistFloat 7s ease-in-out infinite;
-            flex-shrink: 0;
-        }
-
-        .city-building-style5 {
-            position: absolute;
-            background: linear-gradient(180deg, 
-                #8b8b8b 0%, 
-                #696969 30%, 
-                #4a4a4a 70%, 
-                #2d2d2d 100%);
-            border-radius: 0;
-            transform-origin: bottom center;
-            animation: brutalistPulse 5s ease-in-out infinite;
-            box-shadow: 
-                0 4px 8px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
-            border: 1px solid #555;
-        }
-
-        .city-building-style5:nth-child(1) {
-            width: 10px;
-            height: 36px;
-            left: 4px;
-            bottom: 0;
-            animation-delay: 0s;
-            background: linear-gradient(180deg, 
-                #a0a0a0 0%, 
-                #787878 30%, 
-                #5a5a5a 70%, 
-                #3a3a3a 100%);
-        }
-
-        .city-building-style5:nth-child(2) {
-            width: 14px;
-            height: 42px;
-            left: 16px;
-            bottom: 0;
-            animation-delay: 0.8s;
-            background: linear-gradient(180deg, 
-                #8b8b8b 0%, 
-                #696969 30%, 
-                #4a4a4a 70%, 
-                #2d2d2d 100%);
-        }
-
-        .city-building-style5:nth-child(3) {
-            width: 12px;
-            height: 38px;
-            left: 32px;
-            bottom: 0;
-            animation-delay: 1.6s;
-            background: linear-gradient(180deg, 
-                #787878 0%, 
-                #5a5a5a 30%, 
-                #3a3a3a 70%, 
-                #1a1a1a 100%);
-        }
-
-        .city-building-style5:nth-child(4) {
-            width: 8px;
-            height: 28px;
-            left: 46px;
-            bottom: 0;
-            animation-delay: 2.4s;
-            background: linear-gradient(180deg, 
-                #969696 0%, 
-                #787878 30%, 
-                #5a5a5a 70%, 
-                #3a3a3a 100%);
-        }
-
-        /* Building windows for Style 1 */
-        .city-building-style1::before {
-            content: '';
-            position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 1px;
-            box-shadow: 
-                0 4px 0 rgba(255, 255, 255, 0.6),
-                0 8px 0 rgba(255, 255, 255, 0.4),
-                0 12px 0 rgba(255, 255, 255, 0.6);
-            animation: windowGlow 3s ease-in-out infinite;
-        }
-
-        /* Brutalist windows for Style 5 */
-        .city-building-style5::before {
-            content: '';
-            position: absolute;
-            top: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 3px;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 0;
-            box-shadow: 
-                0 4px 0 rgba(255, 255, 255, 0.7),
-                0 8px 0 rgba(255, 255, 255, 0.5),
-                0 12px 0 rgba(255, 255, 255, 0.7),
-                0 16px 0 rgba(255, 255, 255, 0.5);
-            animation: brutalistWindowGlow 4s ease-in-out infinite;
-        }
-
-        /* Neon glow for Style 2 */
-        .city-building-style2::before {
-            content: '';
-            position: absolute;
-            top: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 1px;
-            height: 1px;
-            background: currentColor;
-            border-radius: 50%;
-            box-shadow: 
-                0 3px 0 currentColor,
-                0 6px 0 currentColor,
-                0 9px 0 currentColor,
-                0 12px 0 currentColor;
-            animation: neonGlow 1.5s ease-in-out infinite;
-        }
-
-        /* Floating effect around city */
-        .city-icon-3d-style1::after,
-        .city-icon-3d-style2::after,
-        .city-icon-3d-style3::after,
-        .city-icon-3d-style4::after {
-            content: '';
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            border-radius: 50%;
             z-index: -1;
         }
 
-        .city-icon-3d-style1::after {
-            background: radial-gradient(circle, rgba(88, 166, 255, 0.2) 0%, transparent 70%);
-            animation: cityGlow 4s ease-in-out infinite;
+        .product-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--accent-neon);
+            box-shadow: var(--neon-glow);
         }
 
-        .city-icon-3d-style2::after {
-            background: radial-gradient(circle, rgba(0, 255, 136, 0.3) 0%, transparent 70%);
-            animation: cyberGlow 2s ease-in-out infinite;
+        .product-card:hover::before {
+            opacity: 0.1;
         }
 
-        .city-icon-3d-style3::after {
-            background: radial-gradient(circle, rgba(88, 166, 255, 0.1) 0%, transparent 70%);
-            animation: minimalGlow 8s ease-in-out infinite;
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--glass-border);
         }
 
-        .city-icon-3d-style4::after {
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
-            animation: crystalGlow 5s ease-in-out infinite;
+        .product-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--accent-neon);
+            margin-bottom: 10px;
+            text-shadow: var(--neon-text-shadow);
         }
 
-        .city-icon-3d-style5::after {
-            background: radial-gradient(circle, rgba(139, 139, 139, 0.3) 0%, transparent 70%);
-            animation: brutalistGlow 6s ease-in-out infinite;
+        .product-price {
+            font-size: 1.5em;
+            font-weight: 900;
+            color: var(--accent-yellow);
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
         }
 
-        .city-icon-3d-style6::after {
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.4) 0%, transparent 70%);
-            animation: cyberFloatGlow 5s ease-in-out infinite;
+        .product-location {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            font-size: 0.9em;
         }
 
-        .city-icon-3d-style7::after {
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-            animation: graffitiGlow 4s ease-in-out infinite;
-        }
-
-        .city-icon-3d-style8::after {
-            background: radial-gradient(circle, rgba(74, 222, 128, 0.4) 0%, transparent 70%);
-            animation: weedGlow 7s ease-in-out infinite;
-        }
-
-        /* ===== ANIMATIONS FOR ALL STYLES ===== */
-        
-        /* Style 1: Modern Skyscraper */
-        @keyframes cityFloat {
-            0%, 100% { 
-                transform: translateY(0) rotateY(0deg) scale(1);
-            }
-            25% { 
-                transform: translateY(-3px) rotateY(5deg) scale(1.02);
-            }
-            50% { 
-                transform: translateY(-2px) rotateY(0deg) scale(1.05);
-            }
-            75% { 
-                transform: translateY(-4px) rotateY(-5deg) scale(1.02);
-            }
-        }
-
-        @keyframes buildingPulse {
-            0%, 100% { 
-                transform: scaleY(1) rotateZ(0deg);
-                opacity: 0.8;
-            }
-            25% { 
-                transform: scaleY(1.1) rotateZ(1deg);
-                opacity: 1;
-            }
-            50% { 
-                transform: scaleY(0.95) rotateZ(0deg);
-                opacity: 0.9;
-            }
-            75% { 
-                transform: scaleY(1.05) rotateZ(-1deg);
-                opacity: 1;
-            }
-        }
-
-        /* Style 2: Cyberpunk */
-        @keyframes cyberFloat {
-            0%, 100% { 
-                transform: translateY(0) rotateX(0deg) scale(1);
-            }
-            33% { 
-                transform: translateY(-4px) rotateX(10deg) scale(1.03);
-            }
-            66% { 
-                transform: translateY(-2px) rotateX(-5deg) scale(1.01);
-            }
-        }
-
-        @keyframes cyberPulse {
-            0%, 100% { 
-                transform: scaleY(1) rotateZ(0deg);
-                filter: brightness(1);
-            }
-            50% { 
-                transform: scaleY(1.15) rotateZ(2deg);
-                filter: brightness(1.5);
-            }
-        }
-
-        @keyframes neonGlow {
-            0%, 100% { 
-                opacity: 0.7;
-                filter: brightness(1);
-            }
-            50% { 
-                opacity: 1;
-                filter: brightness(2);
-            }
-        }
-
-        /* Style 3: Minimalist */
-        @keyframes minimalFloat {
-            0%, 100% { 
-                transform: translateY(0) rotateY(0deg) scale(1);
-            }
-            50% { 
-                transform: translateY(-2px) rotateY(3deg) scale(1.02);
-            }
-        }
-
-        @keyframes minimalPulse {
-            0%, 100% { 
-                transform: scaleY(1);
-                opacity: 0.9;
-            }
-            50% { 
-                transform: scaleY(1.05);
-                opacity: 1;
-            }
-        }
-
-        /* Style 4: Fantasy Crystal */
-        @keyframes crystalFloat {
-            0%, 100% { 
-                transform: translateY(0) rotateZ(0deg) scale(1);
-            }
-            25% { 
-                transform: translateY(-3px) rotateZ(5deg) scale(1.03);
-            }
-            50% { 
-                transform: translateY(-1px) rotateZ(0deg) scale(1.05);
-            }
-            75% { 
-                transform: translateY(-4px) rotateZ(-5deg) scale(1.02);
-            }
-        }
-
-        @keyframes crystalPulse {
-            0%, 100% { 
-                transform: scaleY(1) rotateZ(0deg);
-                opacity: 0.8;
-            }
-            25% { 
-                transform: scaleY(1.1) rotateZ(2deg);
-                opacity: 1;
-            }
-            50% { 
-                transform: scaleY(0.95) rotateZ(0deg);
-                opacity: 0.9;
-            }
-            75% { 
-                transform: scaleY(1.05) rotateZ(-2deg);
-                opacity: 1;
-            }
-        }
-
-        /* Style 5: Soviet Brutalism */
-        @keyframes brutalistFloat {
-            0%, 100% { 
-                transform: translateY(0) rotateY(0deg) scale(1);
-            }
-            25% { 
-                transform: translateY(-2px) rotateY(3deg) scale(1.01);
-            }
-            50% { 
-                transform: translateY(-1px) rotateY(0deg) scale(1.03);
-            }
-            75% { 
-                transform: translateY(-3px) rotateY(-3deg) scale(1.01);
-            }
-        }
-
-        @keyframes brutalistPulse {
-            0%, 100% { 
-                transform: scaleY(1) rotateZ(0deg);
-                opacity: 0.9;
-            }
-            25% { 
-                transform: scaleY(1.05) rotateZ(1deg);
-                opacity: 1;
-            }
-            50% { 
-                transform: scaleY(0.98) rotateZ(0deg);
-                opacity: 0.95;
-            }
-            75% { 
-                transform: scaleY(1.03) rotateZ(-1deg);
-                opacity: 1;
-            }
-        }
-
-        /* Glow animations */
-        @keyframes cityGlow {
-            0%, 100% { 
-                opacity: 0.3;
-                transform: scale(1);
-            }
-            50% { 
-                opacity: 0.6;
-                transform: scale(1.1);
-            }
-        }
-
-        @keyframes cyberGlow {
-            0%, 100% { 
-                opacity: 0.4;
-                transform: scale(1);
-            }
-            50% { 
-                opacity: 0.8;
-                transform: scale(1.2);
-            }
-        }
-
-        @keyframes minimalGlow {
-            0%, 100% { 
-                opacity: 0.2;
-                transform: scale(1);
-            }
-            50% { 
-                opacity: 0.4;
-                transform: scale(1.05);
-            }
-        }
-
-        @keyframes crystalGlow {
-            0%, 100% { 
-                opacity: 0.3;
-                transform: scale(1);
-            }
-            50% { 
-                opacity: 0.7;
-                transform: scale(1.15);
-            }
-        }
-
-        @keyframes brutalistGlow {
-            0%, 100% { 
-                opacity: 0.4;
-                transform: scale(1);
-            }
-            50% { 
-                opacity: 0.8;
-                transform: scale(1.2);
-            }
-        }
-
-        @keyframes brutalistWindowGlow {
-            0%, 100% { 
-                opacity: 0.7;
-                filter: brightness(1);
-            }
-            50% { 
-                opacity: 1;
-                filter: brightness(1.3);
-            }
-        }
-
-        /* ===== NEW ANIMATIONS FOR STYLES 6-8 ===== */
-        
-        /* Style 6: Cyber Floating City */
-        @keyframes cyberFloat {
-            0%, 100% { 
-                transform: translateY(0) rotateY(0deg) scale(1);
-            }
-            25% { 
-                transform: translateY(-4px) rotateY(8deg) scale(1.03);
-            }
-            50% { 
-                transform: translateY(-6px) rotateY(0deg) scale(1.06);
-            }
-            75% { 
-                transform: translateY(-3px) rotateY(-8deg) scale(1.03);
-            }
-        }
-
-        @keyframes cyberPulse {
-            0%, 100% { 
-                transform: scaleY(1) rotateZ(0deg);
-                opacity: 0.9;
-            }
-            25% { 
-                transform: scaleY(1.15) rotateZ(2deg);
-                opacity: 1;
-            }
-            50% { 
-                transform: scaleY(0.9) rotateZ(0deg);
-                opacity: 0.8;
-            }
-            75% { 
-                transform: scaleY(1.1) rotateZ(-2deg);
-                opacity: 1;
-            }
-        }
-
-        @keyframes cyberFloatGlow {
-            0%, 100% { 
-                opacity: 0.4;
-                transform: scale(1);
-            }
-            50% { 
-                opacity: 0.8;
-                transform: scale(1.2);
-            }
-        }
-
-        /* Style 7: Graffiti Clean White */
-        @keyframes graffitiFloat {
-            0%, 100% { 
-                transform: translateY(0) rotateY(0deg) scale(1);
-            }
-            25% { 
-                transform: translateY(-2px) rotateY(5deg) scale(1.02);
-            }
-            50% { 
-                transform: translateY(-4px) rotateY(0deg) scale(1.04);
-            }
-            75% { 
-                transform: translateY(-1px) rotateY(-5deg) scale(1.02);
-            }
-        }
-
-        @keyframes graffitiPulse {
-            0%, 100% { 
-                transform: scaleY(1) rotateZ(0deg);
-                opacity: 0.8;
-            }
-            25% { 
-                transform: scaleY(1.1) rotateZ(1deg);
-                opacity: 1;
-            }
-            50% { 
-                transform: scaleY(0.95) rotateZ(0deg);
-                opacity: 0.7;
-            }
-            75% { 
-                transform: scaleY(1.05) rotateZ(-1deg);
-                opacity: 1;
-            }
-        }
-
-        @keyframes graffitiTag {
-            0%, 100% { 
-                opacity: 0.8;
-                transform: translateX(-50%) rotate(0deg);
-            }
-            50% { 
-                opacity: 1;
-                transform: translateX(-50%) rotate(15deg);
-            }
-        }
-
-        @keyframes graffitiGlow {
-            0%, 100% { 
-                opacity: 0.3;
-                transform: scale(1);
-            }
-            50% { 
-                opacity: 0.6;
-                transform: scale(1.1);
-            }
-        }
-
-        /* Style 8: Weed/Snoop Dog Theme */
-        @keyframes weedFloat {
-            0%, 100% { 
-                transform: translateY(0) rotateY(0deg) scale(1);
-            }
-            25% { 
-                transform: translateY(-3px) rotateY(6deg) scale(1.02);
-            }
-            50% { 
-                transform: translateY(-5px) rotateY(0deg) scale(1.05);
-            }
-            75% { 
-                transform: translateY(-2px) rotateY(-6deg) scale(1.02);
-            }
-        }
-
-        @keyframes weedPulse {
-            0%, 100% { 
-                transform: scaleY(1) rotateZ(0deg);
-                opacity: 0.9;
-            }
-            25% { 
-                transform: scaleY(1.12) rotateZ(3deg);
-                opacity: 1;
-            }
-            50% { 
-                transform: scaleZ(0.92) rotateZ(0deg);
-                opacity: 0.8;
-            }
-            75% { 
-                transform: scaleY(1.08) rotateZ(-3deg);
-                opacity: 1;
-            }
-        }
-
-        @keyframes leafSway {
-            0%, 100% { 
-                transform: translateX(-50%) rotate(0deg);
-            }
-            25% { 
-                transform: translateX(-50%) rotate(10deg);
-            }
-            50% { 
-                transform: translateX(-50%) rotate(0deg);
-            }
-            75% { 
-                transform: translateX(-50%) rotate(-10deg);
-            }
-        }
-
-        @keyframes weedGlow {
-            0%, 100% { 
-                opacity: 0.4;
-                transform: scale(1);
-            }
-            50% { 
-                opacity: 0.7;
-                transform: scale(1.15);
-            }
-        }
-
-        @keyframes windowGlow {
-            0%, 100% { 
-                opacity: 0.6;
-                filter: brightness(1);
-            }
-            50% { 
-                opacity: 1;
-                filter: brightness(1.5);
-            }
-        }
-
-        /* ===== NEW STYLES 6-8 ===== */
-        
-        /* Style 6: Cyber Floating City on Rock */
-        .city-icon-3d-style6 {
-            width: 48px;
-            height: 48px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: cyberFloat 8s ease-in-out infinite;
-            flex-shrink: 0;
-        }
-
-        .city-building-style6 {
-            position: absolute;
-            background: linear-gradient(180deg,
-                #00d4ff 0%,
-                #0099cc 30%,
-                #0066aa 70%,
-                #003366 100%);
-            border-radius: 4px;
-            transform-origin: bottom center;
-            animation: cyberPulse 6s ease-in-out infinite;
-            box-shadow:
-                0 4px 12px rgba(0, 212, 255, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-            border: 1px solid #00d4ff;
-        }
-
-        .city-building-style6:nth-child(1) {
-            width: 8px;
-            height: 24px;
-            bottom: 8px;
-            left: 8px;
-            transform: rotateZ(-5deg);
-        }
-
-        .city-building-style6:nth-child(2) {
-            width: 10px;
-            height: 32px;
-            bottom: 6px;
-            left: 20px;
-            transform: rotateZ(2deg);
-        }
-
-        .city-building-style6:nth-child(3) {
-            width: 6px;
-            height: 20px;
-            bottom: 10px;
-            left: 32px;
-            transform: rotateZ(-3deg);
-        }
-
-        .city-building-style6:nth-child(4) {
-            width: 12px;
-            height: 28px;
-            bottom: 4px;
-            left: 38px;
-            transform: rotateZ(1deg);
-        }
-
-        /* Rock base for Style 6 */
-        .city-building-style6::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: -2px;
-            right: -2px;
-            height: 8px;
-            background: linear-gradient(180deg,
-                #4a4a4a 0%,
-                #2d2d2d 50%,
-                #1a1a1a 100%);
-            border-radius: 50% 50% 0 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Style 7: Graffiti Clean White */
-        .city-icon-3d-style7 {
-            width: 48px;
-            height: 48px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: graffitiFloat 7s ease-in-out infinite;
-            flex-shrink: 0;
-        }
-
-        .city-building-style7 {
-            position: absolute;
-            background: linear-gradient(180deg,
-                #ffffff 0%,
-                #f0f0f0 30%,
-                #e0e0e0 70%,
-                #d0d0d0 100%);
+        .add-to-basket-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, var(--accent-neon), var(--accent-pink));
+            border: none;
             border-radius: 8px;
-            transform-origin: bottom center;
-            animation: graffitiPulse 5s ease-in-out infinite;
-            box-shadow:
-                0 4px 8px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.9),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-            border: 2px solid #333;
+            color: var(--primary-bg);
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .city-building-style7:nth-child(1) {
-            width: 10px;
-            height: 26px;
-            bottom: 8px;
-            left: 6px;
-            transform: rotateZ(-8deg);
+        .add-to-basket-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--neon-glow);
         }
 
-        .city-building-style7:nth-child(2) {
-            width: 8px;
-            height: 30px;
-            bottom: 6px;
-            left: 18px;
-            transform: rotateZ(5deg);
+        /* Basket Section */
+        .basket-item {
+            background: var(--secondary-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .city-building-style7:nth-child(3) {
-            width: 12px;
-            height: 22px;
-            bottom: 10px;
-            left: 28px;
-            transform: rotateZ(-4deg);
+        .basket-item-info h3 {
+            color: var(--accent-neon);
+            margin-bottom: 5px;
         }
 
-        .city-building-style7:nth-child(4) {
-            width: 6px;
-            height: 28px;
-            bottom: 4px;
-            left: 40px;
-            transform: rotateZ(3deg);
+        .basket-item-price {
+            color: var(--accent-yellow);
+            font-weight: 700;
         }
 
-        /* Graffiti tags for Style 7 */
-        .city-building-style7::before {
-            content: '★';
-            position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 8px;
+        .remove-from-basket-btn {
+            background: var(--accent-pink);
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            color: var(--primary-bg);
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remove-from-basket-btn:hover {
+            background: var(--accent-neon);
+            transform: scale(1.1);
+        }
+
+        .basket-total {
+            text-align: right;
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--accent-yellow);
+            margin: 20px 0;
+            text-shadow: var(--neon-text-shadow);
+        }
+
+        .buy-now-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--accent-green), var(--accent-yellow));
+            border: none;
+            border-radius: 10px;
+            color: var(--primary-bg);
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: none;
+        }
+
+        .buy-now-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.8);
+        }
+
+        /* Profile Section */
+        .profile-info {
+            background: var(--secondary-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-info h3 {
+            color: var(--accent-neon);
+            margin-bottom: 15px;
+            text-shadow: var(--neon-text-shadow);
+        }
+
+        .profile-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .profile-detail:last-child {
+            border-bottom: none;
+        }
+
+        .profile-label {
+            color: var(--text-secondary);
+        }
+
+        .profile-value {
+            color: var(--accent-yellow);
+            font-weight: 700;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--glass-border);
+            border-radius: 50%;
+            border-top-color: var(--accent-neon);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error Messages */
+        .error-message {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
             color: #ff6b6b;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-            animation: graffitiTag 3s ease-in-out infinite;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
         }
 
-        /* Style 8: Weed/Snoop Dog Theme */
-        .city-icon-3d-style8 {
-            width: 48px;
-            height: 48px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: weedFloat 9s ease-in-out infinite;
-            flex-shrink: 0;
+        /* Success Messages */
+        .success-message {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            color: #51cf66;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
         }
 
-        .city-building-style8 {
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .theme-switcher {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        /* Floating Elements Animation */
+        .floating-element {
             position: absolute;
-            background: linear-gradient(180deg,
-                #4ade80 0%,
-                #22c55e 30%,
-                #16a34a 70%,
-                #15803d 100%);
-            border-radius: 12px;
-            transform-origin: bottom center;
-            animation: weedPulse 7s ease-in-out infinite;
-            box-shadow:
-                0 4px 12px rgba(74, 222, 128, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-            border: 1px solid #22c55e;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-neon);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.6;
         }
 
-        .city-building-style8:nth-child(1) {
-            width: 8px;
-            height: 28px;
-            bottom: 8px;
-            left: 8px;
-            transform: rotateZ(-6deg);
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
         }
 
-        .city-building-style8:nth-child(2) {
-            width: 10px;
-            height: 32px;
-            bottom: 6px;
-            left: 20px;
-            transform: rotateZ(3deg);
-        }
-
-        .city-building-style8:nth-child(3) {
-            width: 6px;
-            height: 24px;
-            bottom: 10px;
-            left: 32px;
-            transform: rotateZ(-5deg);
-        }
-
-        .city-building-style8:nth-child(4) {
-            width: 12px;
-            height: 26px;
-            bottom: 4px;
-            left: 38px;
-            transform: rotateZ(2deg);
-        }
-
-        /* Leaf details for Style 8 */
-        .city-building-style8::before {
-            content: '🍃';
-            position: absolute;
-            top: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 10px;
-            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
-            animation: leafSway 4s ease-in-out infinite;
-        }
-
-        /* Hover effects for all styles */
-        .location-btn:hover .city-icon-3d-style1,
-        .location-btn:hover .city-icon-3d-style2,
-        .location-btn:hover .city-icon-3d-style3,
-        .location-btn:hover .city-icon-3d-style4,
-        .location-btn:hover .city-icon-3d-style5,
-        .location-btn:hover .city-icon-3d-style6,
-        .location-btn:hover .city-icon-3d-style7,
-        .location-btn:hover .city-icon-3d-style8 {
-            animation-duration: 2s;
-            transform: translateY(-6px) rotateY(15deg) scale(1.1);
-        }
-
-        .location-btn:hover .city-building-style1,
-        .location-btn:hover .city-building-style2,
-        .location-btn:hover .city-building-style3,
-        .location-btn:hover .city-building-style4,
-        .location-btn:hover .city-building-style5,
-        .location-btn:hover .city-building-style6,
-        .location-btn:hover .city-building-style7,
-        .location-btn:hover .city-building-style8 {
-            animation-duration: 1s;
-        }
-
-                 .location-btn:hover .city-icon-3d-style1::after,
-         .location-btn:hover .city-icon-3d-style2::after,
-         .location-btn:hover .city-icon-3d-style3::after,
-         .location-btn:hover .city-icon-3d-style4::after,
-         .location-btn:hover .city-icon-3d-style5::after,
-         .location-btn:hover .city-icon-3d-style6::after,
-         .location-btn:hover .city-icon-3d-style7::after,
-         .location-btn:hover .city-icon-3d-style8::after {
-             opacity: 0.8;
-             transform: scale(1.3);
-         }
-
-         /* Location pin animation */
-         @keyframes pinPulse {
-             0%, 100% { 
-                 transform: rotate(-45deg) scale(1);
-                 opacity: 1;
-             }
-             50% { 
-                 transform: rotate(-45deg) scale(1.1);
-                 opacity: 0.8;
-             }
-         }
-
-         .error {
-             text-align: center;
-             padding: 24px;
-             color: #ff3b30;
-             background: rgba(255, 59, 48, 0.1);
-             border: 1px solid rgba(255, 59, 48, 0.2);
-             border-radius: 16px;
-             margin: 20px 0;
-             backdrop-filter: blur(10px);
-         }
-
-         .empty-state {
-             text-align: center;
-             padding: 60px 20px;
-             color: var(--tg-theme-hint-color, #8e8e93);
-         }
-
-         .empty-state-emoji {
-             font-size: 64px;
-             margin-bottom: 20px;
-             filter: grayscale(50%);
-         }
-
-         .empty-state h3 {
-             font-size: 20px;
-             font-weight: 600;
-             margin-bottom: 8px;
-             color: #ffffff;
-         }
-
-         .empty-state p {
-             font-size: 16px;
-             opacity: 0.7;
-         }
-
-         .tab-content {
-             display: none;
-         }
-
-         .tab-content.active {
-             display: block;
-         }
-
-         .profile-card {
-             background: rgba(255, 255, 255, 0.05);
-             border-radius: 20px;
-             padding: 24px;
-             border: 1px solid rgba(255, 255, 255, 0.1);
-             backdrop-filter: blur(20px);
-             margin-bottom: 20px;
-         }
-
-         .profile-avatar {
-             width: 80px;
-             height: 80px;
-             border-radius: 50%;
-             background: linear-gradient(135deg, var(--tg-theme-button-color, #007aff) 0%, #0056cc 100%);
-             display: flex;
-             align-items: center;
-             justify-content: center;
-             font-size: 32px;
-             color: white;
-             margin: 0 auto 20px;
-             box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3);
-         }
-
-         .profile-info {
-             text-align: center;
-         }
-
-         .profile-name {
-             font-size: 24px;
-             font-weight: 700;
-             color: #ffffff;
-             margin-bottom: 8px;
-         }
-
-         .profile-balance {
-             font-size: 32px;
-             font-weight: 800;
-             background: linear-gradient(135deg, #00d4aa 0%, #00a86b 100%);
-             -webkit-background-clip: text;
-             -webkit-text-fill-color: transparent;
-             background-clip: text;
-             margin-bottom: 20px;
-         }
-
-         .profile-stats {
-             display: grid;
-             grid-template-columns: repeat(2, 1fr);
-             gap: 16px;
-             margin-top: 20px;
-         }
-
-         .stat-item {
-             text-align: center;
-             padding: 16px;
-             background: rgba(255, 255, 255, 0.05);
-             border-radius: 12px;
-             border: 1px solid rgba(255, 255, 255, 0.1);
-         }
-
-         .stat-value {
-             font-size: 20px;
-             font-weight: 700;
-             color: #ffffff;
-             margin-bottom: 4px;
-         }
-
-         .stat-label {
-             font-size: 14px;
-             color: var(--tg-theme-hint-color, #8e8e93);
-         }
-
-         @media (max-width: 480px) {
-             .products-grid {
-                 grid-template-columns: 1fr;
-             }
-             
-             .container {
-                 padding: 12px;
-             }
-         }
+        .floating-element:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 20%; right: 15%; animation-delay: 1s; }
+        .floating-element:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 2s; }
+        .floating-element:nth-child(4) { bottom: 20%; right: 25%; animation-delay: 3s; }
+        .floating-element:nth-child(5) { top: 50%; left: 5%; animation-delay: 4s; }
+        .floating-element:nth-child(6) { top: 60%; right: 10%; animation-delay: 5s; }
     </style>
 </head>
 <body>
-    <!-- Premium Animated Background -->
-    <div class="premium-background"></div>
-    
-    <!-- Floating Weed Elements for Style 8 -->
-    <div class="floating-weed">🍃</div>
-    <div class="floating-weed">🌿</div>
-    <div class="floating-weed">🌱</div>
-    <div class="floating-weed">💨</div>
-    
-    <div class="app">
-        <div class="header">
-            <div class="header-content">
-                <h1>🛍️ Shop</h1>
-                <div class="balance" id="userBalance">Loading...</div>
-            </div>
-        </div>
-        
-        <!-- Newsletter Banner -->
-        <div id="newsletterBanner" class="newsletter-banner" style="display: none;">
-            <div class="newsletter-content">
-                <span class="newsletter-icon">📢</span>
-                <div class="newsletter-text-container">
-                    <div class="newsletter-text" id="newsletterText"></div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="tabs">
-                <div class="tab active" data-tab="shop">
-                    <span>🛒 Shop</span>
-                </div>
-                <div class="tab" data-tab="basket">
-                    <span>🛍️ Basket</span>
-                </div>
-                <div class="tab" data-tab="profile">
-                    <span>👤 Profile</span>
-                </div>
-            </div>
-        </div>
-        
+    <!-- Floating Elements -->
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
 
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <select id="themeSelector" onchange="changeTheme(this.value)">
+            <option value="retro">🎮 Retro 80s</option>
+            <option value="cyberpunk">🤖 Cyberpunk</option>
+            <option value="synthwave">🌊 Synthwave</option>
+            <option value="outrun">🏎️ Outrun</option>
+            <option value="vaporwave">🌸 Vaporwave</option>
+        </select>
+    </div>
 
-        <div class="content">
-            <!-- Shop Tab -->
-            <div class="tab-content active" id="shop-content">
-                <!-- City Selection -->
-                <div class="selection-step" id="cityStep">
-                    <h3 class="step-title">
-                        <div id="titleCityIcon" class="city-icon-3d-style1" style="display: inline-block; width: 32px; height: 32px; margin-right: 12px; vertical-align: middle;">
-                            <div class="city-building-style1"></div>
-                            <div class="city-building-style1"></div>
-                            <div class="city-building-style1"></div>
-                            <div class="city-building-style1"></div>
-                        </div>
-                        Choose Your City
-                    </h3>
-                    <div class="button-grid" id="cityButtons">
-                        <div class="loading">
-                            <div class="loading-spinner"></div>
-                            <p>Loading cities...</p>
-                        </div>
-                    </div>
-                </div>
+    <!-- Header -->
+    <div class="header">
+        <h1>BOT SHOP</h1>
+        <p>Welcome to the future of shopping - Retro Edition</p>
+    </div>
 
-                <!-- District Selection -->
-                <div class="selection-step" id="districtStep" style="display: none;">
-                    <div class="step-header">
-                        <button class="back-btn" id="backToCity">← Back</button>
-                        <h3 class="step-title">🏘️ Choose District</h3>
-                    </div>
-                    <div class="button-grid" id="districtButtons">
-                    </div>
-                </div>
-
-                <!-- Products Display -->
-                <div class="selection-step" id="productsStep" style="display: none;">
-                    <div class="step-header">
-                        <button class="back-btn" id="backToDistrict">← Back</button>
-                        <h3 class="step-title">🛍️ Products</h3>
-                        <div class="location-info" id="locationInfo"></div>
-                    </div>
-                    <div id="productsContainer">
-                        <div class="loading">
-                            <div class="loading-spinner"></div>
-                            <p>Loading products...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Basket Tab -->
-            <div class="tab-content" id="basket-content">
-                <div id="basketContainer">
-                    <div class="empty-state">
-                        <div class="empty-state-emoji">🛒</div>
-                        <h3>Your basket is empty</h3>
-                        <p>Add some products to get started</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Profile Tab -->
-            <div class="tab-content" id="profile-content">
-                <div id="profileContainer">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <p>Loading profile...</p>
-                    </div>
-                </div>
+    <!-- Newsletter Banner -->
+    <div id="newsletterBanner" class="newsletter-banner" style="display: none;">
+        <div class="newsletter-content">
+            <span class="newsletter-icon">📢</span>
+            <div class="newsletter-text-container">
+                <div class="newsletter-text" id="newsletterText"></div>
             </div>
         </div>
     </div>
 
-    <button class="basket-fab" id="basketFab">
-        🛒
-        <span class="basket-badge" id="basketBadge">0</span>
-    </button>
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="nav-tab active" onclick="showSection('products')">🛍️ Products</button>
+        <button class="nav-tab" onclick="showSection('basket')">🛒 Basket</button>
+        <button class="nav-tab" onclick="showSection('profile')">👤 Profile</button>
+    </div>
+
+    <!-- Products Section -->
+    <div id="products" class="content-section active">
+        <h2 style="color: var(--accent-neon); margin-bottom: 20px; text-shadow: var(--neon-text-shadow);">
+            🚀 Available Products
+        </h2>
+        <div id="productGrid" class="product-grid">
+            <!-- Products will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Basket Section -->
+    <div id="basket" class="content-section">
+        <h2 style="color: var(--accent-neon); margin-bottom: 20px; text-shadow: var(--neon-text-shadow);">
+            🛒 Your Basket
+        </h2>
+        <div id="basketItems">
+            <!-- Basket items will be loaded here -->
+        </div>
+        <div class="basket-total">
+            Total: €<span id="basketTotal">0.00</span>
+        </div>
+        <button class="buy-now-btn" onclick="buyNow()">
+            🚀 BUY NOW
+        </button>
+    </div>
+
+    <!-- Profile Section -->
+    <div id="profile" class="content-section">
+        <h2 style="color: var(--accent-neon); margin-bottom: 20px; text-shadow: var(--neon-text-shadow);">
+            👤 Your Profile
+        </h2>
+        <div id="profileInfo" class="profile-info">
+            <!-- Profile info will be loaded here -->
+        </div>
+    </div>
 
     <script>
-        // Initialize Telegram Web App
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-
-
-
-
-
-        // Get user data from Telegram
-        const user = tg.initDataUnsafe.user;
-        const userId = user ? user.id : null;
-
-        // API base URL
-        const API_BASE = '/api';
-
-        // Global state
-        let currentCity = '';
-        let currentDistrict = '';
-        let basketItems = [];
-        let userBalance = 0;
-        
-        // City icon style (fixed to style 1 - Modern)
-        let currentCityIconStyle = 1;
-
-        // Tab switching
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetTab = tab.dataset.tab;
-                switchTab(targetTab);
-            });
-        });
-
-        function switchTab(tabName) {
-            // Update tab buttons
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-
-            // Update tab content
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(`${tabName}-content`).classList.add('active');
-
-            // Load content based on tab
-            switch(tabName) {
-                case 'shop':
-                    loadCities();
-                    break;
-                case 'basket':
-                    loadBasket();
-                    break;
-                case 'profile':
-                    loadProfile();
-                    break;
+        // Theme Management
+        function changeTheme(theme) {
+            document.body.className = `theme-${theme}`;
+            localStorage.setItem('selectedTheme', theme);
+            
+            // Add theme-specific animations
+            if (theme === 'synthwave') {
+                document.body.style.animation = 'pulse 2s infinite';
+            } else {
+                document.body.style.animation = 'none';
             }
         }
 
-        // API calls
-        async function apiCall(endpoint, options = {}) {
-            try {
-                const response = await fetch(`${API_BASE}${endpoint}`, {
-                    ...options,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Telegram-Init-Data': tg.initData,
-                        ...options.headers
-                    }
-                });
+        // Load saved theme
+        const savedTheme = localStorage.getItem('selectedTheme') || 'retro';
+        changeTheme(savedTheme);
+        document.getElementById('themeSelector').value = savedTheme;
 
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status}`);
-                }
+        // Section Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // API Configuration
+        const API_BASE = window.location.origin;
 
         // Newsletter functions
         async function loadNewsletter() {
             try {
-                const response = await fetch(`${API_BASE}/admin-messages`);
+                const response = await fetch(`${API_BASE}/api/admin-messages`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.messages && data.messages.length > 0) {
-                        displayNewsletter(data.messages[0]); // Show first active message
+                        displayNewsletter(data.messages[0]);
                     } else {
                         hideNewsletter();
                     }
@@ -2411,7 +731,7 @@
                 
                 // Adjust scroll animation duration based on text length
                 const textLength = message.message_text.length;
-                const duration = Math.max(20, textLength * 0.5); // Minimum 20s, 0.5s per character
+                const duration = Math.max(15, textLength * 0.4); // Shorter duration for smaller banner
                 text.style.animationDuration = `${duration}s`;
             }
         }
@@ -2423,746 +743,237 @@
             }
         }
 
-                return await response.json();
-            } catch (error) {
-                console.error('API call failed:', error);
-                throw error;
-            }
-        }
-
-        // Load user balance
-        async function loadUserBalance() {
-            try {
-                const data = await apiCall('/user/balance');
-                userBalance = data.balance;
-                document.getElementById('userBalance').textContent = `Balance: €${userBalance}`;
-            } catch (error) {
-                document.getElementById('userBalance').textContent = 'Balance: Error';
-            }
-        }
-
-        // Load cities with button interface
-        async function loadCities() {
-            try {
-                const data = await apiCall('/cities');
-                const cityButtons = document.getElementById('cityButtons');
-                
-                if (data.cities.length === 0) {
-                    cityButtons.innerHTML = '<p style="text-align: center; color: var(--tg-theme-hint-color, #8e8e93);">No cities available</p>';
-                    return;
-                }
-                
-                cityButtons.innerHTML = '';
-                data.cities.forEach(city => {
-                    const button = document.createElement('button');
-                    button.className = 'location-btn';
-                    
-                    // Create 3D animated city icon with dynamic style
-                    const cityIcon = document.createElement('div');
-                    cityIcon.className = `city-icon-3d-style${currentCityIconStyle}`;
-                    
-                    // Create buildings with dynamic style
-                    const buildingCount = currentCityIconStyle === 3 ? 3 : 4; // Style 3 has 3 buildings
-                    for (let i = 1; i <= buildingCount; i++) {
-                        const building = document.createElement('div');
-                        building.className = `city-building-style${currentCityIconStyle}`;
-                        cityIcon.appendChild(building);
-                    }
-                    
-                    // Create city name span
-                    const cityName = document.createElement('span');
-                    cityName.textContent = city.name;
-                    
-                    button.appendChild(cityIcon);
-                    button.appendChild(cityName);
-                    button.onclick = () => handleCitySelection(city.id, city.name);
-                    cityButtons.appendChild(button);
-                });
-
-                // Show city step, hide others
-                showStep('city');
-            } catch (error) {
-                document.getElementById('cityButtons').innerHTML = '<p style="text-align: center; color: #ff4444;">Failed to load cities</p>';
-                showError('Failed to load cities');
-            }
-        }
-
-        // Handle city selection
-        async function handleCitySelection(cityId, cityName) {
-            currentCity = cityId;
-            currentDistrict = '';
-            
-            try {
-                const data = await apiCall(`/districts/${cityId}`);
-                const districtButtons = document.getElementById('districtButtons');
-                
-                if (data.districts.length === 0) {
-                    districtButtons.innerHTML = '<p style="text-align: center; color: var(--tg-theme-hint-color, #8e8e93);">No districts available for this city</p>';
-                    showStep('district');
-                    return;
-                }
-                
-                districtButtons.innerHTML = '';
-                data.districts.forEach(district => {
-                    const button = document.createElement('button');
-                    button.className = 'location-btn';
-                    button.textContent = `🏘️ ${district.name}`;
-                    button.onclick = () => handleDistrictSelection(district.id, district.name, cityName);
-                    districtButtons.appendChild(button);
-                });
-                
-                showStep('district');
-            } catch (error) {
-                showError('Failed to load districts');
-            }
-        }
-
-        // Handle district selection
-        async function handleDistrictSelection(districtId, districtName, cityName) {
-            currentDistrict = districtId;
-            
-            // Update location info
-            document.getElementById('locationInfo').innerHTML = `
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div class="location-pin-3d" style="
-                        width: 20px; 
-                        height: 20px; 
-                        background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
-                        border-radius: 50% 50% 50% 0;
-                        transform: rotate(-45deg);
-                        position: relative;
-                        animation: pinPulse 2s ease-in-out infinite;
-                        box-shadow: 0 2px 8px rgba(88, 166, 255, 0.4);
-                    ">
-                        <div style="
-                            position: absolute;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%) rotate(45deg);
-                            width: 6px;
-                            height: 6px;
-                            background: white;
-                            border-radius: 50%;
-                        "></div>
-                    </div>
-                    <span>${cityName} → ${districtName}</span>
-                </div>
-            `;
-            
-            showStep('products');
-            await loadProducts();
-        }
-
-        // Show specific step and hide others
-        function showStep(step) {
-            const steps = ['city', 'district', 'products'];
-            steps.forEach(s => {
-                const element = document.getElementById(`${s}Step`);
-                if (element) {
-                    element.style.display = s === step ? 'block' : 'none';
-                }
-            });
-        }
-
-        // Back button handlers
-        document.getElementById('backToCity').addEventListener('click', () => {
-            showStep('city');
-            currentCity = '';
-            currentDistrict = '';
-        });
-
-        document.getElementById('backToDistrict').addEventListener('click', () => {
-            showStep('district');
-            currentDistrict = '';
-        });
-
-        // Load products
+        // Product Management
         async function loadProducts() {
-            const container = document.getElementById('productsContainer');
-            container.innerHTML = `
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading premium products...</p>
-                </div>
-            `;
-
             try {
-                const data = await apiCall(`/products/${currentCity}/${currentDistrict}`);
-                displayProducts(data.products);
-            } catch (error) {
-                showError('Failed to load products');
-            }
-        }
-
-        // Handle Buy Now button
-        async function handleBuyNow(productId) {
-            try {
-                console.log('Starting payment process for product:', productId);
-                // Show currency selection modal
-                await showCurrencySelection(productId);
-            } catch (error) {
-                console.error('Error in handleBuyNow:', error);
-                showError('Failed to start payment process: ' + error.message);
-            }
-        }
-
-        // Show currency selection modal
-        async function showCurrencySelection(productId) {
-            try {
-                console.log('Loading currencies for product:', productId);
-                const currencyData = await apiCall('/payment/currencies');
-                console.log('Currency data received:', currencyData);
-                
-                if (!currencyData.currencies) {
-                    throw new Error('No currencies received from server');
-                }
-                
-                const currencies = currencyData.currencies;
-
-                // Create modal HTML
-                const modalHTML = `
-                    <div class="payment-modal">
-                        <div class="payment-modal-content">
-                            <div class="payment-modal-header">
-                                <h3>Select Payment Currency</h3>
-                                <button class="close-modal" onclick="closePaymentModal()">×</button>
-                            </div>
-                            <div class="currency-list">
-                                ${currencies.map(currency => `
-                                    <button class="currency-btn" onclick="createPayment('${productId}', 'single', '${currency.code}')">
-                                        <span class="currency-symbol">${currency.symbol}</span>
-                                        <span class="currency-name">${currency.name}</span>
-                                        ${currency.network ? `<span class="currency-network">${currency.network}</span>` : ''}
-                                    </button>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                document.body.insertAdjacentHTML('beforeend', modalHTML);
-            } catch (error) {
-                console.error('Error in showCurrencySelection:', error);
-                showError('Failed to load payment currencies: ' + error.message);
-            }
-        }
-
-        // Create payment invoice
-        async function createPayment(productId, type, currency) {
-            try {
-                console.log('Creating payment:', { productId, type, currency });
-                closePaymentModal();
-                
-                // Show loading state
-                const loadingHTML = `
-                    <div class="payment-modal">
-                        <div class="payment-modal-content">
-                            <div class="loading">
-                                <div class="loading-spinner"></div>
-                                <p>Creating payment invoice...</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                document.body.insertAdjacentHTML('beforeend', loadingHTML);
-                
-                const paymentData = await apiCall('/payment/create', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        type: type,
-                        product_id: productId,
-                        currency: currency
-                    })
-                });
-
-                console.log('Payment response:', paymentData);
-                closePaymentModal(); // Close loading modal
-
-                if (paymentData.success) {
-                    showPaymentInvoice(paymentData);
-                } else {
-                    showError(paymentData.error || 'Payment creation failed');
+                const response = await fetch(`${API_BASE}/api/products`);
+                if (response.ok) {
+                    const data = await response.json();
+                    displayProducts(data.products);
                 }
             } catch (error) {
-                console.error('Error in createPayment:', error);
-                closePaymentModal(); // Close loading modal
-                showError('Failed to create payment: ' + error.message);
+                console.error('Error loading products:', error);
             }
         }
 
-        // Show payment invoice modal
-        function showPaymentInvoice(paymentData) {
-            const expiryDate = paymentData.expiration_estimate_date ? 
-                new Date(paymentData.expiration_estimate_date).toLocaleString() : 'N/A';
-
-            const invoiceHTML = `
-                <div class="payment-modal invoice-modal">
-                    <div class="payment-modal-content">
-                        <div class="payment-modal-header">
-                            <h3>💳 Payment Invoice</h3>
-                            <button class="close-modal" onclick="closePaymentModal()">×</button>
-                        </div>
-                        <div class="invoice-content">
-                            <div class="invoice-section">
-                                <h4>Payment Details</h4>
-                                <div class="payment-info">
-                                    <div class="payment-row">
-                                        <span>Amount:</span>
-                                        <span class="payment-amount">${paymentData.pay_amount} ${paymentData.pay_currency}</span>
-                                    </div>
-                                    <div class="payment-row">
-                                        <span>EUR Value:</span>
-                                        <span>€${paymentData.price_amount}</span>
-                                    </div>
-                                    <div class="payment-row">
-                                        <span>Payment ID:</span>
-                                        <span class="payment-id">${paymentData.payment_id}</span>
-                                    </div>
-                                    <div class="payment-row">
-                                        <span>Expires:</span>
-                                        <span>${expiryDate}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="invoice-section">
-                                <h4>Wallet Address</h4>
-                                <div class="wallet-address-container">
-                                    <div class="wallet-address" id="walletAddress">${paymentData.pay_address}</div>
-                                    <button class="copy-btn" onclick="copyToClipboard('walletAddress')">📋 Copy</button>
-                                </div>
-                            </div>
-
-                            <div class="invoice-section">
-                                <div class="payment-instructions">
-                                    <h4>⚠️ Payment Instructions</h4>
-                                    <ul>
-                                        <li>Send exactly <strong>${paymentData.pay_amount} ${paymentData.pay_currency}</strong> to the address above</li>
-                                        <li>Payment will be automatically confirmed when received</li>
-                                        <li>Do not send from an exchange - use a personal wallet</li>
-                                        <li>Your order will be processed after confirmation</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.body.insertAdjacentHTML('beforeend', invoiceHTML);
-        }
-
-        // Copy to clipboard function
-        function copyToClipboard(elementId) {
-            const element = document.getElementById(elementId);
-            const text = element.textContent;
+        function displayProducts(products) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
             
-            navigator.clipboard.writeText(text).then(() => {
-                // Show success feedback
-                const copyBtn = element.nextElementSibling;
-                const originalText = copyBtn.textContent;
-                copyBtn.textContent = '✅ Copied!';
-                setTimeout(() => {
-                    copyBtn.textContent = originalText;
-                }, 2000);
-            }).catch(() => {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = text;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                
-                const copyBtn = element.nextElementSibling;
-                const originalText = copyBtn.textContent;
-                copyBtn.textContent = '✅ Copied!';
-                setTimeout(() => {
-                    copyBtn.textContent = originalText;
-                }, 2000);
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img src="${product.image_url}" alt="${product.name}" class="product-image" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect width=%22200%22 height=%22200%22 fill=%22%23000%22/><text x=%22100%22 y=%22100%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23fff%22>${product.name}</text></svg>'">
+                    <h3 class="product-title">${product.name}</h3>
+                    <div class="product-price">€${product.price}</div>
+                    <div class="product-location">📍 ${product.city} - ${product.district}</div>
+                    <button class="add-to-basket-btn" onclick="addToBasket(${product.id})">
+                        ➕ Add to Basket
+                    </button>
+                `;
+                grid.appendChild(card);
             });
         }
 
-        // Close payment modal
-        function closePaymentModal() {
-            const modal = document.querySelector('.payment-modal');
-            if (modal) {
-                modal.remove();
-            }
-        }
-
-        // Display products
-        function displayProducts(products) {
-            const container = document.getElementById('productsContainer');
-            
-            if (products.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-emoji">📦</div>
-                        <h3>No products available</h3>
-                        <p>No products found in this location</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const productsHTML = products.map(product => `
-                <div class="product-card">
-                    <div class="product-header">
-                        <span class="product-emoji">${product.emoji}</span>
-                        <h3 class="product-title">${product.type} - ${product.size}</h3>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-location" style="display: flex; align-items: center; gap: 6px;">
-                            <div style="
-                                width: 14px; 
-                                height: 14px; 
-                                background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
-                                border-radius: 50% 50% 50% 0;
-                                transform: rotate(-45deg);
-                                position: relative;
-                                animation: pinPulse 3s ease-in-out infinite;
-                                flex-shrink: 0;
-                            ">
-                                <div style="
-                                    position: absolute;
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%) rotate(45deg);
-                                    width: 4px;
-                                    height: 4px;
-                                    background: white;
-                                    border-radius: 50%;
-                                "></div>
-                            </div>
-                            <span>${product.city} - ${product.district}</span>
-                        </div>
-                        <div class="product-price">€${product.price}</div>
-                        <div class="product-stock">
-                            <span class="stock-indicator"></span>
-                            ${product.stock} available
-                        </div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-secondary" onclick="addToBasket(${product.id}, '${product.type}', '${product.size}', ${product.price})">
-                            Add to Basket
-                        </button>
-                        <button class="btn btn-primary" onclick="handleBuyNow(${product.id})">
-                            Buy Now
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-
-            container.innerHTML = `<div class="products-grid">${productsHTML}</div>`;
-        }
-
-        // Add to basket
-        async function addToBasket(productId, type, size, price) {
+        async function addToBasket(productId) {
             try {
-                await apiCall('/basket/add', {
+                const response = await fetch(`${API_BASE}/api/basket/add`, {
                     method: 'POST',
-                    body: JSON.stringify({
-                        product_id: productId,
-                        type: type,
-                        size: size,
-                        price: price
-                    })
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ product_id: productId })
                 });
-
-                updateBasketBadge();
-                tg.showAlert('Product added to basket!');
-            } catch (error) {
-                tg.showAlert('Failed to add product to basket');
-            }
-        }
-
-        // Buy now
-        async function buyNow(productId) {
-            try {
-                const data = await apiCall('/payment/create', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        product_id: productId,
-                        type: 'single'
-                    })
-                });
-
-                if (data.payment_url) {
-                    tg.openLink(data.payment_url);
+                
+                if (response.ok) {
+                    await updateBasketBadge();
+                    showSuccess('Product added to basket!');
                 } else {
-                    tg.showAlert('Payment creation failed');
+                    showError('Failed to add product to basket');
                 }
             } catch (error) {
-                tg.showAlert('Failed to create payment');
+                console.error('Error adding to basket:', error);
+                showError('Error adding to basket');
             }
         }
 
-        // Load basket
+        // Basket Management
         async function loadBasket() {
             try {
-                const data = await apiCall('/basket');
-                displayBasket(data.items, data.total);
+                const response = await fetch(`${API_BASE}/api/basket`);
+                if (response.ok) {
+                    const data = await response.json();
+                    displayBasket(data.basket);
+                }
             } catch (error) {
-                showError('Failed to load basket');
+                console.error('Error loading basket:', error);
             }
         }
 
-        // Display basket
-        function displayBasket(items, total) {
-            const container = document.getElementById('basketContainer');
+        function displayBasket(basket) {
+            const container = document.getElementById('basketItems');
+            const totalElement = document.getElementById('basketTotal');
             
-            if (items.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-emoji">🛒</div>
-                        <h3>Your basket is empty</h3>
-                        <p>Add some products to get started</p>
+            container.innerHTML = '';
+            let total = 0;
+            
+            basket.forEach(item => {
+                total += item.price;
+                const itemElement = document.createElement('div');
+                itemElement.className = 'basket-item';
+                itemElement.innerHTML = `
+                    <div class="basket-item-info">
+                        <h3>${item.name}</h3>
+                        <div class="basket-item-price">€${item.price}</div>
                     </div>
-                `;
-                return;
-            }
-
-            const itemsHTML = items.map(item => `
-                <div class="product-card">
-                    <div class="product-header">
-                        <span class="product-emoji">${item.emoji}</span>
-                        <h3 class="product-title">${item.type} - ${item.size}</h3>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-location" style="display: flex; align-items: center; gap: 6px;">
-                            <div style="
-                                width: 14px; 
-                                height: 14px; 
-                                background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
-                                border-radius: 50% 50% 50% 0;
-                                transform: rotate(-45deg);
-                                position: relative;
-                                animation: pinPulse 3s ease-in-out infinite;
-                                flex-shrink: 0;
-                            ">
-                                <div style="
-                                    position: absolute;
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%) rotate(45deg);
-                                    width: 4px;
-                                    height: 4px;
-                                    background: white;
-                                    border-radius: 50%;
-                                "></div>
-                            </div>
-                            <span>${item.city} - ${item.district}</span>
-                        </div>
-                        <div class="product-price">€${item.price}</div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-secondary" onclick="removeFromBasket(${item.id})">
-                            🗑️ Remove
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-
-            container.innerHTML = `
-                <div class="products-grid">${itemsHTML}</div>
-                <div class="profile-card" style="margin-top: 24px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <span style="font-size: 18px; color: var(--tg-theme-hint-color, #8e8e93);">Total:</span>
-                        <span style="font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #00d4aa 0%, #00a86b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">€${total}</span>
-                    </div>
-                    <button class="btn btn-primary" style="width: 100%; padding: 16px;" onclick="checkoutBasket()">
-                        💳 Checkout Basket
+                    <button class="remove-from-basket-btn" onclick="removeFromBasket(${item.id})">
+                        ❌ Remove
                     </button>
-                </div>
-            `;
-        }
-
-        // Remove from basket
-        async function removeFromBasket(itemId) {
-            try {
-                await apiCall('/basket/remove', {
-                    method: 'POST',
-                    body: JSON.stringify({ item_id: itemId })
-                });
-
-                loadBasket();
-                updateBasketBadge();
-                tg.showAlert('Item removed from basket');
-            } catch (error) {
-                tg.showAlert('Failed to remove item from basket');
-            }
-        }
-
-        // Checkout basket
-        async function checkoutBasket() {
-            try {
-                const data = await apiCall('/payment/create', {
-                    method: 'POST',
-                    body: JSON.stringify({ type: 'basket' })
-                });
-
-                if (data.payment_url) {
-                    tg.openLink(data.payment_url);
-                } else {
-                    tg.showAlert('Payment creation failed');
-                }
-            } catch (error) {
-                tg.showAlert('Failed to create payment');
-            }
-        }
-
-        // Load profile
-        async function loadProfile() {
-            try {
-                const data = await apiCall('/user/profile');
-                displayProfile(data);
-            } catch (error) {
-                showError('Failed to load profile');
-            }
-        }
-
-        // Display profile
-        function displayProfile(profile) {
-            const container = document.getElementById('profileContainer');
-            const firstLetter = (profile.first_name || profile.username || 'U').charAt(0).toUpperCase();
+                `;
+                container.appendChild(itemElement);
+            });
             
-            container.innerHTML = `
-                <div class="profile-card">
-                    <div class="profile-avatar">${firstLetter}</div>
-                    <div class="profile-info">
-                        <div class="profile-name">${profile.first_name || profile.username || 'User'}</div>
-                        <div class="profile-balance">€${profile.balance}</div>
-                        
-                        <div class="profile-stats">
-                            <div class="stat-item">
-                                <div class="stat-value">${profile.total_purchases}</div>
-                                <div class="stat-label">Orders</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">€${profile.total_spent || 0}</div>
-                                <div class="stat-label">Total Spent</div>
-                            </div>
-                        </div>
-                        
-                        <button class="btn btn-primary" onclick="refillBalance()" style="width: 100%; margin-top: 24px;">
-                            💰 Refill Balance
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="profile-card">
-                    <h3 style="color: #ffffff; margin-bottom: 16px;">📊 Account Details</h3>
-                    <div style="display: grid; gap: 12px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="color: var(--tg-theme-hint-color, #8e8e93);">User ID:</span>
-                            <span style="color: #ffffff; font-weight: 600;">${profile.user_id}</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="color: var(--tg-theme-hint-color, #8e8e93);">Username:</span>
-                            <span style="color: #ffffff; font-weight: 600;">@${profile.username || 'N/A'}</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="color: var(--tg-theme-hint-color, #8e8e93);">Member Since:</span>
-                            <span style="color: #ffffff; font-weight: 600;">${profile.joined_date}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
+            totalElement.textContent = total.toFixed(2);
         }
 
-        // Refill balance
-        async function refillBalance() {
-            const amount = prompt('Enter amount to refill (EUR):');
-            if (amount && !isNaN(amount) && parseFloat(amount) > 0) {
-                try {
-                    const data = await apiCall('/payment/refill', {
-                        method: 'POST',
-                        body: JSON.stringify({ amount: parseFloat(amount) })
-                    });
-
-                    if (data.payment_url) {
-                        tg.openLink(data.payment_url);
-                    } else {
-                        tg.showAlert('Payment creation failed');
-                    }
-                } catch (error) {
-                    tg.showAlert('Failed to create refill payment');
+        async function removeFromBasket(productId) {
+            try {
+                const response = await fetch(`${API_BASE}/api/basket/remove`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ product_id: productId })
+                });
+                
+                if (response.ok) {
+                    await loadBasket();
+                    await updateBasketBadge();
+                    showSuccess('Product removed from basket!');
+                } else {
+                    showError('Failed to remove product from basket');
                 }
+            } catch (error) {
+                console.error('Error removing from basket:', error);
+                showError('Error removing from basket');
             }
         }
 
-        // Update basket badge
         async function updateBasketBadge() {
             try {
-                const data = await apiCall('/basket/count');
-                const badge = document.getElementById('basketBadge');
-                const fab = document.getElementById('basketFab');
-                
-                if (data.count > 0) {
-                    badge.textContent = data.count;
-                    fab.style.display = 'flex';
-                } else {
-                    fab.style.display = 'none';
+                const response = await fetch(`${API_BASE}/api/basket`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const basketCount = data.basket.length;
+                    // Update basket tab with count if needed
                 }
             } catch (error) {
-                console.error('Failed to update basket badge');
+                console.error('Error updating basket badge:', error);
             }
         }
 
-        // Show error
+        // Profile Management
+        async function loadUserProfile() {
+            try {
+                const response = await fetch(`${API_BASE}/api/user/profile`);
+                if (response.ok) {
+                    const data = await response.json();
+                    displayProfile(data.user);
+                }
+            } catch (error) {
+                console.error('Error loading user profile:', error);
+            }
+        }
+
+        function displayProfile(user) {
+            const container = document.getElementById('profileInfo');
+            container.innerHTML = `
+                <h3>User Information</h3>
+                <div class="profile-detail">
+                    <span class="profile-label">Username:</span>
+                    <span class="profile-value">${user.username || 'N/A'}</span>
+                </div>
+                <div class="profile-detail">
+                    <span class="profile-label">Balance:</span>
+                    <span class="profile-value">€${user.balance || '0.00'}</span>
+                </div>
+                <div class="profile-detail">
+                    <span class="profile-label">Total Spent:</span>
+                    <span class="profile-value">€${user.total_spent || '0.00'}</span>
+                </div>
+                <div class="profile-detail">
+                    <span class="profile-label">Member Since:</span>
+                    <span class="profile-value">${user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}</span>
+                </div>
+            `;
+        }
+
+        // Payment Functions
+        async function buyNow() {
+            try {
+                const response = await fetch(`${API_BASE}/api/payment/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.payment_url) {
+                        window.open(data.payment_url, '_blank');
+                        showSuccess('Payment initiated! Check the new tab.');
+                    } else {
+                        showError('Payment URL not received');
+                    }
+                } else {
+                    showError('Failed to start payment process');
+                }
+            } catch (error) {
+                console.error('Error starting payment:', error);
+                showError('Error starting payment process');
+            }
+        }
+
+        // Utility Functions
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.textContent = message;
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        }
+
         function showError(message) {
-            const container = document.getElementById('productsContainer');
-            container.innerHTML = `
-                <div class="error">
-                    <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
-                    <h3 style="color: #ff3b30; margin-bottom: 8px;">Error</h3>
-                    <p>${message}</p>
-                </div>
-            `;
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            document.body.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 3000);
         }
 
-        // Clear products and reset to city selection
-        function clearProducts() {
-            const container = document.getElementById('productsContainer');
-            container.innerHTML = `
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Select a location to view products...</p>
-                </div>
-            `;
-            showStep('city');
-            currentCity = '';
-            currentDistrict = '';
-        }
-
-        // Basket FAB click
-        document.getElementById('basketFab').addEventListener('click', () => {
-            switchTab('basket');
-        });
-
-        // Initialize app
+        // Initialize the app
         async function init() {
-            if (!userId) {
-                tg.showAlert('User authentication failed');
-                return;
+            try {
+                await loadUserProfile();
+                await updateBasketBadge();
+                await loadNewsletter();
+                await loadProducts();
+                await loadBasket();
+            } catch (error) {
+                console.error('Error initializing app:', error);
             }
-
-            await loadUserBalance();
-            await updateBasketBadge();
-            await loadNewsletter();
-            await loadCities();
         }
 
-        // Start the app
-        init();
-
-        // Set up main button for payments
-        tg.MainButton.setText('Continue in Telegram');
-        tg.MainButton.show();
-        tg.MainButton.onClick(() => {
-            tg.close();
-        });
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>

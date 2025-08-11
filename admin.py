@@ -5936,7 +5936,7 @@ async def handle_adm_newsletter_text_message(update: Update, context: ContextTyp
     if not user or not is_primary_admin(user.id):
         return
     
-    if not context.user_data.get('state') == 'adding_newsletter':
+    if context.user_data.get('state') != 'adding_newsletter':
         return
     
     message_text = update.message.text.strip()
@@ -6059,7 +6059,7 @@ async def handle_adm_newsletter_edit_message(update: Update, context: ContextTyp
     if not user or not is_primary_admin(user.id):
         return
     
-    if not context.user_data.get('state') == 'editing_newsletter':
+    if context.user_data.get('state') != 'editing_newsletter':
         return
     
     message_id = context.user_data.get('editing_newsletter')
