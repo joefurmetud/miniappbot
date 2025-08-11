@@ -1250,6 +1250,19 @@ def init_db():
             try: c.execute("ALTER TABLE welcome_messages ADD COLUMN description TEXT")
             except sqlite3.OperationalError: pass # Ignore if already exists
 
+            # Admin Messages table for newsletters/customer announcements
+            c.execute('''CREATE TABLE IF NOT EXISTS admin_messages (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                message_text TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                is_active INTEGER DEFAULT 1 CHECK(is_active IN (0, 1)),
+                display_start_time TEXT DEFAULT NULL,
+                display_end_time TEXT DEFAULT NULL,
+                display_type TEXT DEFAULT 'scrolling' CHECK(display_type IN ('scrolling', 'banner', 'modal')),
+                created_by INTEGER DEFAULT NULL,
+                priority INTEGER DEFAULT 1 CHECK(priority >= 1 AND priority <= 5)
+            )''')
+
             # <<< ADDED: reseller_discounts table >>>
             c.execute('''CREATE TABLE IF NOT EXISTS reseller_discounts (
                 reseller_user_id INTEGER NOT NULL,
@@ -1326,6 +1339,12 @@ def init_db():
             # <<< ADDED Indices for reseller >>>
             c.execute("CREATE INDEX IF NOT EXISTS idx_users_is_reseller ON users(is_reseller)")
             c.execute("CREATE INDEX IF NOT EXISTS idx_reseller_discounts_user_id ON reseller_discounts(reseller_user_id)")
+            # <<< END ADDED >>>
+            
+            # <<< ADDED Indices for admin messages >>>
+            c.execute("CREATE INDEX IF NOT EXISTS idx_admin_messages_active ON admin_messages(is_active)")
+            c.execute("CREATE INDEX IF NOT EXISTS idx_admin_messages_display_time ON admin_messages(display_start_time, display_end_time)")
+            c.execute("CREATE INDEX IF NOT EXISTS idx_admin_messages_priority ON admin_messages(priority)")
             # <<< END ADDED >>>
 
             conn.commit()
@@ -2466,3 +2485,263 @@ def clean_expired_pending_payments():
             logger.error(f"Error processing expired payment {payment_id} for user {user_id}: {e}", exc_info=True)
     
     logger.info(f"Cleaned up {processed_count}/{len(expired_purchases)} expired pending payments.")
+
+
+# ===== ADMIN MESSAGES / NEWSLETTER FUNCTIONS =====
+
+def add_admin_message(message_text: str, display_type: str = 'scrolling', 
+                     display_start_time: str = None, display_end_time: str = None, 
+                     priority: int = 1, created_by: int = None) -> bool:
+    """
+    Add a new admin message/newsletter to the database.
+    
+    Args:
+        message_text: The text content of the message
+        display_type: How to display the message ('scrolling', 'banner', 'modal')
+        display_start_time: Optional start time for display (ISO format string)
+        display_end_time: Optional end time for display (ISO format string)
+        priority: Priority level 1-5 (1=highest, 5=lowest)
+        created_by: Admin user ID who created the message
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            current_time = datetime.now(timezone.utc).isoformat()
+            
+            c.execute("""
+                INSERT INTO admin_messages 
+                (message_text, created_at, display_type, display_start_time, display_end_time, priority, created_by)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (message_text, current_time, display_type, display_start_time, display_end_time, priority, created_by))
+            
+            conn.commit()
+            logger.info(f"Admin message added successfully by user {created_by}")
+            return True
+            
+    except sqlite3.Error as e:
+        logger.error(f"Error adding admin message: {e}")
+        return False
+
+
+def get_active_admin_messages() -> list[dict]:
+    """
+    Get all currently active admin messages that should be displayed.
+    
+    Returns:
+        list: List of active message dictionaries
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            current_time = datetime.now(timezone.utc).isoformat()
+            
+            # Get messages that are active and within their display time window
+            c.execute("""
+                SELECT id, message_text, display_type, priority, created_at
+                FROM admin_messages 
+                WHERE is_active = 1
+                AND (display_start_time IS NULL OR display_start_time <= ?)
+                AND (display_end_time IS NULL OR display_end_time >= ?)
+                ORDER BY priority ASC, created_at DESC
+            """, (current_time, current_time))
+            
+            messages = []
+            for row in c.fetchall():
+                messages.append({
+                    'id': row[0],
+                    'message_text': row[1],
+                    'display_type': row[2],
+                    'priority': row[3],
+                    'created_at': row[4]
+                })
+            
+            return messages
+            
+    except sqlite3.Error as e:
+        logger.error(f"Error getting active admin messages: {e}")
+        return []
+
+
+def get_all_admin_messages(limit: int = None, offset: int = 0) -> list[dict]:
+    """
+    Get all admin messages (for admin panel management).
+    
+    Args:
+        limit: Maximum number of messages to return
+        offset: Number of messages to skip
+    
+    Returns:
+        list: List of all message dictionaries
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            query = """
+                SELECT id, message_text, created_at, is_active, display_type, 
+                       display_start_time, display_end_time, priority, created_by
+                FROM admin_messages 
+                ORDER BY created_at DESC
+            """
+            
+            if limit:
+                query += f" LIMIT {limit}"
+            if offset:
+                query += f" OFFSET {offset}"
+            
+            c.execute(query)
+            
+            messages = []
+            for row in c.fetchall():
+                messages.append({
+                    'id': row[0],
+                    'message_text': row[1],
+                    'created_at': row[2],
+                    'is_active': bool(row[3]),
+                    'display_type': row[4],
+                    'display_start_time': row[5],
+                    'display_end_time': row[6],
+                    'priority': row[7],
+                    'created_by': row[8]
+                })
+            
+            return messages
+            
+    except sqlite3.Error as e:
+        logger.error(f"Error getting all admin messages: {e}")
+        return []
+
+
+def update_admin_message(message_id: int, message_text: str = None, is_active: bool = None,
+                        display_type: str = None, display_start_time: str = None, 
+                        display_end_time: str = None, priority: int = None) -> bool:
+    """
+    Update an existing admin message.
+    
+    Args:
+        message_id: ID of the message to update
+        message_text: New message text (optional)
+        is_active: New active status (optional)
+        display_type: New display type (optional)
+        display_start_time: New start time (optional)
+        display_end_time: New end time (optional)
+        priority: New priority level (optional)
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            # Build dynamic update query
+            updates = []
+            params = []
+            
+            if message_text is not None:
+                updates.append("message_text = ?")
+                params.append(message_text)
+            if is_active is not None:
+                updates.append("is_active = ?")
+                params.append(1 if is_active else 0)
+            if display_type is not None:
+                updates.append("display_type = ?")
+                params.append(display_type)
+            if display_start_time is not None:
+                updates.append("display_start_time = ?")
+                params.append(display_start_time)
+            if display_end_time is not None:
+                updates.append("display_end_time = ?")
+                params.append(display_end_time)
+            if priority is not None:
+                updates.append("priority = ?")
+                params.append(priority)
+            
+            if not updates:
+                return False  # No updates to make
+            
+            params.append(message_id)
+            query = f"UPDATE admin_messages SET {', '.join(updates)} WHERE id = ?"
+            
+            c.execute(query, params)
+            conn.commit()
+            
+            if c.rowcount > 0:
+                logger.info(f"Admin message {message_id} updated successfully")
+                return True
+            else:
+                logger.warning(f"No admin message found with ID {message_id}")
+                return False
+                
+    except sqlite3.Error as e:
+        logger.error(f"Error updating admin message {message_id}: {e}")
+        return False
+
+
+def delete_admin_message(message_id: int) -> bool:
+    """
+    Delete an admin message.
+    
+    Args:
+        message_id: ID of the message to delete
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            c.execute("DELETE FROM admin_messages WHERE id = ?", (message_id,))
+            conn.commit()
+            
+            if c.rowcount > 0:
+                logger.info(f"Admin message {message_id} deleted successfully")
+                return True
+            else:
+                logger.warning(f"No admin message found with ID {message_id}")
+                return False
+                
+    except sqlite3.Error as e:
+        logger.error(f"Error deleting admin message {message_id}: {e}")
+        return False
+
+
+def toggle_admin_message_status(message_id: int) -> bool:
+    """
+    Toggle the active status of an admin message.
+    
+    Args:
+        message_id: ID of the message to toggle
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            
+            # Get current status
+            c.execute("SELECT is_active FROM admin_messages WHERE id = ?", (message_id,))
+            result = c.fetchone()
+            
+            if not result:
+                logger.warning(f"No admin message found with ID {message_id}")
+                return False
+            
+            current_status = result[0]
+            new_status = 0 if current_status else 1
+            
+            # Update status
+            c.execute("UPDATE admin_messages SET is_active = ? WHERE id = ?", (new_status, message_id))
+            conn.commit()
+            
+            logger.info(f"Admin message {message_id} status toggled from {current_status} to {new_status}")
+            return True
+                
+    except sqlite3.Error as e:
+        logger.error(f"Error toggling admin message {message_id} status: {e}")
+        return False

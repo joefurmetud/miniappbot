@@ -98,6 +98,11 @@ from admin import (
     handle_adm_bulk_size, handle_adm_bulk_custom_size, handle_adm_bulk_custom_size_message,
     handle_adm_bulk_price_message, handle_adm_bulk_drop_details_message,
     handle_adm_bulk_remove_last_message, handle_adm_bulk_back_to_messages, handle_adm_bulk_execute_messages,
+    # Newsletter handlers
+    handle_adm_manage_newsletter, handle_adm_add_newsletter, handle_adm_edit_newsletter,
+    handle_adm_edit_newsletter_msg, handle_adm_newsletter_text_message, handle_adm_newsletter_edit_message,
+    handle_adm_delete_newsletter, handle_adm_delete_newsletter_confirm,
+    handle_adm_delete_newsletter_execute, handle_adm_toggle_newsletter, handle_adm_toggle_newsletter_execute,
     cancel_bulk_add,
     # Message handlers that actually exist
     handle_adm_add_city_message, handle_adm_edit_city_message, handle_adm_add_district_message,
@@ -313,6 +318,17 @@ def callback_query_router(func):
     "adm_debug_reseller_discount": admin.handle_adm_debug_reseller_discount,
     "adm_recent_purchases": admin.handle_adm_recent_purchases,
                 "adm_user_overview": admin.handle_adm_user_overview,
+                
+                # Newsletter Handlers
+                "adm_manage_newsletter": admin.handle_adm_manage_newsletter,
+                "adm_add_newsletter": admin.handle_adm_add_newsletter,
+                "adm_edit_newsletter": admin.handle_adm_edit_newsletter,
+                "adm_edit_newsletter_msg": admin.handle_adm_edit_newsletter_msg,
+                "adm_delete_newsletter": admin.handle_adm_delete_newsletter,
+                "adm_delete_newsletter_confirm": admin.handle_adm_delete_newsletter_confirm,
+                "adm_delete_newsletter_execute": admin.handle_adm_delete_newsletter_execute,
+                "adm_toggle_newsletter": admin.handle_adm_toggle_newsletter,
+                "adm_toggle_newsletter_execute": admin.handle_adm_toggle_newsletter_execute,
             }
 
             target_func = KNOWN_HANDLERS.get(command)
@@ -396,6 +412,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         'awaiting_welcome_template_edit': admin.handle_adm_welcome_template_text_message,
         'awaiting_welcome_description': admin.handle_adm_welcome_description_message,
         'awaiting_welcome_description_edit': admin.handle_adm_welcome_description_message,
+        
+        # Newsletter Message States (from admin.py)
+        'adding_newsletter': admin.handle_adm_newsletter_text_message,
+        'editing_newsletter': admin.handle_adm_newsletter_edit_message,
     }
 
     handler_func = STATE_HANDLERS.get(state)

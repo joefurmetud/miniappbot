@@ -651,6 +651,18 @@ def get_payment_currencies():
         logger.error(f"Error getting currencies: {e}")
         return jsonify({'error': 'Failed to get currencies'}), 500
 
+
+@miniapp_bp.route('/api/admin-messages')
+def get_admin_messages():
+    """Get active admin messages for display in mini-app"""
+    try:
+        from utils import get_active_admin_messages
+        messages = get_active_admin_messages()
+        return jsonify({'messages': messages})
+    except Exception as e:
+        logger.error(f"Error getting admin messages: {e}")
+        return jsonify({'error': 'Failed to get admin messages'}), 500
+
 @miniapp_bp.route('/api/payment/refill', methods=['POST'])
 @require_auth
 def create_refill_payment(user):

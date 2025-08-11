@@ -188,6 +188,59 @@
             text-align: center;
         }
 
+        /* Newsletter Banner Styles */
+        .newsletter-banner {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            margin: 0 20px 16px 20px;
+            padding: 12px 16px;
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            overflow: hidden;
+            position: relative;
+            z-index: 999;
+        }
+
+        .newsletter-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .newsletter-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+            animation: newsletterPulse 2s ease-in-out infinite;
+        }
+
+        .newsletter-text-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .newsletter-text {
+            color: white;
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+            animation: newsletterScroll 20s linear infinite;
+            display: inline-block;
+            padding-right: 50px;
+        }
+
+        @keyframes newsletterPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes newsletterScroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
 
 
 
@@ -2154,8 +2207,19 @@
                 <h1>🛍️ Shop</h1>
                 <div class="balance" id="userBalance">Loading...</div>
             </div>
-            
-            <div class="tabs">
+        </div>
+        
+        <!-- Newsletter Banner -->
+        <div id="newsletterBanner" class="newsletter-banner" style="display: none;">
+            <div class="newsletter-content">
+                <span class="newsletter-icon">📢</span>
+                <div class="newsletter-text-container">
+                    <div class="newsletter-text" id="newsletterText"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tabs">
                 <div class="tab active" data-tab="shop">
                     <span>🛒 Shop</span>
                 </div>
@@ -2462,6 +2526,46 @@
                 if (!response.ok) {
                     throw new Error(`API Error: ${response.status}`);
                 }
+
+        // Newsletter functions
+        async function loadNewsletter() {
+            try {
+                const response = await fetch(`${API_BASE}/admin-messages`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.messages && data.messages.length > 0) {
+                        displayNewsletter(data.messages[0]); // Show first active message
+                    } else {
+                        hideNewsletter();
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading newsletter:', error);
+                hideNewsletter();
+            }
+        }
+
+        function displayNewsletter(message) {
+            const banner = document.getElementById('newsletterBanner');
+            const text = document.getElementById('newsletterText');
+            
+            if (banner && text) {
+                text.textContent = message.message_text;
+                banner.style.display = 'block';
+                
+                // Adjust scroll animation duration based on text length
+                const textLength = message.message_text.length;
+                const duration = Math.max(20, textLength * 0.5); // Minimum 20s, 0.5s per character
+                text.style.animationDuration = `${duration}s`;
+            }
+        }
+
+        function hideNewsletter() {
+            const banner = document.getElementById('newsletterBanner');
+            if (banner) {
+                banner.style.display = 'none';
+            }
+        }
 
                 return await response.json();
             } catch (error) {
@@ -3190,6 +3294,7 @@
 
             await loadUserBalance();
             await updateBasketBadge();
+            await loadNewsletter();
             await loadCities();
         }
 

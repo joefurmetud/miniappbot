@@ -515,6 +515,7 @@ async def handle_admin_menu(update: Update, context: ContextTypes.DEFAULT_TYPE, 
         [InlineKeyboardButton("🏷️ Manage Reseller Discounts", callback_data="manage_reseller_discounts_select_reseller|0")],
         [InlineKeyboardButton("🏷️ Manage Discount Codes", callback_data="adm_manage_discounts")],
         [InlineKeyboardButton("👋 Manage Welcome Msg", callback_data="adm_manage_welcome|0")],
+        [InlineKeyboardButton("📢 Manage Newsletter", callback_data="adm_manage_newsletter|0")],
         [InlineKeyboardButton("📦 View Bot Stock", callback_data="view_stock")],
         [InlineKeyboardButton("📜 View Added Products Log", callback_data="viewer_added_products|0")],
         [InlineKeyboardButton("🗺️ Manage Districts", callback_data="adm_manage_districts")],
@@ -5844,3 +5845,426 @@ async def handle_adm_recent_purchases(update: Update, context: ContextTypes.DEFA
     except Exception as e:
         logger.error(f"Error in recent purchases display: {e}", exc_info=True)
         await query.edit_message_text("❌ Error displaying purchases.", parse_mode=None)
+
+
+# ===== NEWSLETTER / ADMIN MESSAGES MANAGEMENT =====
+
+async def handle_adm_manage_newsletter(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Display newsletter management menu"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user:
+        logger.warning("handle_adm_manage_newsletter triggered without effective_user.")
+        if query: await query.answer("Error: Could not identify user.", show_alert=True)
+        return
+
+    user_id = user.id
+    if not is_primary_admin(user_id):
+        logger.warning(f"Non-primary admin {user_id} attempted to access newsletter management.")
+        msg = "Access denied. Only primary admins can manage newsletters."
+        if query: await query.answer(msg, show_alert=True)
+        return
+
+    try:
+        from utils import get_all_admin_messages
+        messages = get_all_admin_messages(limit=10, offset=0)
+        
+        msg = "📢 Newsletter Management\n\n"
+        if messages:
+            msg += "📋 Current Messages:\n"
+            for msg_data in messages:
+                status = "✅ Active" if msg_data['is_active'] else "❌ Inactive"
+                priority = "🔥" * msg_data['priority']
+                msg += f"{priority} {msg_data['message_text'][:50]}{'...' if len(msg_data['message_text']) > 50 else ''}\n"
+                msg += f"   {status} | {msg_data['display_type']} | {msg_data['created_at'][:10]}\n\n"
+        else:
+            msg += "No messages found.\n\n"
+        
+        msg += "Select an action:"
+        
+        keyboard = [
+            [InlineKeyboardButton("➕ Add New Message", callback_data="adm_add_newsletter")],
+            [InlineKeyboardButton("📝 Edit Message", callback_data="adm_edit_newsletter|0")],
+            [InlineKeyboardButton("🗑️ Delete Message", callback_data="adm_delete_newsletter|0")],
+            [InlineKeyboardButton("🔄 Toggle Status", callback_data="adm_toggle_newsletter|0")],
+            [InlineKeyboardButton("🔙 Back to Admin Menu", callback_data="admin_menu")]
+        ]
+        
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        if query:
+            await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode=None)
+        else:
+            await send_message_with_retry(context.bot, update.effective_chat.id, msg, reply_markup=reply_markup, parse_mode=None)
+            
+    except Exception as e:
+        logger.error(f"Error in newsletter management: {e}")
+        error_msg = "❌ Error loading newsletter management."
+        if query: await query.answer(error_msg, show_alert=True)
+        else: await send_message_with_retry(context.bot, update.effective_chat.id, error_msg, parse_mode=None)
+
+
+async def handle_adm_add_newsletter(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Start adding a new newsletter message"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        if query: await query.answer("Access denied.", show_alert=True)
+        return
+
+    msg = "📝 Adding New Newsletter Message\n\n"
+    msg += "Please send the message text you want to display to customers.\n\n"
+    msg += "The message will appear as a scrolling text banner in the mini-app."
+    
+    keyboard = [[InlineKeyboardButton("🔙 Back", callback_data="adm_manage_newsletter|0")]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    if query:
+        await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode=None)
+        # Set state for next message
+        context.user_data['adding_newsletter'] = True
+    else:
+        await send_message_with_retry(context.bot, update.effective_chat.id, msg, reply_markup=reply_markup, parse_mode=None)
+        context.user_data['adding_newsletter'] = True
+
+
+async def handle_adm_newsletter_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle the newsletter text input"""
+    user = update.effective_user
+    if not user or not is_primary_admin(user.id):
+        return
+    
+    if not context.user_data.get('adding_newsletter'):
+        return
+    
+    message_text = update.message.text.strip()
+    if not message_text:
+        await update.message.reply_text("❌ Message text cannot be empty. Please try again.")
+        return
+    
+    try:
+        from utils import add_admin_message
+        success = add_admin_message(
+            message_text=message_text,
+            display_type='scrolling',
+            priority=1,
+            created_by=user.id
+        )
+        
+        if success:
+            msg = f"✅ Newsletter message added successfully!\n\n📝 Message: {message_text[:100]}{'...' if len(message_text) > 100 else ''}"
+            keyboard = [[InlineKeyboardButton("🔙 Back to Newsletter Management", callback_data="adm_manage_newsletter|0")]]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await update.message.reply_text(msg, reply_markup=reply_markup, parse_mode=None)
+        else:
+            await update.message.reply_text("❌ Failed to add newsletter message. Please try again.")
+        
+        # Clear state
+        context.user_data.pop('adding_newsletter', None)
+        
+    except Exception as e:
+        logger.error(f"Error adding newsletter message: {e}")
+        await update.message.reply_text("❌ Error adding newsletter message. Please try again.")
+        context.user_data.pop('adding_newsletter', None)
+
+
+async def handle_adm_edit_newsletter(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Start editing a newsletter message"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        if query: await query.answer("Access denied.", show_alert=True)
+        return
+
+    try:
+        from utils import get_all_admin_messages
+        messages = get_all_admin_messages(limit=50, offset=0)
+        
+        if not messages:
+            await query.answer("No messages to edit.", show_alert=True)
+            return
+        
+        msg = "📝 Select Message to Edit:\n\n"
+        keyboard = []
+        
+        for i, msg_data in enumerate(messages):
+            display_text = msg_data['message_text'][:40] + "..." if len(msg_data['message_text']) > 40 else msg_data['message_text']
+            status = "✅" if msg_data['is_active'] else "❌"
+            keyboard.append([InlineKeyboardButton(
+                f"{status} {display_text}",
+                callback_data=f"adm_edit_newsletter_msg|{msg_data['id']}"
+            )])
+        
+        keyboard.append([InlineKeyboardButton("🔙 Back", callback_data="adm_manage_newsletter|0")])
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode=None)
+        
+    except Exception as e:
+        logger.error(f"Error loading messages for editing: {e}")
+        await query.answer("Error loading messages.", show_alert=True)
+
+
+async def handle_adm_edit_newsletter_msg(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Handle editing a specific newsletter message"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+    
+    if not params:
+        await query.answer("Invalid message ID.", show_alert=True)
+        return
+    
+    try:
+        message_id = int(params[0])
+        from utils import get_all_admin_messages
+        messages = get_all_admin_messages(limit=100, offset=0)
+        message_data = next((msg for msg in messages if msg['id'] == message_id), None)
+        
+        if not message_data:
+            await query.answer("Message not found.", show_alert=True)
+            return
+        
+        msg = f"📝 Editing Newsletter Message\n\n"
+        msg += f"📋 Current Text: {message_data['message_text']}\n"
+        msg += f"📊 Status: {'✅ Active' if message_data['is_active'] else '❌ Inactive'}\n"
+        msg += f"🎯 Display Type: {message_data['display_type']}\n"
+        msg += f"🔥 Priority: {message_data['priority']}\n"
+        msg += f"📅 Created: {message_data['created_at'][:10]}\n\n"
+        msg += "Send the new message text to update it:"
+        
+        keyboard = [[InlineKeyboardButton("🔙 Back", callback_data="adm_edit_newsletter|0")]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode=None)
+        
+        # Set state for editing
+        context.user_data['editing_newsletter'] = message_id
+        
+    except Exception as e:
+        logger.error(f"Error preparing message edit: {e}")
+        await query.answer("Error loading message.", show_alert=True)
+
+
+async def handle_adm_newsletter_edit_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle the newsletter edit text input"""
+    user = update.effective_user
+    if not user or not is_primary_admin(user.id):
+        return
+    
+    message_id = context.user_data.get('editing_newsletter')
+    if not message_id:
+        return
+    
+    new_text = update.message.text.strip()
+    if not new_text:
+        await update.message.reply_text("❌ Message text cannot be empty. Please try again.")
+        return
+    
+    try:
+        from utils import update_admin_message
+        success = update_admin_message(
+            message_id=message_id,
+            message_text=new_text
+        )
+        
+        if success:
+            msg = f"✅ Newsletter message updated successfully!\n\n📝 New Message: {new_text[:100]}{'...' if len(new_text) > 100 else ''}"
+            keyboard = [[InlineKeyboardButton("🔙 Back to Newsletter Management", callback_data="adm_manage_newsletter|0")]]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await update.message.reply_text(msg, reply_markup=reply_markup, parse_mode=None)
+        else:
+            await update.message.reply_text("❌ Failed to update newsletter message. Please try again.")
+        
+        # Clear state
+        context.user_data.pop('editing_newsletter', None)
+        
+    except Exception as e:
+        logger.error(f"Error updating newsletter message: {e}")
+        await update.message.reply_text("❌ Error updating newsletter message. Please try again.")
+        context.user_data.pop('editing_newsletter', None)
+
+
+async def handle_adm_delete_newsletter(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Start deleting a newsletter message"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+
+    try:
+        from utils import get_all_admin_messages
+        messages = get_all_admin_messages(limit=50, offset=0)
+        
+        if not messages:
+            await query.answer("No messages to delete.", show_alert=True)
+            return
+        
+        msg = "🗑️ Select Message to Delete:\n\n"
+        keyboard = []
+        
+        for i, msg_data in enumerate(messages):
+            display_text = msg_data['message_text'][:40] + "..." if len(msg_data['message_text']) > 40 else msg_data['message_text']
+            status = "✅" if msg_data['is_active'] else "❌"
+            keyboard.append([InlineKeyboardButton(
+                f"{status} {display_text}",
+                callback_data=f"adm_delete_newsletter_confirm|{msg_data['id']}"
+            )])
+        
+        keyboard.append([InlineKeyboardButton("🔙 Back", callback_data="adm_manage_newsletter|0")])
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode=None)
+        
+    except Exception as e:
+        logger.error(f"Error loading messages for deletion: {e}")
+        await query.answer("Error loading messages.", show_alert=True)
+
+
+async def handle_adm_delete_newsletter_confirm(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Confirm deletion of a newsletter message"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+    
+    if not params:
+        await query.answer("Invalid message ID.", show_alert=True)
+        return
+    
+    try:
+        message_id = int(params[0])
+        from utils import get_all_admin_messages
+        messages = get_all_admin_messages(limit=100, offset=0)
+        message_data = next((msg for msg in messages if msg['id'] == message_id), None)
+        
+        if not message_data:
+            await query.answer("Message not found.", show_alert=True)
+            return
+        
+        msg = f"🗑️ Confirm Deletion\n\n"
+        msg += f"📝 Message: {message_data['message_text']}\n"
+        msg += f"📊 Status: {'✅ Active' if message_data['is_active'] else '❌ Inactive'}\n"
+        msg += f"📅 Created: {message_data['created_at'][:10]}\n\n"
+        msg += "⚠️ This action cannot be undone. Are you sure?"
+        
+        keyboard = [
+            [InlineKeyboardButton("✅ Yes, Delete", callback_data=f"adm_delete_newsletter_execute|{message_id}")],
+            [InlineKeyboardButton("❌ Cancel", callback_data="adm_delete_newsletter|0")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode=None)
+        
+    except Exception as e:
+        logger.error(f"Error preparing message deletion: {e}")
+        await query.answer("Error loading message.", show_alert=True)
+
+
+async def handle_adm_delete_newsletter_execute(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Execute deletion of a newsletter message"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+    
+    if not params:
+        await query.answer("Invalid message ID.", show_alert=True)
+        return
+    
+    try:
+        message_id = int(params[0])
+        from utils import delete_admin_message
+        success = delete_admin_message(message_id)
+        
+        if success:
+            msg = "✅ Newsletter message deleted successfully!"
+            keyboard = [[InlineKeyboardButton("🔙 Back to Newsletter Management", callback_data="adm_manage_newsletter|0")]]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode=None)
+        else:
+            await query.answer("❌ Failed to delete message.", show_alert=True)
+        
+    except Exception as e:
+        logger.error(f"Error deleting newsletter message: {e}")
+        await query.answer("Error deleting message.", show_alert=True)
+
+
+async def handle_adm_toggle_newsletter(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Start toggling newsletter message status"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+
+    try:
+        from utils import get_all_admin_messages
+        messages = get_all_admin_messages(limit=50, offset=0)
+        
+        if not messages:
+            await query.answer("No messages to toggle.", show_alert=True)
+            return
+        
+        msg = "🔄 Select Message to Toggle Status:\n\n"
+        keyboard = []
+        
+        for i, msg_data in enumerate(messages):
+            display_text = msg_data['message_text'][:40] + "..." if len(msg_data['message_text']) > 40 else msg_data['message_text']
+            status = "✅" if msg_data['is_active'] else "❌"
+            keyboard.append([InlineKeyboardButton(
+                f"{status} {display_text}",
+                callback_data=f"adm_toggle_newsletter_execute|{msg_data['id']}"
+            )])
+        
+        keyboard.append([InlineKeyboardButton("🔙 Back", callback_data="adm_manage_newsletter|0")])
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await query.edit_message_text(msg, reply_markup=reply_markup, parse_mode=None)
+        
+    except Exception as e:
+        logger.error(f"Error loading messages for toggle: {e}")
+        await query.answer("Error loading messages.", show_alert=True)
+
+
+async def handle_adm_toggle_newsletter_execute(update: Update, context: ContextTypes.DEFAULT_TYPE, params=None):
+    """Execute status toggle of a newsletter message"""
+    user = update.effective_user
+    query = update.callback_query
+    
+    if not user or not is_primary_admin(user.id):
+        await query.answer("Access denied.", show_alert=True)
+        return
+    
+    if not params:
+        await query.answer("Invalid message ID.", show_alert=True)
+        return
+    
+    try:
+        message_id = int(params[0])
+        from utils import toggle_admin_message_status
+        success = toggle_admin_message_status(message_id)
+        
+        if success:
+            await query.answer("✅ Message status toggled successfully!", show_alert=True)
+            # Refresh the newsletter management menu
+            await handle_adm_manage_newsletter(update, context)
+        else:
+            await query.answer("❌ Failed to toggle status.", show_alert=True)
+        
+    except Exception as e:
+        logger.error(f"Error toggling newsletter message status: {e}")
+        await query.answer("Error toggling status.", show_alert=True)
