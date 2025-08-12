@@ -124,7 +124,7 @@ LANGUAGES = {
     "en": {
         "native_name": "English",
         # --- General & Menu ---
-        "welcome": "👋 Welcome, {username}!\n\n👤 Status: {status} {progress_bar}\n💰 Balance: {balance_str} EUR\n📦 Total Purchases: {purchases}\n🛒 Basket Items: {basket_count}\n\nStart shopping or explore your options below.\n\n⚠️ Note: No refunds.", # <<< Default Welcome Message Format
+        "welcome": "🌟 <b>Welcome to Arunas21 Bot Shop!</b> 🌟\n\n👋 Hello, <b>{username}</b>! Welcome to the most premium bot experience!\n\n✨ <b>Your Profile:</b>\n👤 Status: <b>{status}</b> {progress_bar}\n💰 Balance: <b>{balance_str} EUR</b>\n📦 Total Purchases: <b>{purchases}</b>\n🛒 Basket Items: <b>{basket_count}</b>\n\n🚀 <b>Ready to Shop?</b>\nExperience our modern, premium interface with:\n• 🛍️ Beautiful product catalog\n• 🛒 Smart shopping basket\n• 💳 Secure crypto payments\n• ⭐ Customer reviews\n• 🎯 Personalized recommendations\n\n💎 <b>Premium Features:</b>\n• Glassmorphic design\n• Smooth animations\n• Mobile-optimized\n• Real-time updates\n• Multi-language support\n\n🎉 <b>Click the button below to open our Mini App!</b>", # <<< Default Welcome Message Format
         "status_label": "Status",
         "balance_label": "Balance",
         "purchases_label": "Total Purchases",
@@ -138,6 +138,7 @@ LANGUAGES = {
         "price_list_button": "Price List",
         "language_button": "Language",
         "admin_button": "🔧 Admin Panel",
+        "mini_app_button": "🚀 Open Mini App",
         "home_button": "Home",
         "back_button": "Back",
         "cancel_button": "Cancel",
@@ -480,7 +481,7 @@ LANGUAGES = {
     "lt": {
         "native_name": "Lietuvių",
         # --- General & Menu ---
-        "welcome": "👋 Sveiki, {username}!\n\n👤 Būsena: {status} {progress_bar}\n💰 Balansas: {balance_str} EUR\n📦 Viso pirkimų: {purchases}\n🛒 Krepšelyje: {basket_count} prekė(s)\n\nPradėkite apsipirkti arba naršykite parinktis žemiau.\n\n⚠️ Pastaba: Pinigai negrąžinami.",
+        "welcome": "🌟 <b>Sveiki atvykę į Arunas21 Bot Shop!</b> 🌟\n\n👋 Sveiki, <b>{username}</b>! Sveiki atvykę į patį geriausią bot patyrimą!\n\n✨ <b>Jūsų profilis:</b>\n👤 Būsena: <b>{status}</b> {progress_bar}\n💰 Balansas: <b>{balance_str} EUR</b>\n📦 Viso pirkimų: <b>{purchases}</b>\n🛒 Krepšelyje: <b>{basket_count}</b>\n\n🚀 <b>Pasiruošę apsipirkti?</b>\nPatirkite mūsų modernų, premium sąsają su:\n• 🛍️ Gražiu produktų katalogu\n• 🛒 Išmaniu apsipirkimo krepšeliu\n• 💳 Saugiais kripto mokėjimais\n• ⭐ Klientų atsiliepimais\n• 🎯 Personalizuotais pasiūlymais\n\n💎 <b>Premium funkcijos:</b>\n• Stiklo morfizmo dizainas\n• Sklandūs animacijos\n• Mobiliesiems optimizuotas\n• Realaus laiko atnaujinimai\n• Daugiakalbė palaikymas\n\n🎉 <b>Spustelėkite mygtuką žemiau, kad atidarytumėte mūsų Mini programą!</b>",
         "status_label": "Būsena",
         "balance_label": "Balansas",
         "purchases_label": "Viso pirkimų",
@@ -494,6 +495,7 @@ LANGUAGES = {
         "price_list_button": "Kainoraštis", # <-- Example Translation
         "language_button": "Kalba", # <-- Example Translation
         "admin_button": "🔧 Admino Panelė",
+        "mini_app_button": "🚀 Atidaryti Mini programą",
         "home_button": "Pradžia", # <-- Example Translation
         "back_button": "Atgal", # <-- Example Translation
         "cancel_button": "Atšaukti", # <-- Example Translation
@@ -835,7 +837,7 @@ LANGUAGES = {
     "ru": {
         "native_name": "Русский",
         # --- General & Menu ---
-        "welcome": "👋 Добро пожаловать, {username}!\n\n👤 Статус: {status} {progress_bar}\n💰 Баланс: {balance_str} EUR\n📦 Всего покупок: {purchases}\n🛒 В корзине: {basket_count} товар(ов)\n\nНачните покупки или изучите опции ниже.\n\n⚠️ Примечание: Возврат средств невозможен.",
+        "welcome": "🌟 <b>Добро пожаловать в Arunas21 Bot Shop!</b> 🌟\n\n👋 Привет, <b>{username}</b>! Добро пожаловать в самый премиум бот-опыт!\n\n✨ <b>Ваш профиль:</b>\n👤 Статус: <b>{status}</b> {progress_bar}\n💰 Баланс: <b>{balance_str} EUR</b>\n📦 Всего покупок: <b>{purchases}</b>\n🛒 В корзине: <b>{basket_count}</b>\n\n🚀 <b>Готовы к покупкам?</b>\nИспытайте наш современный, премиум интерфейс с:\n• 🛍️ Красивым каталогом продуктов\n• 🛒 Умной корзиной покупок\n• 💳 Безопасными крипто-платежами\n• ⭐ Отзывами клиентов\n• 🎯 Персонализированными предложениями\n\n💎 <b>Премиум функции:</b>\n• Стеклянный морфизм дизайн\n• Плавные анимации\n• Оптимизация для мобильных\n• Обновления в реальном времени\n• Многоязычная поддержка\n\n🎉 <b>Нажмите кнопку ниже, чтобы открыть наше Mini приложение!</b>",
         "status_label": "Статус",
         "balance_label": "Баланс",
         "purchases_label": "Всего покупок",
@@ -849,6 +851,7 @@ LANGUAGES = {
         "price_list_button": "Прайс-лист", # <-- Example Translation
         "language_button": "Язык", # <-- Example Translation
         "admin_button": "🔧 Панель Админа",
+        "mini_app_button": "🚀 Открыть Mini приложение",
         "home_button": "Главная", # <-- Example Translation
         "back_button": "Назад", # <-- Example Translation
         "cancel_button": "Отмена", # <-- Example Translation

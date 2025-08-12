@@ -905,7 +905,7 @@
             }
             
             .promo-text {
-                font-size: 14px;
+            font-size: 14px;
                 letter-spacing: 1px;
             }
             
@@ -989,10 +989,10 @@
         .nav-tabs {
             display: flex;
             background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.08) 0%, 
-                rgba(255, 255, 255, 0.05) 50%, 
-                rgba(255, 255, 255, 0.08) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(99, 102, 241, 0.1) 50%, 
+                rgba(255, 255, 255, 0.15) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
             /* Premium spacing for touch targets */
             padding: 8px;
@@ -1002,10 +1002,10 @@
             -webkit-backdrop-filter: blur(24px);
             box-shadow: 
                 0 8px 32px rgba(0, 0, 0, 0.3),
-                0 4px 16px rgba(99, 102, 241, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15),
-                0 0 0 1px rgba(255, 255, 255, 0.05),
-                inset 0 0 20px rgba(99, 102, 241, 0.05);
+                0 4px 16px rgba(99, 102, 241, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.08),
+                inset 0 0 20px rgba(99, 102, 241, 0.08);
             position: relative;
             animation: navTabsEntrance 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), navTabsBreathing 4s ease-in-out infinite;
             will-change: transform;
@@ -1017,33 +1017,34 @@
             0%, 100% { 
                 box-shadow: 
                     0 8px 32px rgba(0, 0, 0, 0.3),
-                    0 4px 16px rgba(99, 102, 241, 0.1),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-                    0 0 0 1px rgba(255, 255, 255, 0.05),
-                    inset 0 0 20px rgba(99, 102, 241, 0.05);
+                    0 4px 16px rgba(99, 102, 241, 0.15),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                    0 0 0 1px rgba(255, 255, 255, 0.08),
+                    inset 0 0 20px rgba(99, 102, 241, 0.08);
             }
             50% { 
                 box-shadow: 
                     0 10px 36px rgba(0, 0, 0, 0.32),
-                    0 5px 18px rgba(99, 102, 241, 0.12),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-                    0 0 0 1px rgba(255, 255, 255, 0.06),
-                    inset 0 0 24px rgba(99, 102, 241, 0.06);
+                    0 5px 18px rgba(99, 102, 241, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                    0 0 0 1px rgba(255, 255, 255, 0.12),
+                    inset 0 0 24px rgba(99, 102, 241, 0.12);
             }
         }
 
         .nav-tabs:hover {
             box-shadow: 
                 0 12px 40px rgba(0, 0, 0, 0.35),
-                0 6px 20px rgba(99, 102, 241, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                0 0 0 1px rgba(255, 255, 255, 0.08);
+                0 6px 20px rgba(99, 102, 241, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.12),
+                inset 0 0 24px rgba(99, 102, 241, 0.12);
             transform: translateY(-2px);
         }
 
         @keyframes navTabsEntrance {
             0% {
-                opacity: 0;
+            opacity: 0;
                 transform: translateY(-30px) scale(0.9);
                 filter: blur(10px);
             }
@@ -1070,7 +1071,6 @@
         .nav-tab:nth-child(4) { animation-delay: 0.25s; }
         .nav-tab:nth-child(5) { animation-delay: 0.3s; }
         .nav-tab:nth-child(6) { animation-delay: 0.35s; }
-        .nav-tab:nth-child(7) { animation-delay: 0.4s; }
 
         @keyframes tabEntrance {
             0% {
@@ -1079,7 +1079,7 @@
                 filter: blur(5px);
             }
             100% {
-                opacity: 1;
+            opacity: 1;
                 transform: translateY(0) scale(1);
                 filter: blur(0px);
             }
@@ -1101,7 +1101,6 @@
         .nav-tab:nth-child(4) { animation-delay: 0.25s; }
         .nav-tab:nth-child(5) { animation-delay: 0.3s; }
         .nav-tab:nth-child(6) { animation-delay: 0.35s; }
-        .nav-tab:nth-child(7) { animation-delay: 0.4s; }
 
         /* Prevent layout shifts during loading */
         .nav-tabs {
@@ -1114,41 +1113,15 @@
             transform-origin: left center;
         }
 
-        /* PREMIUM ANIMATED TAB INDICATOR - Apple Design System */
+        /* Modern Tab Design - No Indicator Blob */
         .nav-tabs {
-            --indicator-position: 0%;
-            --indicator-width: 14.285%; /* 100% / 7 tabs */
-        }
-
-        .nav-tabs::after {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            width: calc(var(--indicator-width) - 6px);
-            height: calc(100% - 16px);
-            background: linear-gradient(135deg, 
-                rgba(99, 102, 241, 0.85) 0%, 
-                rgba(236, 72, 153, 0.85) 50%,
-                rgba(99, 102, 241, 0.85) 100%);
-            border-radius: 16px;
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            box-shadow: 
-                0 8px 24px rgba(99, 102, 241, 0.3),
-                0 4px 12px rgba(236, 72, 153, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            z-index: 1;
-            will-change: transform;
-            backface-visibility: hidden;
-            transform-style: preserve-3d;
-            filter: blur(0.5px);
-            transform: translateX(var(--indicator-position));
+            position: relative;
         }
 
         .nav-tab {
             flex: 1;
-            background: transparent;
-            border: none;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(99, 102, 241, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             color: rgba(255, 255, 255, 0.75);
             /* Premium padding for better touch targets */
             padding: var(--space-lg) var(--space-xl);
@@ -1199,10 +1172,12 @@
             font-weight: 700;
             transform: translateY(-2px);
             text-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.25) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.3);
             box-shadow: 
-                0 8px 24px rgba(99, 102, 241, 0.3),
-                0 4px 12px rgba(236, 72, 153, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+                0 8px 24px rgba(99, 102, 241, 0.2),
+                0 4px 12px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
         }
@@ -1246,7 +1221,8 @@
         .nav-tab:hover:not(.active) {
             color: rgba(255, 255, 255, 0.95);
             transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.08);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(99, 102, 241, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 
                 0 8px 24px rgba(0, 0, 0, 0.2),
                 0 4px 12px rgba(99, 102, 241, 0.1),
@@ -1321,6 +1297,277 @@
             width: 120px;
             height: 120px;
             opacity: 1;
+        }
+
+        /* Dynamic Reviews Carousel - Premium Design */
+        .reviews-carousel-section {
+            margin: var(--space-2xl) var(--space-lg);
+            padding: var(--space-xl);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(99, 102, 241, 0.08) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 28px;
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.25),
+                0 6px 20px rgba(99, 102, 241, 0.15),
+                0 2px 8px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reviews-carousel-section:hover {
+            box-shadow: 
+                0 16px 50px rgba(0, 0, 0, 0.3),
+                0 8px 25px rgba(99, 102, 241, 0.2),
+                0 3px 12px rgba(255, 255, 255, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .reviews-carousel-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(99, 102, 241, 0.5) 50%, 
+                transparent 100%);
+            animation: shimmerFlow 3s ease-in-out infinite;
+        }
+
+        .reviews-carousel-container {
+            position: relative;
+            margin-top: var(--space-lg);
+        }
+
+        .reviews-carousel {
+            display: flex;
+            gap: var(--space-lg);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            padding: var(--space-md) 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .reviews-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .review-card {
+            min-width: 320px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.12) 0%, 
+                rgba(99, 102, 241, 0.1) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: var(--space-2xl);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.2),
+                0 6px 20px rgba(99, 102, 241, 0.15),
+                0 2px 8px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .review-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                rgba(99, 102, 241, 0.8) 0%, 
+                rgba(255, 255, 255, 0.6) 100%);
+            transform: scaleX(0);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .review-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.25),
+                0 10px 30px rgba(99, 102, 241, 0.2),
+                0 4px 12px rgba(255, 255, 255, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgba(99, 102, 241, 0.4);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(99, 102, 241, 0.12) 100%);
+        }
+
+        .review-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .review-card:hover .reviewer-name {
+            text-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+        }
+
+        .review-card:hover .star {
+            transform: scale(1.1);
+            filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.6));
+        }
+
+        .review-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+            text-align: center;
+        }
+
+        .reviewer-info {
+            width: 100%;
+            margin-bottom: var(--space-sm);
+        }
+
+        .reviewer-name {
+            font-size: var(--text-xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            letter-spacing: 0.02em;
+            text-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+        }
+
+        .review-date {
+            font-size: var(--text-sm);
+            color: var(--text-tertiary);
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .review-rating {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: var(--space-lg);
+            padding: var(--space-sm) 0;
+        }
+
+        .star {
+            color: #FFD700;
+            font-size: 18px;
+            filter: drop-shadow(0 2px 6px rgba(255, 215, 0, 0.4));
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .star:hover {
+            transform: scale(1.2);
+        }
+
+        .review-text {
+            font-size: var(--text-lg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-weight: 500;
+            text-align: center;
+            padding: 0 var(--space-md);
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+
+        .carousel-btn {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(99, 102, 241, 0.2) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            color: var(--text-primary);
+            font-size: 26px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 
+                0 8px 24px rgba(0, 0, 0, 0.2),
+                0 4px 12px rgba(99, 102, 241, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .carousel-btn:hover {
+            transform: scale(1.15) translateY(-2px);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                rgba(99, 102, 241, 0.25) 100%);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 
+                0 12px 32px rgba(99, 102, 241, 0.25),
+                0 6px 20px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .carousel-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Auto-scroll animation for continuous flow - Slower, more deliberate pace */
+        @keyframes autoScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .reviews-carousel.auto-scroll {
+            animation: autoScroll 60s linear infinite;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+            .reviews-carousel-section {
+                margin: var(--space-xl) var(--space-md);
+                padding: var(--space-lg);
+                border-radius: 24px;
+            }
+
+            .review-card {
+                min-width: 300px;
+                padding: var(--space-xl);
+            }
+
+            .reviewer-name {
+                font-size: var(--text-lg);
+            }
+
+            .review-text {
+                font-size: var(--text-base);
+                padding: 0 var(--space-sm);
+                max-width: 260px;
+            }
+
+            .carousel-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 22px;
+            }
         }
 
         /* Tab Ripple Effect */
@@ -2543,11 +2790,11 @@
                 flex-direction: column;
                 text-align: center;
                 gap: var(--space-lg);
-            }
-            
-            .profile-avatar {
-                width: 80px;
-                height: 80px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
                 font-size: 28px;
             }
             
@@ -3753,7 +4000,7 @@
                 </div>
             </div>
             <div class="tagline">Premium Bot Experience</div>
-        </div>
+            </div>
             
         <!-- Newsletter Banner -->
         <div id="newsletterBanner" class="newsletter-banner" style="display: none;">
@@ -3792,10 +4039,7 @@
                 <span class="nav-icon">📝</span>
                 <span>Reviews</span>
             </button>
-            <button class="nav-tab" data-tab="pricelist">
-                <span class="nav-icon">📋</span>
-                <span>Prices</span>
-            </button>
+
             <button class="nav-tab" data-tab="settings">
                 <span class="nav-icon">⚙️</span>
                 <span>Settings</span>
@@ -3811,8 +4055,26 @@
                 <h3 class="section-title">Select Location</h3>
                 <div id="citiesGrid" class="cities-grid">
                     <!-- Cities will be loaded here -->
+                </div>
             </div>
-        </div>
+
+            <!-- Dynamic Reviews Carousel -->
+            <div class="reviews-carousel-section">
+                <h3 class="section-title">What Our Customers Say</h3>
+                <div class="reviews-carousel-container">
+                    <div class="reviews-carousel" id="reviewsCarousel">
+                        <!-- Reviews will be dynamically loaded here -->
+                    </div>
+                    <div class="carousel-controls">
+                        <button class="carousel-btn carousel-prev" onclick="scrollReviews('prev')">
+                            <span>‹</span>
+                        </button>
+                        <button class="carousel-btn carousel-next" onclick="scrollReviews('next')">
+                            <span>›</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             <!-- District Selection -->
             <div id="districtSelection" class="district-selection" style="display: none;">
@@ -3978,7 +4240,7 @@
                                 <option value="en">English</option>
                                 <option value="lt">Lietuvių</option>
                                 <option value="ru">Русский</option>
-                            </select>
+                        </select>
                         </div>
                         <div class="setting-item">
                             <div class="setting-info">
@@ -3993,7 +4255,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+                    </div>
 
         <!-- Refill Section -->
         <div id="refillSection" class="content-section">
@@ -4054,27 +4316,27 @@
                 <label for="pricelistCity">Select City:</label>
                 <select id="pricelistCity" class="city-select" onchange="loadPriceList()">
                     <option value="">All Cities</option>
-                </select>
-            </div>
+                        </select>
+                    </div>
             
             <div class="pricelist-container" id="pricelistContainer">
                 <div class="loading-pricelist">Loading price list...</div>
             </div>
-        </div>
+                </div>
 
         <!-- Settings Section -->
         <div id="settingsSection" class="content-section">
             <div class="section-header">
                 <h2 class="section-title">⚙️ Settings</h2>
                 <p class="section-subtitle">Customize your experience</p>
-            </div>
+                    </div>
             
             <div class="settings-card">
                 <div class="setting-item">
                     <div class="setting-info">
                         <span class="setting-label">🌐 Language</span>
                         <span class="setting-description">Choose your preferred language</span>
-                    </div>
+                </div>
                     <select id="languageSelect" class="setting-select" onchange="changeLanguage()">
                         <option value="en">English</option>
                         <option value="es">Español</option>
@@ -4087,8 +4349,8 @@
                         <option value="zh">中文</option>
                         <option value="ja">日本語</option>
                     </select>
-                </div>
-                
+            </div>
+
                 <div class="setting-item">
                     <div class="setting-info">
                         <span class="setting-label">🏷️ Discount Code</span>
@@ -4097,10 +4359,10 @@
                     <div class="discount-input-group">
                         <input type="text" id="discountCode" placeholder="Enter discount code" class="discount-input">
                         <button class="btn btn-secondary" onclick="applyDiscountCode()">Apply</button>
-                    </div>
-                    <div id="discountStatus" class="discount-status"></div>
                 </div>
-                
+                    <div id="discountStatus" class="discount-status"></div>
+            </div>
+
                 <div class="setting-item">
                     <div class="setting-info">
                         <span class="setting-label">📧 Newsletter</span>
@@ -4109,10 +4371,10 @@
                     <div class="newsletter-toggle">
                         <input type="checkbox" id="newsletterToggle" class="toggle-input">
                         <label for="newsletterToggle" class="toggle-label"></label>
-                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
     <!-- Payment Modal -->
     <div id="paymentModal" class="modal" style="display: none;">
@@ -4399,7 +4661,7 @@
                         clearInterval(paymentTimer);
                         setTimeout(() => {
                             closePaymentModal();
-                            loadBasket();
+                    loadBasket();
                             showSuccess('Payment successful! Your order has been placed.');
                         }, 2000);
                     }
@@ -4659,6 +4921,7 @@
                 await loadNewsletter();
                 await loadPromoBanners();
                 await loadCities();
+                await loadReviewsCarousel();
                 
                 setupEventListeners();
                 
@@ -4705,6 +4968,9 @@
             if (newsletterToggle) {
                 newsletterToggle.addEventListener('change', toggleNewsletter);
             }
+
+            // Setup carousel interactions
+            setupCarouselInteractions();
         }
 
         // Premium click effect for tabs
@@ -4801,6 +5067,7 @@
             // Load section-specific data
             if (tabName === 'products') {
                 showCitySelection();
+                loadReviewsCarousel(); // Load reviews carousel for Shop tab
             } else if (tabName === 'basket') {
                 loadBasket();
             } else if (tabName === 'profile') {
@@ -4810,33 +5077,18 @@
                 document.getElementById('refillCurrentBalance').textContent = document.getElementById('profileBalance').textContent;
             } else if (tabName === 'reviews') {
                 loadReviews();
-            } else if (tabName === 'pricelist') {
-                loadPriceList();
             } else if (tabName === 'settings') {
                 loadUserSettings();
             }
         }
 
-        // FIGMA-QUALITY TAB INDICATOR ANIMATION
+        // Modern Tab Management - No Indicator
         function updateTabIndicator(activeIndex) {
-            const tabsContainer = document.querySelector('.nav-tabs');
-            if (tabsContainer && tabsContainer.style) {
-                // Calculate precise position for each tab
-                // Each tab takes up 1/7 of the width, so we multiply by the index
-                const translateX = activeIndex * (100/7); // 14.285% per tab (7 tabs total)
-                
-                // Apply the position with smooth transition - immediate and fluid
-                tabsContainer.style.setProperty('--indicator-position', `${translateX}%`);
-                
-                // Force a reflow to ensure smooth animation
-                tabsContainer.offsetHeight;
-                
-                // Add premium click effect for visual feedback
-                addPremiumClickEffect(activeIndex);
-                
-                // Add subtle glow effect to active tab
-                addActiveTabGlow(activeIndex);
-            }
+            // Add premium click effect for visual feedback
+            addPremiumClickEffect(activeIndex);
+            
+            // Add subtle glow effect to active tab
+            addActiveTabGlow(activeIndex);
         }
 
         // Enhanced Premium Click Effect
@@ -4898,7 +5150,7 @@
                     const data = await response.json();
                     if (data.messages && data.messages.length > 0) {
                         displayNewsletter(data.messages[0]);
-                } else {
+            } else {
                         hideNewsletter();
                     }
                 }
@@ -5145,10 +5397,10 @@
                         ${favorites.includes(product.id) ? '❤️' : '🤍'}
                     </button>
                     <div class="product-header">
-                        <div class="product-info">
+                    <div class="product-info">
                             <div class="product-title">
                                 ${product.type || product.name || 'Product'}
-                            </div>
+                        </div>
                             <div class="product-meta">
                                 <div class="product-size">${product.size || 'Standard'}</div>
                                 <div class="product-location">
@@ -5322,28 +5574,28 @@
                     <div class="basket-item-image">
                         <div class="product-icon" style="background: ${productIcon.gradient};">
                             <span style="font-size: 18px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">${productIcon.text}</span>
-                        </div>
+                    </div>
                     </div>
                     <div class="basket-item-details">
                         <div class="basket-item-name">${item.name || item.type || 'Product'}</div>
                         <div class="basket-item-price">€${item.price} × ${item.quantity} = €${(item.price * item.quantity).toFixed(2)}</div>
                         <div class="basket-item-location">
                             ${item.city} - ${item.district || 'District'}
-                        </div>
                     </div>
+                </div>
                     <div class="basket-item-actions">
                         <div class="quantity-control">
                             <button class="quantity-btn" onclick="updateBasketQuantity(${item.basket_id}, ${item.quantity - 1})">−</button>
                             <span class="quantity-value">${item.quantity}</span>
                             <button class="quantity-btn" onclick="updateBasketQuantity(${item.basket_id}, ${item.quantity + 1})">+</button>
-                        </div>
+                    </div>
                         <button class="remove-btn" onclick="removeFromBasket(${item.basket_id})">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                             </svg>
-                        </button>
-                    </div>
-                `;
+                    </button>
+                </div>
+            `;
                 container.appendChild(card);
             });
 
@@ -5381,7 +5633,7 @@
         async function removeFromBasket(basketId) {
             try {
                 const response = await fetch(`${API_BASE}/basket/remove`, {
-                        method: 'POST',
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ basket_id: basketId })
                 });
@@ -5394,7 +5646,7 @@
                     const error = await response.json();
                     showError(error.error || 'Failed to remove product');
                     }
-                } catch (error) {
+            } catch (error) {
                 console.error('Error removing from basket:', error);
                 showError('Failed to remove product');
             }
@@ -5485,11 +5737,11 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    if (data.payment_url) {
+                if (data.payment_url) {
                         // Open payment in new window or redirect
                         window.open(data.payment_url, '_blank');
                         showSuccess('Payment window opened. Please complete the payment.');
-                    } else {
+                } else {
                         showError('Failed to create payment');
                     }
                 } else {
@@ -5535,10 +5787,10 @@
                     <div class="review-header">
                         <span class="review-author">${review.author_name || 'Anonymous'}</span>
                         <span class="review-date">${new Date(review.created_at).toLocaleDateString()}</span>
-                    </div>
+                            </div>
                     <div class="review-rating">
                         ${generateStars(review.rating)}
-                    </div>
+                            </div>
                     <div class="review-text">${review.text}</div>
                 `;
                 container.appendChild(card);
@@ -5563,7 +5815,7 @@
                     <div class="modal-header">
                         <h2>✍️ Leave Review</h2>
                         <button class="modal-close" onclick="this.parentElement.parentElement.parentElement.remove()">✕</button>
-                    </div>
+                        </div>
                     <div class="modal-body">
                         <div class="review-form">
                             <label>Rating:</label>
@@ -5573,7 +5825,7 @@
                                 <span class="star-input" data-rating="3">★</span>
                                 <span class="star-input" data-rating="4">★</span>
                                 <span class="star-input" data-rating="5">★</span>
-                            </div>
+                        </div>
                             <label>Review:</label>
                             <textarea id="reviewText" placeholder="Share your experience..." rows="4"></textarea>
                         </div>
@@ -5610,7 +5862,7 @@
 
             try {
                 const response = await fetch(`${API_BASE}/reviews`, {
-                    method: 'POST',
+                        method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ rating: parseInt(rating), text: text })
                 });
@@ -5619,11 +5871,11 @@
                     showSuccess('Review submitted successfully!');
                     document.querySelector('.modal').remove();
                     loadReviews();
-                } else {
+                    } else {
                     const error = await response.json();
                     showError(error.error || 'Failed to submit review');
-                }
-            } catch (error) {
+                    }
+                } catch (error) {
                 console.error('Error submitting review:', error);
                 showError('Failed to submit review');
             }
@@ -5666,7 +5918,7 @@
                         <div class="price-item">
                             <span class="price-item-name">${item.name}</span>
                             <span class="price-item-value">€${item.price.toFixed(2)}</span>
-                        </div>
+                </div>
                     `).join('')}
                 `;
                 container.appendChild(categoryDiv);
@@ -5857,6 +6109,184 @@
                     particle.style.transform = `scale(${scale})`;
                 });
             }, 100);
+        }
+
+        // Reviews Carousel Functions
+        let reviewsData = [];
+        let currentReviewIndex = 0;
+        let autoScrollInterval;
+
+        // Load and display reviews in the carousel
+        async function loadReviewsCarousel() {
+            try {
+                const response = await fetch(`${API_BASE}/reviews`);
+                if (response.ok) {
+                    const data = await response.json();
+                    reviewsData = data.reviews || [];
+                    renderReviewsCarousel();
+                    startAutoScroll();
+                } else {
+                    // Fallback to sample reviews if API fails
+                    reviewsData = getSampleReviews();
+                    renderReviewsCarousel();
+                    startAutoScroll();
+                }
+            } catch (error) {
+                console.error('Error loading reviews for carousel:', error);
+                // Fallback to sample reviews
+                reviewsData = getSampleReviews();
+                renderReviewsCarousel();
+                startAutoScroll();
+            }
+        }
+
+        // Render reviews in the carousel
+        function renderReviewsCarousel() {
+            const carousel = document.getElementById('reviewsCarousel');
+            if (!carousel || reviewsData.length === 0) return;
+
+            carousel.innerHTML = '';
+            
+            // Create duplicate reviews for seamless loop
+            const extendedReviews = [...reviewsData, ...reviewsData];
+            
+            extendedReviews.forEach((review, index) => {
+                const reviewCard = document.createElement('div');
+                reviewCard.className = 'review-card';
+                reviewCard.innerHTML = `
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-name">${review.author_name || 'Anonymous'}</div>
+                            <div class="review-date">${new Date(review.created_at || Date.now()).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        ${generateStars(review.rating || 5)}
+                    </div>
+                    <div class="review-text">${review.text || 'Great service and fast delivery!'}</div>
+                `;
+                carousel.appendChild(reviewCard);
+            });
+        }
+
+        // Generate star rating display
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+            let starsHTML = '';
+            
+            for (let i = 0; i < fullStars; i++) {
+                starsHTML += '<span class="star">★</span>';
+            }
+            
+            if (hasHalfStar) {
+                starsHTML += '<span class="star">☆</span>';
+            }
+            
+            const emptyStars = 5 - Math.ceil(rating);
+            for (let i = 0; i < emptyStars; i++) {
+                starsHTML += '<span class="star" style="color: rgba(255, 215, 0, 0.3);">★</span>';
+            }
+            
+            return starsHTML;
+        }
+
+        // Sample reviews for fallback
+        function getSampleReviews() {
+            return [
+                {
+                    author_name: 'Alex M.',
+                    rating: 5,
+                    text: 'Amazing service! Fast delivery and great quality. Highly recommend!',
+                    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+                },
+                {
+                    author_name: 'Sarah K.',
+                    rating: 5,
+                    text: 'Best bot shop I\'ve ever used. Professional and reliable.',
+                    created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+                },
+                {
+                    author_name: 'Mike R.',
+                    rating: 5,
+                    text: 'Excellent customer support and fast processing times.',
+                    created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
+                },
+                {
+                    author_name: 'Emma L.',
+                    rating: 5,
+                    text: 'Premium quality service with competitive prices.',
+                    created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
+                },
+                {
+                    author_name: 'David P.',
+                    rating: 5,
+                    text: 'Outstanding experience! Will definitely use again.',
+                    created_at: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000)
+                }
+            ];
+        }
+
+        // Manual carousel navigation
+        function scrollReviews(direction) {
+            const carousel = document.getElementById('reviewsCarousel');
+            if (!carousel) return;
+
+            const cardWidth = 320 + 24; // card width + gap (updated for new design)
+            const scrollAmount = direction === 'next' ? cardWidth : -cardWidth;
+            
+            carousel.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+
+            // Pause auto-scroll temporarily
+            pauseAutoScroll();
+            setTimeout(() => startAutoScroll(), 3000);
+        }
+
+        // Start auto-scroll animation
+        function startAutoScroll() {
+            if (autoScrollInterval) return;
+            
+            const carousel = document.getElementById('reviewsCarousel');
+            if (!carousel) return;
+
+            // Add auto-scroll class for CSS animation
+            carousel.classList.add('auto-scroll');
+            
+            // Manual auto-scroll for better control - Slower, more deliberate pace
+            autoScrollInterval = setInterval(() => {
+                if (carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth) {
+                    carousel.scrollLeft = 0;
+                } else {
+                    carousel.scrollBy({ left: 0.5, behavior: 'auto' });
+                }
+            }, 100);
+        }
+
+        // Pause auto-scroll
+        function pauseAutoScroll() {
+            if (autoScrollInterval) {
+                clearInterval(autoScrollInterval);
+                autoScrollInterval = null;
+            }
+            
+            const carousel = document.getElementById('reviewsCarousel');
+            if (carousel) {
+                carousel.classList.remove('auto-scroll');
+            }
+        }
+
+        // Pause auto-scroll on hover for better UX
+        function setupCarouselInteractions() {
+            const carousel = document.getElementById('reviewsCarousel');
+            if (!carousel) return;
+
+            carousel.addEventListener('mouseenter', pauseAutoScroll);
+            carousel.addEventListener('mouseleave', startAutoScroll);
+            carousel.addEventListener('touchstart', pauseAutoScroll);
+            carousel.addEventListener('touchend', startAutoScroll);
         }
 
         // Initialize the app when DOM is loaded

@@ -8,7 +8,7 @@ from collections import defaultdict, Counter
 from decimal import Decimal, ROUND_DOWN # <<< Added ROUND_DOWN
 
 # --- Telegram Imports ---
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 from telegram import helpers
@@ -187,7 +187,12 @@ def _build_start_menu_content(user_id: int, username: str, lang_data: dict, cont
     price_list_button_text = lang_data.get("price_list_button", "Price List")
     language_button_text = lang_data.get("language_button", "Language")
     admin_button_text = lang_data.get("admin_button", "🔧 Admin Panel")
+    
+    # Create a prominent mini app button
+    mini_app_button_text = lang_data.get("mini_app_button", "🚀 Open Mini App")
+    
     keyboard = [
+        [InlineKeyboardButton(mini_app_button_text, web_app=WebAppInfo(url="https://miniappbot-u5p9.onrender.com"))],
         [InlineKeyboardButton(f"{EMOJI_SHOP} {shop_button_text}", callback_data="shop")],
         [InlineKeyboardButton(f"{EMOJI_PROFILE} {profile_button_text}", callback_data="profile"),
          InlineKeyboardButton(f"{EMOJI_REFILL} {top_up_button_text}", callback_data="refill")],

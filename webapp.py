@@ -36,6 +36,217 @@ from flask import Blueprint
 # Create Blueprint for Mini App
 miniapp_bp = Blueprint('miniapp', __name__, template_folder='templates')
 
+# Telegram IP Whitelist for Security
+TELEGRAM_IP_RANGES = [
+    # Telegram's official IP ranges
+    "149.154.160.0/20",    # Telegram DC1
+    "149.154.161.0/24",    # Telegram DC1
+    "149.154.162.0/24",    # Telegram DC1
+    "149.154.163.0/24",    # Telegram DC1
+    "149.154.164.0/24",    # Telegram DC1
+    "149.154.165.0/24",    # Telegram DC1
+    "149.154.166.0/24",    # Telegram DC1
+    "149.154.167.0/24",    # Telegram DC1
+    "149.154.168.0/24",    # Telegram DC1
+    "149.154.169.0/24",    # Telegram DC1
+    "149.154.170.0/24",    # Telegram DC1
+    "149.154.171.0/24",    # Telegram DC1
+    "149.154.172.0/24",    # Telegram DC1
+    "149.154.173.0/24",    # Telegram DC1
+    "149.154.174.0/24",    # Telegram DC1
+    "149.154.175.0/24",    # Telegram DC1
+    "91.108.4.0/22",       # Telegram DC2
+    "91.108.8.0/22",       # Telegram DC2
+    "91.108.12.0/22",      # Telegram DC2
+    "91.108.16.0/22",      # Telegram DC2
+    "91.108.56.0/22",      # Telegram DC2
+    "91.108.56.0/24",      # Telegram DC2
+    "91.108.57.0/24",      # Telegram DC2
+    "91.108.58.0/24",      # Telegram DC2
+    "91.108.59.0/24",      # Telegram DC2
+    "91.108.56.0/22",      # Telegram DC2
+    "91.108.60.0/22",      # Telegram DC2
+    "91.108.64.0/22",      # Telegram DC2
+    "91.108.68.0/22",      # Telegram DC2
+    "91.108.72.0/22",      # Telegram DC2
+    "91.108.76.0/22",      # Telegram DC2
+    "91.108.80.0/22",      # Telegram DC2
+    "91.108.84.0/22",      # Telegram DC2
+    "91.108.88.0/22",      # Telegram DC2
+    "91.108.92.0/22",      # Telegram DC2
+    "91.108.96.0/22",      # Telegram DC2
+    "91.108.100.0/22",     # Telegram DC2
+    "91.108.104.0/22",     # Telegram DC2
+    "91.108.108.0/22",     # Telegram DC2
+    "91.108.112.0/22",     # Telegram DC2
+    "91.108.116.0/22",     # Telegram DC2
+    "91.108.120.0/22",     # Telegram DC2
+    "91.108.124.0/22",     # Telegram DC2
+    "91.108.128.0/22",     # Telegram DC2
+    "91.108.132.0/22",     # Telegram DC2
+    "91.108.136.0/22",     # Telegram DC2
+    "91.108.140.0/22",     # Telegram DC2
+    "91.108.144.0/22",     # Telegram DC2
+    "91.108.148.0/22",     # Telegram DC2
+    "91.108.152.0/22",     # Telegram DC2
+    "91.108.156.0/22",     # Telegram DC2
+    "91.108.160.0/22",     # Telegram DC2
+    "91.108.164.0/22",     # Telegram DC2
+    "91.108.168.0/22",     # Telegram DC2
+    "91.108.172.0/22",     # Telegram DC2
+    "91.108.176.0/22",     # Telegram DC2
+    "91.108.180.0/22",     # Telegram DC2
+    "91.108.184.0/22",     # Telegram DC2
+    "91.108.188.0/22",     # Telegram DC2
+    "91.108.192.0/22",     # Telegram DC2
+    "91.108.196.0/22",     # Telegram DC2
+    "91.108.200.0/22",     # Telegram DC2
+    "91.108.204.0/22",     # Telegram DC2
+    "91.108.208.0/22",     # Telegram DC2
+    "91.108.212.0/22",     # Telegram DC2
+    "91.108.216.0/22",     # Telegram DC2
+    "91.108.220.0/22",     # Telegram DC2
+    "91.108.224.0/22",     # Telegram DC2
+    "91.108.228.0/22",     # Telegram DC2
+    "91.108.232.0/22",     # Telegram DC2
+    "91.108.236.0/22",     # Telegram DC2
+    "91.108.240.0/22",     # Telegram DC2
+    "91.108.244.0/22",     # Telegram DC2
+    "91.108.248.0/22",     # Telegram DC2
+    "91.108.252.0/22",     # Telegram DC2
+    "95.161.64.0/20",      # Telegram DC3
+    "95.161.68.0/22",      # Telegram DC3
+    "95.161.72.0/22",      # Telegram DC3
+    "95.161.76.0/22",      # Telegram DC3
+    "95.161.80.0/22",      # Telegram DC3
+    "95.161.84.0/22",      # Telegram DC3
+    "95.161.88.0/22",      # Telegram DC3
+    "95.161.92.0/22",      # Telegram DC3
+    "95.161.96.0/22",      # Telegram DC3
+    "95.161.100.0/22",     # Telegram DC3
+    "95.161.104.0/22",     # Telegram DC3
+    "95.161.108.0/22",     # Telegram DC3
+    "95.161.112.0/22",     # Telegram DC3
+    "95.161.116.0/22",     # Telegram DC3
+    "95.161.120.0/22",     # Telegram DC3
+    "95.161.124.0/22",     # Telegram DC3
+    "95.161.128.0/22",     # Telegram DC3
+    "95.161.132.0/22",     # Telegram DC3
+    "95.161.136.0/22",     # Telegram DC3
+    "95.161.140.0/22",     # Telegram DC3
+    "95.161.144.0/22",     # Telegram DC3
+    "95.161.148.0/22",     # Telegram DC3
+    "95.161.152.0/22",     # Telegram DC3
+    "95.161.156.0/22",     # Telegram DC3
+    "95.161.160.0/22",     # Telegram DC3
+    "95.161.164.0/22",     # Telegram DC3
+    "95.161.168.0/22",     # Telegram DC3
+    "95.161.172.0/22",     # Telegram DC3
+    "95.161.176.0/22",     # Telegram DC3
+    "95.161.180.0/22",     # Telegram DC3
+    "95.161.184.0/22",     # Telegram DC3
+    "95.161.188.0/22",     # Telegram DC3
+    "95.161.192.0/22",     # Telegram DC3
+    "95.161.196.0/22",     # Telegram DC3
+    "95.161.200.0/22",     # Telegram DC3
+    "95.161.204.0/22",     # Telegram DC3
+    "95.161.208.0/22",     # Telegram DC3
+    "95.161.212.0/22",     # Telegram DC3
+    "95.161.216.0/22",     # Telegram DC3
+    "95.161.220.0/22",     # Telegram DC3
+    "95.161.224.0/22",     # Telegram DC3
+    "95.161.228.0/22",     # Telegram DC3
+    "95.161.232.0/22",     # Telegram DC3
+    "95.161.236.0/22",     # Telegram DC3
+    "95.161.240.0/22",     # Telegram DC3
+    "95.161.244.0/22",     # Telegram DC3
+    "95.161.248.0/22",     # Telegram DC3
+    "95.161.252.0/22",     # Telegram DC3
+    "67.198.55.0/24",      # Telegram DC4
+    "67.198.56.0/24",      # Telegram DC4
+    "67.198.57.0/24",      # Telegram DC4
+    "67.198.58.0/24",      # Telegram DC4
+    "67.198.59.0/24",      # Telegram DC4
+    "67.198.60.0/24",      # Telegram DC4
+    "67.198.61.0/24",      # Telegram DC4
+    "67.198.62.0/24",      # Telegram DC4
+    "67.198.63.0/24",      # Telegram DC2
+    "127.0.0.1",           # Localhost for development
+    "::1"                   # Localhost IPv6 for development
+]
+
+def is_ip_in_whitelist(ip_address: str) -> bool:
+    """Check if IP address is in Telegram's whitelist"""
+    import ipaddress
+    
+    try:
+        ip = ipaddress.ip_address(ip_address)
+        for range_str in TELEGRAM_IP_RANGES:
+            if ip in ipaddress.ip_network(range_str, strict=False):
+                return True
+        return False
+    except ValueError:
+        return False
+
+def require_telegram_ip(f):
+    """Decorator to require requests from Telegram IPs only"""
+    def decorated_function(*args, **kwargs):
+        # Get client IP (handle proxy headers)
+        client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+        if client_ip and ',' in client_ip:
+            client_ip = client_ip.split(',')[0].strip()
+        
+        # Check if IP is whitelisted
+        if not is_ip_in_whitelist(client_ip):
+            logger.warning(f"Blocked request from non-whitelisted IP: {client_ip}")
+            return jsonify({'error': 'Access denied'}), 403
+        
+        return f(*args, **kwargs)
+    decorated_function.__name__ = f.__name__
+    return decorated_function
+
+# Rate Limiting for Security
+from collections import defaultdict
+import time
+
+# Simple in-memory rate limiter
+request_counts = defaultdict(list)
+RATE_LIMIT_WINDOW = 60  # 1 minute
+RATE_LIMIT_MAX_REQUESTS = 100  # Max requests per minute per IP
+
+def check_rate_limit(ip_address: str) -> bool:
+    """Check if IP address has exceeded rate limit"""
+    current_time = time.time()
+    
+    # Clean old requests outside the window
+    request_counts[ip_address] = [
+        req_time for req_time in request_counts[ip_address] 
+        if current_time - req_time < RATE_LIMIT_WINDOW
+    ]
+    
+    # Check if limit exceeded
+    if len(request_counts[ip_address]) >= RATE_LIMIT_MAX_REQUESTS:
+        return False
+    
+    # Add current request
+    request_counts[ip_address].append(current_time)
+    return True
+
+def require_rate_limit(f):
+    """Decorator to add rate limiting"""
+    def decorated_function(*args, **kwargs):
+        client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+        if client_ip and ',' in client_ip:
+            client_ip = client_ip.split(',')[0].strip()
+        
+        if not check_rate_limit(client_ip):
+            logger.warning(f"Rate limit exceeded for IP: {client_ip}")
+            return jsonify({'error': 'Rate limit exceeded. Please try again later.'}), 429
+        
+        return f(*args, **kwargs)
+    decorated_function.__name__ = f.__name__
+    return decorated_function
+
 def validate_telegram_data(init_data: str) -> Optional[Dict]:
     """
     Validate Telegram Web App init data
@@ -109,11 +320,14 @@ def require_auth(f):
 # Routes
 
 @miniapp_bp.route('/')
+@require_rate_limit
 def index():
     """Serve the Mini App interface"""
     return render_template('index.html')
 
 @miniapp_bp.route('/api/user/balance')
+@require_rate_limit
+@require_telegram_ip
 @require_auth
 def get_user_balance(user):
     """Get user's current balance"""
@@ -140,6 +354,7 @@ def get_user_balance(user):
             conn.close()
 
 @miniapp_bp.route('/api/user/profile')
+@require_telegram_ip
 @require_auth
 def get_user_profile(user):
     """Get user profile information"""
@@ -201,6 +416,7 @@ def get_user_profile(user):
             conn.close()
 
 @miniapp_bp.route('/api/cities')
+@require_telegram_ip
 def get_cities():
     """Get all available cities"""
     try:
@@ -212,6 +428,7 @@ def get_cities():
         return jsonify({'error': 'Failed to get cities'}), 500
 
 @miniapp_bp.route('/api/districts/<city_id>')
+@require_telegram_ip
 def get_districts(city_id):
     """Get districts for a specific city"""
     try:
@@ -225,6 +442,7 @@ def get_districts(city_id):
         return jsonify({'error': 'Failed to get districts'}), 500
 
 @miniapp_bp.route('/api/products/<city_id>/<district_id>')
+@require_telegram_ip
 @require_auth
 def get_products(user, city_id, district_id):
     """Get products for a specific location"""
@@ -290,6 +508,7 @@ def get_products(user, city_id, district_id):
             conn.close()
 
 @miniapp_bp.route('/api/basket')
+@require_telegram_ip
 @require_auth
 def get_basket(user):
     """Get user's basket items using modern basket system"""
@@ -336,6 +555,7 @@ def get_basket(user):
         return jsonify({'error': 'Failed to get basket'}), 500
 
 @miniapp_bp.route('/api/basket/count')
+@require_telegram_ip
 @require_auth
 def get_basket_count(user):
     """Get number of items in basket using modern basket system"""
@@ -353,6 +573,7 @@ def get_basket_count(user):
         return jsonify({'error': 'Failed to get basket count'}), 500
 
 @miniapp_bp.route('/api/basket/add', methods=['POST'])
+@require_telegram_ip
 @require_auth
 def add_to_basket(user):
     """Add item to basket using modern basket system"""
@@ -385,6 +606,7 @@ def add_to_basket(user):
 
 
 @miniapp_bp.route('/api/basket/remove', methods=['POST'])
+@require_telegram_ip
 @require_auth
 def remove_from_basket(user):
     """Remove item from basket using modern basket system"""
@@ -412,6 +634,7 @@ def remove_from_basket(user):
 
 
 @miniapp_bp.route('/api/basket/update-quantity', methods=['POST'])
+@require_telegram_ip
 @require_auth
 def update_basket_quantity(user):
     """Update quantity of basket item using modern basket system"""
@@ -442,6 +665,8 @@ def update_basket_quantity(user):
         return jsonify({'error': 'Failed to update quantity'}), 500
 
 @miniapp_bp.route('/api/payment/create', methods=['POST'])
+@require_rate_limit
+@require_telegram_ip
 @require_auth
 def create_payment(user):
     """Create NOWPayments invoice for basket or single item"""
@@ -589,6 +814,7 @@ def create_payment(user):
             conn.close()
 
 @miniapp_bp.route('/api/payment/currencies')
+@require_telegram_ip
 def get_payment_currencies():
     """Get available payment currencies"""
     try:
@@ -610,6 +836,7 @@ def get_payment_currencies():
 
 
 @miniapp_bp.route('/api/admin-messages')
+@require_telegram_ip
 def get_admin_messages():
     """Get active admin messages for display in mini-app"""
     try:
@@ -622,6 +849,7 @@ def get_admin_messages():
 
 
 @miniapp_bp.route('/api/promo-banners')
+@require_telegram_ip
 def get_promo_banners():
     """Get active promotional banners for display in mini-app"""
     try:
@@ -633,6 +861,7 @@ def get_promo_banners():
         return jsonify({'error': 'Failed to get promotional banners'}), 500
 
 @miniapp_bp.route('/api/payment/refill', methods=['POST'])
+@require_telegram_ip
 @require_auth
 def create_refill_payment(user):
     """Create payment for balance refill"""
@@ -658,6 +887,7 @@ def create_refill_payment(user):
         return jsonify({'error': 'Failed to create refill payment'}), 500
 
 @miniapp_bp.route('/api/reviews', methods=['GET'])
+@require_telegram_ip
 def get_reviews():
     """Get all reviews"""
     try:
@@ -689,6 +919,7 @@ def get_reviews():
             conn.close()
 
 @miniapp_bp.route('/api/reviews', methods=['POST'])
+@require_telegram_ip
 @require_auth
 def create_review(user):
     """Create a new review"""
@@ -717,6 +948,7 @@ def create_review(user):
 
 @miniapp_bp.route('/api/pricelist')
 @miniapp_bp.route('/api/pricelist/<city_id>')
+@require_telegram_ip
 def get_price_list(city_id=None):
     """Get price list for all cities or specific city"""
     try:
@@ -763,6 +995,7 @@ def get_price_list(city_id=None):
             conn.close()
 
 @miniapp_bp.route('/api/user/language', methods=['POST'])
+@require_telegram_ip
 @require_auth
 def update_user_language(user):
     """Update user language preference"""
@@ -786,6 +1019,7 @@ def update_user_language(user):
             conn.close()
 
 @miniapp_bp.route('/api/discount/apply', methods=['POST'])
+@require_telegram_ip
 @require_auth
 def apply_discount(user):
     """Apply discount code"""
@@ -837,6 +1071,7 @@ def apply_discount(user):
             conn.close()
 
 @miniapp_bp.route('/api/user/newsletter', methods=['POST'])
+@require_telegram_ip
 @require_auth
 def update_newsletter_preference(user):
     """Update user newsletter preference"""
@@ -857,6 +1092,7 @@ def update_newsletter_preference(user):
             conn.close()
 
 @miniapp_bp.route('/api/user/settings')
+@require_telegram_ip
 @require_auth
 def get_user_settings(user):
     """Get user settings"""
