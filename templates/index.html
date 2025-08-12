@@ -170,7 +170,7 @@
             background: var(--bg-card);
             border-radius: var(--radius);
             /* Rule 3: More spacing than expected */
-            padding: var(--space-3xl);
+            padding: var(--space-4xl);
             /* Subtle depth without overwhelming */
             box-shadow: var(--shadow-card);
             backdrop-filter: blur(20px);
@@ -215,7 +215,7 @@
 
         /* Rule 5: Emphasize what users look for first - the brand */
         .logo {
-            font-size: var(--text-4xl);
+            font-size: var(--text-3xl);
             font-weight: 800;
             color: var(--text-primary);
             font-family: var(--font-mono);
@@ -592,10 +592,12 @@
         }
 
         .nav-tab.active {
-            background: var(--primary);
-            color: var(--text-primary);
+            background: var(--gradient-primary);
+            color: white;
             /* Rule 5: Emphasize active state */
             font-weight: 600;
+            box-shadow: var(--glass-shadow-sm);
+            transform: translateY(-1px);
         }
 
         .nav-tab:hover:not(.active) {
@@ -1026,13 +1028,13 @@
 
         /* Apple-style Section Titles */
         .section-title {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--apple-text-primary);
-            margin-bottom: 24px;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: var(--space-2xl);
             text-align: center;
-            letter-spacing: -0.5px;
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            letter-spacing: -0.02em;
+            font-family: var(--font-primary);
         }
 
         .section-header {
@@ -1044,23 +1046,24 @@
 
         .cities-grid, .districts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
         }
 
         .city-card, .district-card {
-            background: var(--apple-bg-grouped-secondary);
-            border-radius: var(--apple-radius-card);
-            padding: 24px;
+            background: var(--glass-bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
             text-align: center;
             cursor: pointer;
-            transition: var(--apple-transition-spring);
-            border: 1px solid var(--apple-gray-5);
+            transition: var(--transition-smooth);
+            border: 1px solid var(--glass-border);
             position: relative;
             overflow: hidden;
-            box-shadow: var(--apple-shadow-card);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--glass-shadow-md);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         .city-card::before, .district-card::before {
@@ -1109,40 +1112,40 @@
         }
 
         .city-icon-container {
-            width: 72px;
-            height: 72px;
-            margin: 0 auto 16px;
-            background: var(--apple-gradient-purple);
-            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--space-4);
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            color: var(--apple-text-white);
-            box-shadow: var(--apple-shadow-md);
-            transition: var(--apple-transition-smooth);
-            border: 3px solid rgba(255, 255, 255, 0.2);
+            font-size: var(--text-2xl);
+            color: white;
+            box-shadow: var(--glass-shadow-md);
+            transition: var(--transition-smooth);
+            border: 1px solid var(--glass-border);
         }
 
         .city-icon-container:hover {
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: var(--apple-shadow-lg);
+            transform: scale(1.05);
+            box-shadow: var(--glass-shadow-lg);
         }
 
         .city-name, .district-name {
-            font-size: 18px;
+            font-size: var(--text-lg);
             font-weight: 600;
-            color: var(--apple-text-primary);
-            margin-bottom: 6px;
-            letter-spacing: -0.2px;
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+            letter-spacing: -0.01em;
+            font-family: var(--font-primary);
         }
 
         .city-count, .district-count {
-            font-size: 14px;
-            color: var(--apple-text-secondary);
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
             font-weight: 500;
-            letter-spacing: -0.1px;
+            letter-spacing: 0.01em;
         }
 
         /* Modal Styles */
@@ -1378,13 +1381,7 @@
 </head>
 <body>
 
-    <!-- Premium Promotional Banner -->
-    <div id="promoBanner" class="promo-banner" style="display: none;">
-        <div class="floating-particles" id="bannerParticles"></div>
-        <div class="promo-content">
-            <div class="promo-text" id="promoText">✨ PREMIUM SHOP ✨</div>
-        </div>
-    </div>
+
             
     <div class="container">
                 <!-- Header -->
@@ -1411,11 +1408,11 @@
         <!-- Navigation Tabs -->
         <div class="nav-tabs">
             <button class="nav-tab active" data-tab="products">
-                <div class="nav-icon">🛒</div>
+                <div class="nav-icon">🛍️</div>
                 <span>Products</span>
             </button>
             <button class="nav-tab" data-tab="basket">
-                <div class="nav-icon">🛍️</div>
+                <div class="nav-icon">🛒</div>
                 <span>Basket</span>
                 <span id="basketBadge" class="basket-badge" style="display: none;">0</span>
             </button>
