@@ -8,25 +8,41 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
         
         :root {
-            /* Apple Design System Colors */
-            --apple-blue: #007AFF;
-            --apple-purple: #5856D6;
-            --apple-pink: #FF2D92;
-            --apple-red: #FF3B30;
-            --apple-orange: #FF9500;
-            --apple-yellow: #FFCC02;
-            --apple-green: #30D158;
-            --apple-mint: #00C7BE;
-            --apple-teal: #59ADC4;
-            --apple-cyan: #55BEF0;
-            --apple-indigo: #5856D6;
+            /* TOP-TIER Design System - Rule 4: Consistent spacing, fonts, colors */
             
-            /* Apple System Backgrounds */
-            --apple-bg-primary: #FFFFFF;
-            --apple-bg-secondary: #F2F2F7;
-            --apple-bg-tertiary: #FFFFFF;
-            --apple-bg-grouped-primary: #F2F2F7;
-            --apple-bg-grouped-secondary: #FFFFFF;
+            /* Spacing System - Divisible by 4 for consistency */
+            --space-xs: 0.25rem;    /* 4px */
+            --space-sm: 0.5rem;     /* 8px */
+            --space-md: 0.75rem;    /* 12px */
+            --space-lg: 1rem;       /* 16px */
+            --space-xl: 1.25rem;    /* 20px */
+            --space-2xl: 1.5rem;    /* 24px */
+            --space-3xl: 2rem;      /* 32px */
+            --space-4xl: 2.5rem;    /* 40px */
+            --space-5xl: 3rem;      /* 48px */
+            
+            /* Essential Colors Only - Rule 1: Less is more */
+            --primary: #007AFF;     /* Main action color */
+            --accent: #FF2D92;      /* Highlight color */
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --bg-primary: #000000;
+            --bg-secondary: rgba(255, 255, 255, 0.05);
+            --bg-card: rgba(255, 255, 255, 0.08);
+            
+            /* Typography System - Rule 5: Clear hierarchy */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            /* Font sizes with clear hierarchy */
+            --text-xs: 0.75rem;     /* 12px */
+            --text-sm: 0.875rem;    /* 14px */
+            --text-base: 1rem;      /* 16px */
+            --text-lg: 1.125rem;    /* 18px */
+            --text-xl: 1.25rem;     /* 20px */
+            --text-2xl: 1.5rem;     /* 24px */
+            --text-3xl: 1.875rem;   /* 30px */
+            --text-4xl: 2.25rem;    /* 36px */
             
             /* Apple System Grays */
             --apple-gray: #8E8E93;
@@ -83,15 +99,17 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #0a0a0a;
-            color: #ffffff;
-            line-height: 1.47;
+            font-family: var(--font-primary);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: var(--leading-normal);
             overflow-x: hidden;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             position: relative;
+            /* Rule 3: More spacing than you think */
+            padding: var(--space-lg);
         }
 
         /* Enhanced Apple-style background with dynamic effects */
@@ -144,34 +162,25 @@
 
 
         /* Container - Apple Card Style */
+        /* Rule 1: Good design is as little design as possible */
         .container {
             max-width: 400px;
             margin: 0 auto;
-            min-height: 100vh;
-            background: rgba(20, 20, 20, 0.85);
-            position: relative;
-            border-radius: 24px;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            overflow: hidden;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            /* Rule 3: More spacing than expected */
+            padding: var(--space-3xl);
+            /* Subtle depth without overwhelming */
+            box-shadow: var(--shadow-card);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: containerFloat 6s ease-in-out infinite;
         }
 
-        /* Enhanced Apple-style Header */
+        /* Rule 5: Hierarchy - What users look for first */
         .header {
-            background: var(--apple-gradient-blue);
-            padding: 60px 24px 40px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-            border-radius: var(--apple-radius-xl) var(--apple-radius-xl) 0 0;
-            box-shadow: 
-                0 10px 30px rgba(0, 122, 255, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            /* Rule 3: Generous spacing */
+            margin-bottom: var(--space-5xl);
         }
 
         .header::before {
@@ -203,23 +212,23 @@
             50% { opacity: 0.8; }
         }
 
+        /* Rule 5: Emphasize what users look for first - the brand */
         .logo {
-            font-size: 34px;
-            font-weight: 700;
-            color: var(--apple-text-white);
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-            position: relative;
-            z-index: 1;
+            font-size: var(--text-4xl);
+            font-weight: 800;
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            letter-spacing: 0.1em;
+            /* Rule 3: Generous spacing */
+            margin-bottom: var(--space-lg);
         }
 
         .tagline {
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 17px;
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
             font-weight: 400;
-            position: relative;
-            z-index: 1;
-            opacity: 0.9;
+            /* Rule 5: De-emphasize secondary information */
+            opacity: 0.8;
         }
 
         /* Theme Switcher */
@@ -565,45 +574,43 @@
         }
 
         /* Apple-style Navigation Tabs */
+        /* Rule 2: Use similarity and proximity to group navigation */
         .nav-tabs {
             display: flex;
-            background: var(--apple-bg-grouped-secondary);
-            margin: 24px;
-            border-radius: var(--apple-radius-button);
-            padding: 6px;
-            box-shadow: var(--apple-shadow-md);
-            margin-bottom: 32px;
-            border: 1px solid var(--apple-gray-5);
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            /* Rule 3: Generous spacing */
+            padding: var(--space-xs);
+            margin-bottom: var(--space-4xl);
+            gap: var(--space-xs);
         }
 
         .nav-tab {
             flex: 1;
             background: transparent;
             border: none;
-            padding: 14px 20px;
-            border-radius: var(--apple-radius-sm);
+            color: var(--text-secondary);
+            /* Rule 3: Consistent spacing */
+            padding: var(--space-lg);
+            border-radius: var(--radius);
+            font-size: var(--text-sm);
             font-weight: 500;
-            font-size: 16px;
-            color: var(--apple-text-secondary);
             cursor: pointer;
-            transition: var(--apple-transition-smooth);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+            transition: var(--transition);
+            text-align: center;
+            font-family: var(--font-primary);
         }
 
         .nav-tab.active {
-            background: var(--apple-blue);
-            color: var(--apple-text-white);
-            box-shadow: var(--apple-shadow-button);
+            background: var(--primary);
+            color: var(--text-primary);
+            /* Rule 5: Emphasize active state */
+            font-weight: 600;
         }
 
         .nav-tab:hover:not(.active) {
-            background: var(--apple-gray-6);
-            color: var(--apple-text-primary);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
         }
 
         .nav-tab:active {
@@ -781,25 +788,24 @@
         }
 
         /* Apple-style 3D Buttons */
+        /* Rule 1: Essential button design - primary and secondary only */
         .btn {
             border: none;
-            border-radius: var(--apple-radius-button);
-            padding: 16px 32px;
+            border-radius: var(--radius);
+            /* Rule 3: Proper spacing */
+            padding: var(--space-lg) var(--space-2xl);
             font-weight: 600;
-            font-size: 17px;
+            font-size: var(--text-base);
             cursor: pointer;
-            transition: var(--apple-transition-spring);
+            transition: var(--transition);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: var(--space-sm);
             text-decoration: none;
-            position: relative;
-            overflow: hidden;
-            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
-            letter-spacing: -0.2px;
-            transform-style: preserve-3d;
-            backface-visibility: hidden;
+            font-family: var(--font-primary);
+            /* Rule 3: More spacing for touch targets */
+            min-height: 48px;
         }
 
         .btn::before {
