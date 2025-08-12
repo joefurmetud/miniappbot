@@ -1318,6 +1318,14 @@
             position: relative;
             overflow: hidden;
             transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reviews-carousel-section.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
         }
 
         .reviews-carousel-section:hover {
@@ -4310,23 +4318,7 @@
                 </div>
             </div>
 
-            <!-- Dynamic Reviews Carousel -->
-            <div class="reviews-carousel-section">
-                <h3 class="section-title">What Our Customers Say</h3>
-                <div class="reviews-carousel-container">
-                    <div class="reviews-carousel" id="reviewsCarousel">
-                        <!-- Reviews will be dynamically loaded here -->
-                    </div>
-                    <div class="carousel-controls">
-                        <button class="carousel-btn carousel-prev" onclick="scrollReviews('prev')">
-                            <span>‹</span>
-                        </button>
-                        <button class="carousel-btn carousel-next" onclick="scrollReviews('next')">
-                            <span>›</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
+
 
             <!-- District Selection -->
             <div id="districtSelection" class="district-selection" style="display: none;">
@@ -4348,8 +4340,26 @@
                 <div id="productsGrid" class="products-grid">
                     <!-- Products will be loaded here -->
                     </div>
+                    
+                    <!-- Dynamic Reviews Carousel - Now positioned after products -->
+                    <div class="reviews-carousel-section" style="margin-top: var(--space-3xl);">
+                        <h3 class="section-title">What Our Customers Say</h3>
+                        <div class="reviews-carousel-container">
+                            <div class="reviews-carousel" id="reviewsCarousel">
+                                <!-- Reviews will be dynamically loaded here -->
+                            </div>
+                            <div class="carousel-controls">
+                                <button class="carousel-btn carousel-prev" onclick="scrollReviews('prev')">
+                                    <span>‹</span>
+                                </button>
+                                <button class="carousel-btn carousel-next" onclick="scrollReviews('next')">
+                                    <span>›</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
         <!-- Basket Section -->
         <div id="basketSection" class="content-section">
@@ -5223,6 +5233,9 @@
 
             // Setup carousel interactions
             setupCarouselInteractions();
+            
+            // Initialize reviews section visibility
+            manageReviewsVisibility();
         }
 
         // Premium click effect for tabs
@@ -5613,6 +5626,16 @@
             document.getElementById('citySelection').style.display = 'block';
             document.getElementById('districtSelection').style.display = 'none';
             document.getElementById('productsContainer').style.display = 'none';
+            
+            // Hide reviews section during city selection with smooth transition
+            const reviewsSection = document.querySelector('.reviews-carousel-section');
+            if (reviewsSection) {
+                reviewsSection.classList.add('hidden');
+                setTimeout(() => {
+                    reviewsSection.style.display = 'none';
+                }, 500);
+            }
+            
             currentCity = null;
             currentDistrict = null;
         }
@@ -5621,6 +5644,16 @@
             document.getElementById('citySelection').style.display = 'none';
             document.getElementById('districtSelection').style.display = 'block';
             document.getElementById('productsContainer').style.display = 'none';
+            
+            // Hide reviews section during district selection with smooth transition
+            const reviewsSection = document.querySelector('.reviews-carousel-section');
+            if (reviewsSection) {
+                reviewsSection.classList.add('hidden');
+                setTimeout(() => {
+                    reviewsSection.style.display = 'none';
+                }, 500);
+            }
+            
             currentDistrict = null;
         }
 
@@ -5628,6 +5661,39 @@
             document.getElementById('citySelection').style.display = 'none';
             document.getElementById('districtSelection').style.display = 'none';
             document.getElementById('productsContainer').style.display = 'block';
+            
+            // Show reviews section when products are displayed with smooth transition
+            const reviewsSection = document.querySelector('.reviews-carousel-section');
+            if (reviewsSection) {
+                reviewsSection.style.display = 'block';
+                // Small delay to ensure display is set before removing hidden class
+                setTimeout(() => {
+                    reviewsSection.classList.remove('hidden');
+                }, 10);
+                
+                // Ensure reviews are loaded when products are shown
+                if (reviewsSection.querySelector('.reviews-carousel').children.length === 0) {
+                    loadReviewsCarousel();
+                }
+            }
+        }
+
+        // Function to manage reviews section visibility
+        function manageReviewsVisibility() {
+            const reviewsSection = document.querySelector('.reviews-carousel-section');
+            if (reviewsSection) {
+                // Only show reviews when products are visible
+                const productsContainer = document.getElementById('productsContainer');
+                if (productsContainer && productsContainer.style.display === 'block') {
+                    reviewsSection.style.display = 'block';
+                    reviewsSection.classList.remove('hidden');
+                } else {
+                    reviewsSection.classList.add('hidden');
+                    setTimeout(() => {
+                        reviewsSection.style.display = 'none';
+                    }, 500);
+                }
+            }
         }
 
                 // Render products with modern design
