@@ -92,16 +92,39 @@
             --apple-radius-button: 14px;
             --apple-radius-card: 18px;
             
-            /* Apple Transitions */
-            --apple-transition-fast: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --apple-transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --apple-transition-spring: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    /* Apple Transitions - Optimized for Performance */
+        --apple-transition-fast: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        --apple-transition-smooth: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        --apple-transition-spring: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        
+        /* Performance Optimizations */
+        --will-change-transform: transform;
+        --will-change-opacity: opacity;
+        --contain-layout: layout style paint;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        /* Performance optimizations for smooth scrolling and animations */
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: var(--leading-normal);
+            overflow-x: hidden;
+            /* Performance optimizations */
+            will-change: scroll-position;
+            contain: layout style paint;
         }
 
         body {
@@ -168,7 +191,7 @@
             filter: blur(0.3px);
         }
 
-        /* Additional seamless background layers for depth */
+        /* Additional seamless background layers for depth - Optimized for Performance */
         .seamless-bg-layer-1 {
             content: '';
             position: fixed;
@@ -177,11 +200,13 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 60% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
-                radial-gradient(circle at 30% 70%, rgba(236, 72, 153, 0.12) 0%, transparent 60%);
+                radial-gradient(circle at 60% 30%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 30% 70%, rgba(236, 72, 153, 0.06) 0%, transparent 60%);
             z-index: -4;
-            animation: depthFlow 40s linear infinite;
-            filter: blur(0.8px);
+            animation: depthFlow 60s linear infinite;
+            filter: blur(0.5px);
+            will-change: transform;
+            contain: layout style paint;
         }
 
         .seamless-bg-layer-2 {
@@ -192,10 +217,12 @@
             width: 100%;
             height: 100%;
             background: 
-                linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.03) 25%, transparent 50%, rgba(255, 255, 255, 0.03) 75%, transparent 100%);
+                linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.02) 25%, transparent 50%, rgba(255, 255, 255, 0.02) 75%, transparent 100%);
             z-index: -5;
-            animation: horizontalFlow 35s linear infinite;
-            filter: blur(1px);
+            animation: horizontalFlow 80s linear infinite;
+            filter: blur(0.5px);
+            will-change: transform;
+            contain: layout style paint;
         }
 
         .seamless-bg-layer-3 {
@@ -206,10 +233,12 @@
             width: 100%;
             height: 100%;
             background: 
-                conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(99, 102, 241, 0.08) 90deg, transparent 180deg, rgba(236, 72, 153, 0.08) 270deg, transparent 360deg);
+                conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(99, 102, 241, 0.04) 90deg, transparent 180deg, rgba(236, 72, 153, 0.04) 270deg, transparent 360deg);
             z-index: -6;
-            animation: conicFlow 50s linear infinite;
-            filter: blur(1.2px);
+            animation: conicFlow 100s linear infinite;
+            filter: blur(0.5px);
+            will-change: transform;
+            contain: layout style paint;
         }
 
         /* Floating particles for premium atmosphere */
@@ -225,105 +254,90 @@
 
         .particle {
             position: absolute;
-            width: 2px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.1);
+            width: 1px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.06);
             border-radius: 50%;
-            animation: particleFloat 20s linear infinite;
+            animation: particleFloat 30s linear infinite;
+            will-change: transform;
+            contain: layout style paint;
         }
 
         .particle:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
-        .particle:nth-child(2) { top: 30%; left: 80%; animation-delay: 2s; }
-        .particle:nth-child(3) { top: 60%; left: 10%; animation-delay: 4s; }
-        .particle:nth-child(4) { top: 80%; left: 70%; animation-delay: 6s; }
-        .particle:nth-child(5) { top: 40%; left: 50%; animation-delay: 8s; }
-        .particle:nth-child(6) { top: 70%; left: 30%; animation-delay: 10s; }
-        .particle:nth-child(7) { top: 20%; left: 60%; animation-delay: 12s; }
-        .particle:nth-child(8) { top: 90%; left: 40%; animation-delay: 14s; }
+        .particle:nth-child(2) { top: 30%; left: 80%; animation-delay: 5s; }
+        .particle:nth-child(3) { top: 60%; left: 10%; animation-delay: 10s; }
+        .particle:nth-child(4) { top: 80%; left: 70%; animation-delay: 15s; }
+        .particle:nth-child(5) { top: 40%; left: 50%; animation-delay: 20s; }
+        .particle:nth-child(6) { top: 70%; left: 30%; animation-delay: 25s; }
 
         @keyframes seamlessFlow {
             0% { 
-                transform: translateX(0) translateY(0) scale(1) rotate(0deg);
-                filter: hue-rotate(0deg);
-            }
-            25% { 
-                transform: translateX(-15px) translateY(-15px) scale(1.02) rotate(1deg);
-                filter: hue-rotate(90deg);
+                transform: translateX(0) translateY(0) scale(1);
             }
             50% { 
-                transform: translateX(15px) translateY(-10px) scale(0.98) rotate(2deg);
-                filter: hue-rotate(180deg);
-            }
-            75% { 
-                transform: translateX(-10px) translateY(15px) scale(1.01) rotate(1deg);
-                filter: hue-rotate(270deg);
+                transform: translateX(-10px) translateY(-10px) scale(1.01);
             }
             100% { 
-                transform: translateX(0) translateY(0) scale(1) rotate(0deg);
-                filter: hue-rotate(360deg);
+                transform: translateX(0) translateY(0) scale(1);
             }
         }
 
         @keyframes shimmerFlow {
             0% { 
                 opacity: 0.2; 
-                transform: translateX(-100px) translateY(0) scale(1);
+                transform: translateX(-50px) translateY(0);
             }
             50% { 
                 opacity: 0.4; 
-                transform: translateX(100px) translateY(-20px) scale(1.1);
+                transform: translateX(50px) translateY(-10px);
             }
             100% { 
                 opacity: 0.2; 
-                transform: translateX(-100px) translateY(0) scale(1);
+                transform: translateX(-50px) translateY(0);
             }
         }
 
         @keyframes depthFlow {
             0% { 
-                transform: translateX(0) translateY(0) scale(1) rotate(0deg);
+                transform: translateX(0) translateY(0);
                 opacity: 0.8;
             }
-            33% { 
-                transform: translateX(20px) translateY(-15px) scale(1.05) rotate(1deg);
+            50% { 
+                transform: translateX(10px) translateY(-10px);
                 opacity: 1;
             }
-            66% { 
-                transform: translateX(-20px) translateY(20px) scale(0.95) rotate(-1deg);
-                opacity: 0.6;
-            }
             100% { 
-                transform: translateX(0) translateY(0) scale(1) rotate(0deg);
+                transform: translateX(0) translateY(0);
                 opacity: 0.8;
             }
         }
 
         @keyframes horizontalFlow {
             0% { 
-                transform: translateX(-100%) translateY(0) scale(1);
+                transform: translateX(-50%) translateY(0);
                 opacity: 0.3;
             }
             50% { 
-                transform: translateX(0%) translateY(-10px) scale(1.02);
+                transform: translateX(0%) translateY(-5px);
                 opacity: 0.6;
             }
             100% { 
-                transform: translateX(100%) translateY(0) scale(1);
+                transform: translateX(50%) translateY(0);
                 opacity: 0.3;
             }
         }
 
         @keyframes conicFlow {
             0% { 
-                transform: rotate(0deg) scale(1);
+                transform: rotate(0deg);
                 opacity: 0.4;
             }
             50% { 
-                transform: rotate(180deg) scale(1.1);
+                transform: rotate(180deg);
                 opacity: 0.7;
             }
             100% { 
-                transform: rotate(360deg) scale(1);
+                transform: rotate(360deg);
                 opacity: 0.4;
             }
         }
@@ -1007,7 +1021,7 @@
                 0 0 0 1px rgba(255, 255, 255, 0.08),
                 inset 0 0 20px rgba(99, 102, 241, 0.08);
             position: relative;
-            animation: navTabsEntrance 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), navTabsBreathing 4s ease-in-out infinite;
+            animation: navTabsEntrance 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), navTabsBreathing 8s ease-in-out infinite;
             will-change: transform;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1308,8 +1322,8 @@
                 rgba(99, 102, 241, 0.08) 100%);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 28px;
-            backdrop-filter: blur(35px);
-            -webkit-backdrop-filter: blur(35px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             box-shadow: 
                 0 12px 40px rgba(0, 0, 0, 0.25),
                 0 6px 20px rgba(99, 102, 241, 0.15),
@@ -1317,9 +1331,11 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.15);
             position: relative;
             overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             opacity: 1;
             transform: translateY(0);
+            will-change: transform, opacity;
+            contain: layout style paint;
         }
 
         .reviews-carousel-section.hidden {
@@ -1715,16 +1731,18 @@
 
         .product-card {
             opacity: 0;
-            transform: translateY(20px);
-            animation: productCardEntrance 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            transform: translateY(10px);
+            animation: productCardEntrance 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            will-change: transform, opacity;
+            contain: layout style paint;
         }
 
-        .product-card:nth-child(1) { animation-delay: 0.1s; }
-        .product-card:nth-child(2) { animation-delay: 0.2s; }
-        .product-card:nth-child(3) { animation-delay: 0.3s; }
-        .product-card:nth-child(4) { animation-delay: 0.4s; }
-        .product-card:nth-child(5) { animation-delay: 0.5s; }
-        .product-card:nth-child(6) { animation-delay: 0.6s; }
+        .product-card:nth-child(1) { animation-delay: 0.05s; }
+        .product-card:nth-child(2) { animation-delay: 0.1s; }
+        .product-card:nth-child(3) { animation-delay: 0.15s; }
+        .product-card:nth-child(4) { animation-delay: 0.2s; }
+        .product-card:nth-child(5) { animation-delay: 0.25s; }
+        .product-card:nth-child(6) { animation-delay: 0.3s; }
 
         @keyframes productCardEntrance {
             to {
@@ -1809,16 +1827,18 @@
                 0 4px 16px rgba(0, 0, 0, 0.08),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(50px);
-            -webkit-backdrop-filter: blur(50px);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             display: flex;
             flex-direction: column;
             gap: var(--space-xl);
             cursor: pointer;
             min-height: 280px;
+            will-change: transform, opacity;
+            contain: layout style paint;
         }
 
         .product-card::after {
@@ -1855,10 +1875,10 @@
         }
 
         .product-card:hover {
-            transform: translateY(-8px) scale(1.02);
+            transform: translateY(-4px) scale(1.01);
             box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.25),
-                0 8px 24px rgba(0, 0, 0, 0.15),
+                0 12px 32px rgba(0, 0, 0, 0.2),
+                0 6px 16px rgba(0, 0, 0, 0.12),
                 inset 0 1px 0 rgba(255, 255, 255, 0.15),
                 0 0 0 1px rgba(99, 102, 241, 0.1);
             border-color: rgba(255, 255, 255, 0.2);
@@ -4229,10 +4249,8 @@
     <div class="seamless-bg-layer-2"></div>
     <div class="seamless-bg-layer-3"></div>
     
-    <!-- Floating particles for premium atmosphere -->
+    <!-- Floating particles for premium atmosphere - Optimized for Performance -->
     <div class="floating-particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
         <div class="particle"></div>
         <div class="particle"></div>
         <div class="particle"></div>
@@ -5236,6 +5254,9 @@
             
             // Initialize reviews section visibility
             manageReviewsVisibility();
+            
+            // Start performance monitoring
+            performanceMonitor.start();
         }
 
         // Premium click effect for tabs
@@ -5678,25 +5699,124 @@
             }
         }
 
-        // Function to manage reviews section visibility
+        // Function to manage reviews section visibility - Performance Optimized
         function manageReviewsVisibility() {
             const reviewsSection = document.querySelector('.reviews-carousel-section');
-            if (reviewsSection) {
-                // Only show reviews when products are visible
-                const productsContainer = document.getElementById('productsContainer');
-                if (productsContainer && productsContainer.style.display === 'block') {
-                    reviewsSection.style.display = 'block';
+            if (!reviewsSection) return;
+            
+            // Only show reviews when products are visible
+            const productsContainer = document.getElementById('productsContainer');
+            if (productsContainer && productsContainer.style.display === 'block') {
+                reviewsSection.style.display = 'block';
+                // Use requestAnimationFrame for smooth transitions
+                requestAnimationFrame(() => {
                     reviewsSection.classList.remove('hidden');
-                } else {
-                    reviewsSection.classList.add('hidden');
-                    setTimeout(() => {
-                        reviewsSection.style.display = 'none';
-                    }, 500);
+                });
+            } else {
+                reviewsSection.classList.add('hidden');
+                setTimeout(() => {
+                    reviewsSection.style.display = 'none';
+                }, 300); // Reduced from 500ms for better performance
+            }
+        }
+
+        // Performance optimization: Debounce function for smooth interactions
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Optimized tab switching with performance improvements
+        const optimizedSwitchTab = debounce(switchTab, 50);
+
+        // Performance monitoring and optimization
+        class PerformanceMonitor {
+            constructor() {
+                this.metrics = {
+                    frameTime: [],
+                    memoryUsage: [],
+                    interactionDelay: []
+                };
+                this.isMonitoring = false;
+            }
+
+            start() {
+                if (this.isMonitoring) return;
+                this.isMonitoring = true;
+                this.monitorFrameRate();
+                this.monitorMemory();
+            }
+
+            monitorFrameRate() {
+                let lastTime = performance.now();
+                const measureFrame = () => {
+                    if (!this.isMonitoring) return;
+                    
+                    const currentTime = performance.now();
+                    const frameTime = currentTime - lastTime;
+                    this.metrics.frameTime.push(frameTime);
+                    
+                    // Keep only last 100 measurements
+                    if (this.metrics.frameTime.length > 100) {
+                        this.metrics.frameTime.shift();
+                    }
+                    
+                    lastTime = currentTime;
+                    requestAnimationFrame(measureFrame);
+                };
+                requestAnimationFrame(measureFrame);
+            }
+
+            monitorMemory() {
+                if ('memory' in performance) {
+                    setInterval(() => {
+                        if (!this.isMonitoring) return;
+                        this.metrics.memoryUsage.push(performance.memory.usedJSHeapSize);
+                        
+                        if (this.metrics.memoryUsage.length > 50) {
+                            this.metrics.memoryUsage.shift();
+                        }
+                    }, 1000);
+                }
+            }
+
+            getAverageFrameTime() {
+                if (this.metrics.frameTime.length === 0) return 0;
+                const sum = this.metrics.frameTime.reduce((a, b) => a + b, 0);
+                return sum / this.metrics.frameTime.length;
+            }
+
+            optimizeIfNeeded() {
+                const avgFrameTime = this.getAverageFrameTime();
+                if (avgFrameTime > 16.67) { // 60fps threshold
+                    this.applyPerformanceOptimizations();
+                }
+            }
+
+            applyPerformanceOptimizations() {
+                // Reduce animation complexity if performance is poor
+                const particles = document.querySelectorAll('.particle');
+                if (particles.length > 3) {
+                    particles.forEach((particle, index) => {
+                        if (index > 2) {
+                            particle.style.animationPlayState = 'paused';
+                        }
+                    });
                 }
             }
         }
 
-                // Render products with modern design
+        // Initialize performance monitor
+        const performanceMonitor = new PerformanceMonitor();
+
+                // Render products with modern design - Performance Optimized
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
             
@@ -5725,14 +5845,17 @@
                 return;
             }
 
-            // Remove loading state and render products
+            // Remove loading state and render products with performance optimization
             setTimeout(() => {
                 grid.classList.remove('loading');
+                
+                // Use DocumentFragment for better performance
+                const fragment = document.createDocumentFragment();
                 
                 products.forEach((product, index) => {
                     const card = document.createElement('div');
                     card.className = 'product-card';
-                    card.style.animationDelay = `${(index + 1) * 0.1}s`;
+                    card.style.animationDelay = `${(index + 1) * 0.05}s`; // Reduced delay for better performance
                     
                     card.innerHTML = `
                         <button class="favorite-btn ${favorites.includes(product.id) ? 'active' : ''}" 
@@ -5768,9 +5891,17 @@
                         </div>
                     `;
                     
-                    grid.appendChild(card);
+                    fragment.appendChild(card);
                 });
-            }, 300);
+                
+                // Single DOM update for better performance
+                grid.appendChild(fragment);
+                
+                // Check performance after rendering
+                setTimeout(() => {
+                    performanceMonitor.optimizeIfNeeded();
+                }, 100);
+            }, 200); // Reduced timeout for better responsiveness
         }
 
         // Product quantities tracker
