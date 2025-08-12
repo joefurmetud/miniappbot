@@ -512,6 +512,337 @@
             opacity: 1;
         }
 
+        /* 🎨 MODERN CITY SELECTION - Minimalist & Premium Design */
+        .city-selection {
+            padding: var(--space-2xl) 0;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .cities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            padding: var(--space-lg) 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .city-card {
+            position: relative;
+            background: var(--gradient-mesh-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--apple-radius-lg);
+            padding: var(--space-xl);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            overflow: hidden;
+            will-change: transform, opacity;
+            contain: layout style paint;
+        }
+
+        .city-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                rgba(99, 102, 241, 0.8) 0%, 
+                rgba(236, 72, 153, 0.6) 100%);
+            transform: scaleX(0);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 2;
+        }
+
+        .city-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, 
+                rgba(99, 102, 241, 0.1) 0%, 
+                transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .city-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                0 12px 32px rgba(0, 0, 0, 0.2),
+                0 6px 16px rgba(99, 102, 241, 0.1);
+        }
+
+        .city-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .city-card:hover::after {
+            opacity: 1;
+        }
+
+        .city-card:active {
+            transform: translateY(-2px);
+            transition: all 0.1s ease;
+        }
+
+        .city-card.selected {
+            background: var(--gradient-mesh-primary);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 
+                0 8px 24px rgba(99, 102, 241, 0.2),
+                0 4px 12px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .city-card.selected::before {
+            transform: scaleX(1);
+        }
+
+        .city-card.selected::after {
+            opacity: 1;
+            background: radial-gradient(circle at 50% 0%, 
+                rgba(99, 102, 241, 0.2) 0%, 
+                transparent 70%);
+        }
+
+        .city-icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(99, 102, 241, 0.08) 100%);
+            border-radius: var(--apple-radius-md);
+            margin-bottom: var(--space-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .city-card:hover .city-icon-container {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(99, 102, 241, 0.12) 100%);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .city-card.selected .city-icon-container {
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.2) 0%, 
+                rgba(99, 102, 241, 0.1) 100%);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .city-name {
+            font-family: var(--font-primary);
+            font-size: var(--text-lg);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            letter-spacing: -0.01em;
+            line-height: 1.3;
+            text-align: center;
+        }
+
+        .city-count {
+            font-family: var(--font-primary);
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            text-align: center;
+            opacity: 0.8;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }
+
+        .city-card.selected .city-name {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .city-card.selected .city-count {
+            color: var(--text-primary);
+            opacity: 0.9;
+        }
+
+        /* District Selection - Matching Design */
+        .district-selection {
+            padding: var(--space-2xl) 0;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .districts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: var(--space-lg);
+            padding: var(--space-lg) 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .district-card {
+            position: relative;
+            background: var(--gradient-mesh-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--apple-radius-lg);
+            padding: var(--space-xl);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            overflow: hidden;
+            will-change: transform, opacity;
+            contain: layout style paint;
+        }
+
+        .district-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                rgba(236, 72, 153, 0.8) 0%, 
+                rgba(99, 102, 241, 0.6) 100%);
+            transform: scaleX(0);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 2;
+        }
+
+        .district-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                0 12px 32px rgba(0, 0, 0, 0.2),
+                0 6px 16px rgba(236, 72, 153, 0.1);
+        }
+
+        .district-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .district-name {
+            font-family: var(--font-primary);
+            font-size: var(--text-lg);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            letter-spacing: -0.01em;
+            line-height: 1.3;
+            text-align: center;
+        }
+
+        .district-count {
+            font-family: var(--font-primary);
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            text-align: center;
+            opacity: 0.8;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-xl);
+            padding: 0 var(--space-lg);
+        }
+
+        .section-title {
+            font-family: var(--font-primary);
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .back-button {
+            background: var(--gradient-mesh-accent);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--apple-radius-md);
+            padding: var(--space-sm) var(--space-md);
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button:active {
+            transform: translateY(0);
+            transition: all 0.1s ease;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .cities-grid, .districts-grid {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                gap: var(--space-md);
+                padding: var(--space-md) 0;
+            }
+
+            .city-card, .district-card {
+                padding: var(--space-lg);
+            }
+
+            .city-icon-container {
+                width: 40px;
+                height: 40px;
+            }
+
+            .section-title {
+                font-size: var(--text-xl);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cities-grid, .districts-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: var(--space-sm);
+            }
+
+            .city-card, .district-card {
+                padding: var(--space-md);
+            }
+
+            .city-name, .district-name {
+                font-size: var(--text-base);
+            }
+
+            .city-count, .district-count {
+                font-size: var(--text-xs);
+            }
+        }
+
         body {
             font-family: var(--font-primary);
             background: #000000;
@@ -4713,9 +5044,11 @@
             
             <!-- City Selection -->
             <div id="citySelection" class="city-selection">
-                <h3 class="section-title text-title">Select Location</h3>
+                <div class="section-header">
+                    <h3 class="section-title text-title">Select Your Location</h3>
+                </div>
                 <div id="citiesGrid" class="cities-grid">
-                    <!-- Cities will be loaded here -->
+                    <!-- Cities will be dynamically loaded here -->
                 </div>
             </div>
 
@@ -4742,24 +5075,30 @@
             <!-- District Selection -->
             <div id="districtSelection" class="district-selection" style="display: none;">
                 <div class="section-header">
-                    <button id="backToCity" class="btn btn-secondary">← Back to Cities</button>
-                    <h3 class="section-title" id="selectedCityName">Select District</h3>
-                    </div>
-                <div id="districtsGrid" class="districts-grid">
-                    <!-- Districts will be loaded here -->
+                    <button id="backToCity" class="back-button">
+                        <span>←</span>
+                        <span>Back to Cities</span>
+                    </button>
+                    <h3 class="section-title text-title" id="selectedCityName">Select District</h3>
                 </div>
-                    </div>
+                <div id="districtsGrid" class="districts-grid">
+                    <!-- Districts will be dynamically loaded here -->
+                </div>
+            </div>
 
             <!-- Products Grid -->
             <div id="productsContainer" class="products-container" style="display: none;">
                 <div class="section-header">
-                    <button id="backToDistrict" class="btn btn-secondary">← Back to Districts</button>
-                    <h3 class="section-title" id="selectedDistrictName">Products</h3>
+                    <button id="backToDistrict" class="back-button">
+                        <span>←</span>
+                        <span>Back to Districts</span>
+                    </button>
+                    <h3 class="section-title text-title" id="selectedDistrictName">Products</h3>
                 </div>
                 <div id="productsGrid" class="products-grid">
-                    <!-- Products will be loaded here -->
-                    </div>
+                    <!-- Products will be dynamically loaded here -->
                 </div>
+            </div>
             </div>
 
         <!-- Basket Section -->
@@ -5946,57 +6285,105 @@
             return cityIcons[cityName] || 'CT'; // Default city icon
         }
 
-        // Render cities
+        // Render cities with premium design and smooth interactions
         function renderCities() {
             const grid = document.getElementById('citiesGrid');
             grid.innerHTML = '';
 
-            cities.forEach(city => {
+            cities.forEach((city, index) => {
                 const card = document.createElement('div');
                 card.className = 'city-card';
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
                 card.innerHTML = `
                     <div class="city-icon-container">
-                        <span style="font-size: 18px; font-weight: 700; letter-spacing: 0.05em;">${getCityIcon(city.name)}</span>
+                        <span style="font-size: 18px; font-weight: 700; letter-spacing: 0.05em; color: var(--text-primary);">${getCityIcon(city.name)}</span>
                     </div>
                     <div class="city-name">${city.name}</div>
                     <div class="city-count">${city.districts?.length || 0} districts</div>
                 `;
+                
+                // Add premium click interactions
                 card.addEventListener('click', () => selectCity(city));
+                card.addEventListener('mouseenter', () => addHoverEffect(card));
+                card.addEventListener('mouseleave', () => removeHoverEffect(card));
+                
                 grid.appendChild(card);
+                
+                // Staggered entrance animation
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
             });
         }
 
-        // Select city and show districts
+        // Select city and show districts with premium effects
         function selectCity(city) {
             currentCity = city;
+            
+            // Find the clicked card and add selection effect
+            const cityCards = document.querySelectorAll('.city-card');
+            cityCards.forEach(card => {
+                if (card.querySelector('.city-name').textContent === city.name) {
+                    addSelectionEffect(card);
+                }
+            });
+            
             document.getElementById('selectedCityName').textContent = `${city.name} Districts`;
             renderDistricts(city.districts || []);
             showDistrictSelection();
         }
 
-        // Render districts
+        // Render districts with premium design and smooth interactions
         function renderDistricts(districts) {
             const grid = document.getElementById('districtsGrid');
             grid.innerHTML = '';
 
-            districts.forEach(district => {
+            districts.forEach((district, index) => {
                 const card = document.createElement('div');
                 card.className = 'district-card';
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
                 card.innerHTML = `
                     <div class="city-icon-container">
-                        <span style="font-size: 16px; font-weight: 600; letter-spacing: 0.05em;">DT</span>
+                        <span style="font-size: 16px; font-weight: 600; letter-spacing: 0.05em; color: var(--text-primary);">DT</span>
                     </div>
                     <div class="district-name">${district.name}</div>
                     <div class="district-count">View products</div>
                 `;
+                
+                // Add premium click interactions
                 card.addEventListener('click', () => selectDistrict(district));
+                card.addEventListener('mouseenter', () => addHoverEffect(card));
+                card.addEventListener('mouseleave', () => removeHoverEffect(card));
+                
                 grid.appendChild(card);
+                
+                // Staggered entrance animation
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
             });
         }
 
-        // Select district and load products
+        // Select district and load products with premium effects
         async function selectDistrict(district) {
             currentDistrict = district;
+            
+            // Find the clicked card and add selection effect
+            const districtCards = document.querySelectorAll('.district-card');
+            districtCards.forEach(card => {
+                if (card.querySelector('.district-name').textContent === district.name) {
+                    addSelectionEffect(card);
+                }
+            });
+            
             document.getElementById('selectedDistrictName').textContent = `${currentCity.name} - ${district.name}`;
             await loadProducts(currentCity.id, district.id);
             showProductsContainer();
@@ -6025,11 +6412,31 @@
             }
         }
 
-        // Navigation functions
+        // Navigation functions with smooth transitions
         function showCitySelection() {
-            document.getElementById('citySelection').style.display = 'block';
-            document.getElementById('districtSelection').style.display = 'none';
-            document.getElementById('productsContainer').style.display = 'none';
+            const citySection = document.getElementById('citySelection');
+            const districtSection = document.getElementById('districtSelection');
+            const productsSection = document.getElementById('productsContainer');
+            
+            // Smooth fade out
+            districtSection.style.opacity = '0';
+            productsSection.style.opacity = '0';
+            
+            setTimeout(() => {
+                districtSection.style.display = 'none';
+                productsSection.style.display = 'none';
+                
+                // Smooth fade in
+                citySection.style.display = 'block';
+                citySection.style.opacity = '0';
+                citySection.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    citySection.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    citySection.style.opacity = '1';
+                    citySection.style.transform = 'translateY(0)';
+                }, 10);
+            }, 200);
             
             // Keep reviews section visible during city selection
             const reviewsSection = document.querySelector('.reviews-carousel-section');
@@ -6244,6 +6651,46 @@
 
         // Initialize premium interactions
         const premiumInteractions = new PremiumInteractions();
+
+        // 🎨 Premium Interaction Helper Functions
+        function addHoverEffect(card) {
+            if (!card.classList.contains('selected')) {
+                card.style.transform = 'translateY(-4px) scale(1.02)';
+                card.style.boxShadow = `
+                    0 16px 40px rgba(0, 0, 0, 0.25),
+                    0 8px 20px rgba(99, 102, 241, 0.15)
+                `;
+            }
+        }
+
+        function removeHoverEffect(card) {
+            if (!card.classList.contains('selected')) {
+                card.style.transform = 'translateY(0) scale(1)';
+                card.style.boxShadow = '';
+            }
+        }
+
+        function addSelectionEffect(card) {
+            // Remove selection from all other cards
+            const allCards = card.parentElement.querySelectorAll('.city-card, .district-card');
+            allCards.forEach(c => c.classList.remove('selected'));
+            
+            // Add selection to current card
+            card.classList.add('selected');
+            
+            // Add premium selection animation
+            card.style.transform = 'translateY(-2px) scale(1.01)';
+            card.style.boxShadow = `
+                0 12px 32px rgba(99, 102, 241, 0.25),
+                0 6px 16px rgba(0, 0, 0, 0.15)
+            `;
+            
+            // Reset after animation
+            setTimeout(() => {
+                card.style.transform = '';
+                card.style.boxShadow = '';
+            }, 300);
+        }
 
                 // Render products with modern design - Performance Optimized
         function renderProducts() {
