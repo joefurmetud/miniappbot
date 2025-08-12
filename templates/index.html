@@ -101,7 +101,7 @@
 
         body {
             font-family: var(--font-primary);
-            background: var(--bg-primary);
+            background: #000000;
             color: var(--text-primary);
             line-height: var(--leading-normal);
             overflow-x: hidden;
@@ -111,6 +111,40 @@
             position: relative;
             /* Rule 3: More spacing than you think */
             padding: var(--space-lg);
+        }
+
+        /* CINEMATIC VIDEO BACKGROUND */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.3) contrast(1.2) saturate(0.8);
+        }
+
+        /* FIGMA-QUALITY OVERLAY */
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
+            z-index: -1;
+            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(1px);
         }
 
         /* Enhanced Apple-style background with dynamic effects */
@@ -163,18 +197,53 @@
 
 
         /* Container - Apple Card Style */
-        /* Rule 1: Good design is as little design as possible */
+        /* FIGMA-QUALITY GLASSMORPHISM CONTAINER */
         .container {
             max-width: 400px;
             margin: 0 auto;
-            background: var(--bg-card);
-            border-radius: var(--radius);
+            background: rgba(15, 15, 35, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
             /* Rule 3: More spacing than expected */
             padding: var(--space-4xl);
-            /* Subtle depth without overwhelming */
-            box-shadow: var(--shadow-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            /* PREMIUM FIGMA-STYLE EFFECTS */
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* FIGMA-STYLE SUBTLE HIGHLIGHT */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 20%, 
+                rgba(255, 255, 255, 0.6) 50%, 
+                rgba(255, 255, 255, 0.3) 80%, 
+                transparent 100%);
+            opacity: 0.8;
+        }
+
+        /* INTERACTIVE HOVER EFFECTS */
+        .container:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Rule 5: Hierarchy - What users look for first */
@@ -564,40 +633,99 @@
         }
 
         /* Apple-style Navigation Tabs */
-        /* Rule 2: Use similarity and proximity to group navigation */
+        /* FIGMA-QUALITY INTERACTIVE NAVIGATION */
         .nav-tabs {
             display: flex;
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
             /* Rule 3: Generous spacing */
-            padding: var(--space-xs);
+            padding: 6px;
             margin-bottom: var(--space-4xl);
-            gap: var(--space-xs);
+            gap: 4px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 
+                0 4px 16px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        /* FIGMA-STYLE ANIMATED TAB INDICATOR */
+        .nav-tabs {
+            --indicator-position: 0%;
+        }
+
+        .nav-tabs::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            width: calc(33.333% - 4px);
+            height: calc(100% - 12px);
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.9) 0%, 
+                rgba(236, 72, 153, 0.9) 100%);
+            border-radius: 12px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 6px 20px rgba(99, 102, 241, 0.4),
+                0 2px 8px rgba(236, 72, 153, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            z-index: 1;
+            transform: translateX(var(--indicator-position));
         }
 
         .nav-tab {
             flex: 1;
             background: transparent;
             border: none;
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.6);
             /* Rule 3: Consistent spacing */
-            padding: var(--space-lg);
-            border-radius: var(--radius);
-            font-size: var(--text-sm);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
             font-family: var(--font-primary);
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-tab .nav-icon {
+            font-size: 18px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-tab span {
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .nav-tab.active {
-            background: var(--gradient-primary);
             color: white;
             /* Rule 5: Emphasize active state */
             font-weight: 600;
-            box-shadow: var(--glass-shadow-sm);
+        }
+
+        .nav-tab.active .nav-icon {
+            transform: scale(1.1);
+        }
+
+        .nav-tab:hover:not(.active) {
+            color: rgba(255, 255, 255, 0.8);
             transform: translateY(-1px);
+        }
+
+        .nav-tab:hover:not(.active) .nav-icon {
+            transform: scale(1.05);
         }
 
         .nav-tab:hover:not(.active) {
@@ -1052,18 +1180,36 @@
         }
 
         .city-card, .district-card {
-            background: var(--glass-bg-card);
-            border-radius: var(--radius-lg);
-            padding: var(--space-6);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 24px;
             text-align: center;
             cursor: pointer;
-            transition: var(--transition-smooth);
-            border: 1px solid var(--glass-border);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             position: relative;
             overflow: hidden;
-            box-shadow: var(--glass-shadow-md);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 
+                0 8px 24px rgba(0, 0, 0, 0.3),
+                0 2px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        /* FIGMA-QUALITY HOVER EFFECTS */
+        .city-card:hover, .district-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 8px 24px rgba(99, 102, 241, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .city-card:active, .district-card:active {
+            transform: translateY(-4px) scale(1.01);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .city-card::before, .district-card::before {
@@ -1380,8 +1526,17 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-
-
+    <!-- CINEMATIC VIDEO BACKGROUND -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="https://cdn.coverr.co/videos/coverr-masked-figures-in-dark-alley-6142/1080p.mp4" type="video/mp4">
+            <!-- Fallback for the specific Pexels video you mentioned -->
+            <source src="https://player.vimeo.com/external/458048611.hd.mp4?s=8e8741dbee251fca2cc2078bdabf7ea47a9e6e93&profile_id=175" type="video/mp4">
+        </video>
+    </div>
+    
+    <!-- FIGMA-QUALITY OVERLAY -->
+    <div class="video-overlay"></div>
             
     <div class="container">
                 <!-- Header -->
@@ -1894,15 +2049,30 @@
         }
 
         // Tab switching
+        // FIGMA-QUALITY INTERACTIVE TAB SWITCHING
         function switchTab(tabName) {
-            // Update active tab
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.tab === tabName);
+            const tabs = document.querySelectorAll('.nav-tab');
+            const tabsContainer = document.querySelector('.nav-tabs');
+            let activeIndex = 0;
+
+            // Update active tab and find index
+            tabs.forEach((tab, index) => {
+                const isActive = tab.dataset.tab === tabName;
+                tab.classList.toggle('active', isActive);
+                if (isActive) activeIndex = index;
             });
 
-            // Update active section
+            // FIGMA-STYLE ANIMATED INDICATOR
+            updateTabIndicator(activeIndex);
+
+            // Update active content with smooth transition
             document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.toggle('active', section.id === tabName + 'Section');
+                const isActive = section.id === tabName + 'Section';
+                section.classList.toggle('active', isActive);
+                
+                if (isActive) {
+                    section.style.animation = 'fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                }
             });
 
             // Load section-specific data
@@ -1912,6 +2082,15 @@
                 loadBasket();
             } else if (tabName === 'profile') {
                 loadUserProfile();
+            }
+        }
+
+        // FIGMA-QUALITY TAB INDICATOR ANIMATION
+        function updateTabIndicator(activeIndex) {
+            const tabsContainer = document.querySelector('.nav-tabs');
+            if (tabsContainer && tabsContainer.style) {
+                const translateX = activeIndex * (100/3); // 33.33% per tab
+                tabsContainer.style.setProperty('--indicator-position', `${translateX}%`);
             }
         }
 
