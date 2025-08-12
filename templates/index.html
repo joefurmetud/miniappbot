@@ -8,18 +8,18 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
         
         :root {
-            /* TOP-TIER Design System - Rule 4: Consistent spacing, fonts, colors */
+            /* OPTIMIZED Design System - Consistent spacing, fonts, colors */
             
-            /* Spacing System - Divisible by 4 for consistency */
+            /* Refined Spacing System - Better visual rhythm */
             --space-xs: 0.25rem;    /* 4px */
             --space-sm: 0.5rem;     /* 8px */
             --space-md: 0.75rem;    /* 12px */
             --space-lg: 1rem;       /* 16px */
-            --space-xl: 1.25rem;    /* 20px */
-            --space-2xl: 1.5rem;    /* 24px */
-            --space-3xl: 2rem;      /* 32px */
-            --space-4xl: 2.5rem;    /* 40px */
-            --space-5xl: 3rem;      /* 48px */
+            --space-xl: 1.5rem;     /* 24px */
+            --space-2xl: 2rem;      /* 32px */
+            --space-3xl: 2.5rem;    /* 40px */
+            --space-4xl: 3rem;      /* 48px */
+            --space-5xl: 4rem;      /* 64px */
             
             /* DARK PREMIUM Colors - Top-tier mobile UI */
             --primary: #6366f1;     /* Indigo - more sophisticated than blue */
@@ -31,11 +31,11 @@
             --bg-secondary: rgba(99, 102, 241, 0.05);
             --bg-card: rgba(15, 15, 35, 0.8);
             
-            /* Typography System - Rule 5: Clear hierarchy */
-            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
+            /* Typography System - Optimized for readability */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Consolas', monospace;
             
-            /* Font sizes with clear hierarchy */
+            /* Refined Font Scale - Better visual hierarchy */
             --text-xs: 0.75rem;     /* 12px */
             --text-sm: 0.875rem;    /* 14px */
             --text-base: 1rem;      /* 16px */
@@ -44,6 +44,11 @@
             --text-2xl: 1.5rem;     /* 24px */
             --text-3xl: 1.875rem;   /* 30px */
             --text-4xl: 2.25rem;    /* 36px */
+            
+            /* Line Heights for better readability */
+            --leading-tight: 1.25;
+            --leading-normal: 1.5;
+            --leading-relaxed: 1.75;
             
             /* Apple System Grays */
             --apple-gray: #8E8E93;
@@ -109,8 +114,10 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             position: relative;
-            /* Rule 3: More spacing than you think */
+            /* Optimized spacing for better mobile experience */
             padding: var(--space-lg);
+            font-size: var(--text-base);
+            letter-spacing: -0.01em;
         }
 
         /* CINEMATIC VIDEO BACKGROUND */
@@ -197,15 +204,15 @@
 
 
         /* Container - Apple Card Style */
-        /* FIGMA-QUALITY GLASSMORPHISM CONTAINER */
+        /* OPTIMIZED GLASSMORPHISM CONTAINER */
         .container {
-            max-width: 400px;
+            max-width: 420px;
             margin: 0 auto;
             background: rgba(15, 15, 35, 0.25);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
-            /* Rule 3: More spacing than expected */
-            padding: var(--space-4xl);
+            /* Refined spacing for better content flow */
+            padding: var(--space-2xl);
             /* PREMIUM FIGMA-STYLE EFFECTS */
             box-shadow: 
                 0 8px 32px rgba(0, 0, 0, 0.4),
@@ -246,11 +253,12 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Rule 5: Hierarchy - What users look for first */
+        /* Optimized Header - Clear hierarchy */
         .header {
             text-align: center;
-            /* Rule 3: Generous spacing */
-            margin-bottom: var(--space-5xl);
+            /* Refined spacing for better flow */
+            margin-bottom: var(--space-3xl);
+            position: relative;
         }
 
         .header::before {
@@ -282,23 +290,26 @@
             50% { opacity: 0.8; }
         }
 
-        /* Rule 5: Emphasize what users look for first - the brand */
+        /* Brand Logo - Strong visual hierarchy */
         .logo {
             font-size: var(--text-3xl);
             font-weight: 800;
             color: var(--text-primary);
             font-family: var(--font-mono);
-            letter-spacing: 0.1em;
-            /* Rule 3: Generous spacing */
-            margin-bottom: var(--space-lg);
+            letter-spacing: 0.05em;
+            /* Optimized spacing */
+            margin-bottom: var(--space-md);
+            line-height: var(--leading-tight);
         }
 
         .tagline {
             color: var(--text-secondary);
             font-size: var(--text-sm);
-            font-weight: 400;
-            /* Rule 5: De-emphasize secondary information */
-            opacity: 0.8;
+            font-weight: 500;
+            /* Better contrast for readability */
+            opacity: 0.85;
+            line-height: var(--leading-normal);
+            letter-spacing: 0.01em;
         }
 
 
@@ -567,12 +578,12 @@
             }
         }
 
-        /* TOP-TIER Newsletter Banner - Rule 1: Essential design only */
+        /* Optimized Newsletter Banner */
         .newsletter-banner {
             background: var(--bg-card);
-            border-radius: var(--radius);
-            /* Rule 3: Generous spacing */
-            margin-bottom: var(--space-3xl);
+            border-radius: 16px;
+            /* Refined spacing */
+            margin-bottom: var(--space-2xl);
             padding: var(--space-lg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -633,15 +644,15 @@
         }
 
         /* Apple-style Navigation Tabs */
-        /* FIGMA-QUALITY INTERACTIVE NAVIGATION */
+        /* OPTIMIZED INTERACTIVE NAVIGATION */
         .nav-tabs {
             display: flex;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
-            /* Rule 3: Generous spacing */
+            /* Better spacing for touch targets */
             padding: 6px;
-            margin-bottom: var(--space-4xl);
+            margin-bottom: var(--space-2xl);
             gap: 4px;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -680,11 +691,11 @@
             flex: 1;
             background: transparent;
             border: none;
-            color: rgba(255, 255, 255, 0.6);
-            /* Rule 3: Consistent spacing */
-            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.7);
+            /* Optimized padding for better touch targets */
+            padding: var(--space-md) var(--space-lg);
             border-radius: 12px;
-            font-size: 14px;
+            font-size: var(--text-sm);
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -695,7 +706,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: var(--space-xs);
+            line-height: var(--leading-tight);
+            letter-spacing: 0.01em;
         }
 
         .nav-tab .nav-icon {
@@ -704,9 +717,10 @@
         }
 
         .nav-tab span {
-            font-size: 12px;
+            font-size: var(--text-xs);
             font-weight: 500;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            line-height: var(--leading-tight);
         }
 
         .nav-tab.active {
@@ -755,31 +769,46 @@
         /* Content Sections */
         .content-section {
             display: none;
-            padding: 0 20px 24px;
+            padding: 0;
         }
 
         .content-section.active {
             display: block;
+            animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Apple-style Product Cards */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Optimized Product Grid */
         .products-grid {
             display: grid;
-            gap: 20px;
-            padding: 0 24px;
+            gap: var(--space-lg);
+            padding: 0;
         }
 
         .product-card {
-            background: var(--apple-bg-grouped-secondary);
-            border-radius: var(--apple-radius-card);
-            padding: 24px;
-            box-shadow: var(--apple-shadow-card);
-            border: 1px solid var(--apple-gray-5);
-            transition: var(--apple-transition-spring);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: var(--space-xl);
+            box-shadow: 
+                0 8px 24px rgba(0, 0, 0, 0.3),
+                0 2px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
         }
 
         .product-card::before {
@@ -813,20 +842,21 @@
         .product-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
+            align-items: flex-start;
+            margin-bottom: var(--space-lg);
         }
 
         .product-title {
-            font-size: 22px;
+            font-size: var(--text-xl);
             font-weight: 700;
-            color: var(--apple-text-primary);
-            margin-bottom: 8px;
-            letter-spacing: -0.4px;
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            letter-spacing: -0.02em;
+            font-family: var(--font-primary);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: var(--space-sm);
+            line-height: var(--leading-tight);
         }
 
         .product-emoji {
@@ -846,26 +876,27 @@
         }
 
         .product-city {
-            font-size: 15px;
-            color: var(--apple-text-secondary);
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: var(--space-sm);
             font-weight: 500;
+            line-height: var(--leading-normal);
         }
 
         .city-icon {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: var(--apple-gradient-ocean);
+            background: linear-gradient(135deg, rgba(0, 199, 190, 0.9) 0%, rgba(0, 122, 255, 0.9) 100%);
             border-radius: 50%;
             color: white;
-            font-size: 14px;
-            box-shadow: var(--apple-shadow-sm);
-            transition: var(--apple-transition-smooth);
+            font-size: var(--text-xs);
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .city-icon:hover {
@@ -874,58 +905,64 @@
         }
 
         .product-price {
-            font-size: 24px;
+            font-size: var(--text-2xl);
             font-weight: 700;
-            color: var(--apple-blue);
-            letter-spacing: -0.5px;
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #007AFF;
+            letter-spacing: -0.02em;
+            font-family: var(--font-primary);
+            line-height: var(--leading-tight);
         }
 
         .product-details {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
         }
 
         .detail-item {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: var(--space-xs);
         }
 
         .detail-label {
-            font-size: 12px;
-            color: var(--text-muted);
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            line-height: var(--leading-tight);
         }
 
         .detail-value {
-            font-size: 14px;
+            font-size: var(--text-sm);
             color: var(--text-primary);
             font-weight: 500;
+            line-height: var(--leading-normal);
         }
 
-        /* Apple-style 3D Buttons */
-        /* Rule 1: Essential button design - primary and secondary only */
+        /* Optimized Button Design */
         .btn {
             border: none;
-            border-radius: var(--radius);
-            /* Rule 3: Proper spacing */
-            padding: var(--space-lg) var(--space-2xl);
+            border-radius: 14px;
+            /* Refined spacing for better touch targets */
+            padding: var(--space-md) var(--space-xl);
             font-weight: 600;
-            font-size: var(--text-base);
+            font-size: var(--text-sm);
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: var(--space-sm);
             text-decoration: none;
             font-family: var(--font-primary);
-            /* Rule 3: More spacing for touch targets */
-            min-height: 48px;
+            /* Better touch targets */
+            min-height: 44px;
+            position: relative;
+            line-height: var(--leading-tight);
+            letter-spacing: 0.01em;
         }
 
         .btn::before {
@@ -1131,58 +1168,110 @@
             background-clip: text;
         }
 
-        /* Responsive Design */
+        /* Enhanced Mobile Responsiveness */
         @media (max-width: 480px) {
+            body {
+                padding: var(--space-sm);
+                font-size: var(--text-sm);
+            }
+            
             .container {
                 max-width: 100%;
+                padding: var(--space-lg);
+                margin: 0;
             }
             
             .header {
-                padding: 20px 16px;
+                margin-bottom: var(--space-2xl);
+            }
+            
+            .logo {
+                font-size: var(--text-2xl);
+            }
+            
+            .tagline {
+                font-size: var(--text-xs);
             }
             
             .nav-tabs {
-                margin: 0 16px;
+                margin-bottom: var(--space-xl);
             }
             
-            .content-section {
-                padding: 0 16px 20px;
+            .nav-tab {
+                padding: var(--space-sm) var(--space-md);
             }
             
-            .newsletter-banner {
-                margin: 12px 16px;
+            .nav-tab .nav-icon {
+                font-size: 16px;
+            }
+            
+            .nav-tab span {
+                font-size: 10px;
+            }
+            
+            .section-title {
+                font-size: var(--text-2xl);
+                margin-bottom: var(--space-lg);
+            }
+            
+            .cities-grid, .districts-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: var(--space-md);
+            }
+            
+            .city-card, .district-card {
+                padding: var(--space-lg);
+            }
+            
+            .product-card {
+                padding: var(--space-lg);
+            }
+            
+            .product-title {
+                font-size: var(--text-lg);
+            }
+            
+            .product-price {
+                font-size: var(--text-xl);
+            }
+            
+            .btn {
+                min-height: 40px;
+                font-size: var(--text-xs);
+                padding: var(--space-sm) var(--space-lg);
             }
         }
 
-        /* Apple-style Section Titles */
+        /* Optimized Section Titles */
         .section-title {
-            font-size: 32px;
+            font-size: var(--text-3xl);
             font-weight: 800;
             color: var(--text-primary);
-            margin-bottom: var(--space-2xl);
+            margin-bottom: var(--space-xl);
             text-align: center;
             letter-spacing: -0.02em;
             font-family: var(--font-primary);
+            line-height: var(--leading-tight);
         }
 
         .section-header {
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
         }
 
         .cities-grid, .districts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: var(--space-4);
-            margin-bottom: var(--space-6);
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
         }
 
         .city-card, .district-card {
             background: rgba(255, 255, 255, 0.08);
             border-radius: 20px;
-            padding: 24px;
+            padding: var(--space-xl);
             text-align: center;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1282,9 +1371,10 @@
             font-size: var(--text-lg);
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: var(--space-2);
+            margin-bottom: var(--space-sm);
             letter-spacing: -0.01em;
             font-family: var(--font-primary);
+            line-height: var(--leading-tight);
         }
 
         .city-count, .district-count {
@@ -1292,6 +1382,7 @@
             color: var(--text-secondary);
             font-weight: 500;
             letter-spacing: 0.01em;
+            line-height: var(--leading-normal);
         }
 
         /* Modal Styles */
@@ -1447,46 +1538,56 @@
         }
 
         .basket-item-name {
-            font-size: 16px;
+            font-size: var(--text-base);
             font-weight: 600;
-            color: var(--apple-text-primary);
-            margin-bottom: 4px;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+            line-height: var(--leading-tight);
         }
 
         .quantity-control {
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: var(--apple-bg-secondary);
-            border-radius: var(--apple-radius-sm);
-            padding: 4px;
+            gap: var(--space-sm);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: var(--space-xs);
         }
 
         .quantity-btn {
             width: 28px;
             height: 28px;
             border: none;
-            background: var(--apple-blue);
+            background: #007AFF;
             color: white;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 16px;
+            font-size: var(--text-sm);
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .quantity-btn:hover {
+            transform: scale(1.1);
+            background: #0056CC;
         }
 
         .quantity-value {
             min-width: 30px;
             text-align: center;
             font-weight: 600;
+            color: var(--text-primary);
+            font-size: var(--text-sm);
+            line-height: var(--leading-tight);
         }
 
         /* Favorite Button */
         .favorite-btn {
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: var(--space-md);
+            right: var(--space-md);
             background: rgba(255, 255, 255, 0.9);
             border: none;
             border-radius: 50%;
@@ -1496,13 +1597,20 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 20px;
-            transition: var(--apple-transition-smooth);
+            font-size: var(--text-lg);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 10;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .favorite-btn:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.95);
         }
 
         .favorite-btn.active {
-            color: var(--apple-red);
+            color: #FF3B30;
         }
 
         /* Animations */
@@ -1519,9 +1627,9 @@
         /* Utility Classes */
         .hidden { display: none !important; }
         .text-center { text-align: center; }
-        .mb-4 { margin-bottom: 16px; }
-        .mt-4 { margin-top: 16px; }
-        .mt-2 { margin-top: 8px; }
+        .mb-4 { margin-bottom: var(--space-lg); }
+        .mt-4 { margin-top: var(--space-lg); }
+        .mt-2 { margin-top: var(--space-sm); }
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
