@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS • Premium CBD Shop</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            /* === FOUNDATIONAL DESIGN SYSTEM === */
+            
+            /* SPACING SYSTEM - Based on 4px grid for perfect alignment */
+            --space-1: 0.25rem;   /* 4px */
+            --space-2: 0.5rem;    /* 8px */
+            --space-3: 0.75rem;   /* 12px */
+            --space-4: 1rem;      /* 16px */
+            --space-6: 1.5rem;    /* 24px */
+            --space-8: 2rem;      /* 32px */
+            --space-10: 2.5rem;   /* 40px */
+            --space-12: 3rem;     /* 48px */
+            --space-16: 4rem;     /* 64px */
+            
+            /* TYPOGRAPHY SCALE - Minimal, purposeful sizes */
+            --text-xs: 0.75rem;   /* 12px - Secondary info */
+            --text-sm: 0.875rem;  /* 14px - Body text */
+            --text-base: 1rem;    /* 16px - Primary body */
+            --text-lg: 1.125rem;  /* 18px - Emphasis */
+            --text-xl: 1.25rem;   /* 20px - Headings */
+            --text-2xl: 1.5rem;   /* 24px - Large headings */
+            --text-3xl: 1.875rem; /* 30px - Hero text */
+            
+            /* LINE HEIGHT - Smaller text needs more line height */
+            --leading-tight: 1.25;
+            --leading-normal: 1.5;
+            --leading-relaxed: 1.75;
+            
+            /* PREMIUM GLASSY COLOR SYSTEM - OKLCH for perfect perceptual uniformity */
+            
+            /* Light Mode - Premium Glass Aesthetic */
+            --glass-bg-primary: oklch(0.98 0.005 280);      /* Pure white with slight cool tint */
+            --glass-bg-secondary: oklch(0.96 0.01 280);     /* Subtle glass surface */
+            --glass-bg-card: oklch(0.99 0.003 280 / 0.8);  /* Translucent cards */
+            
+            /* Text Hierarchy - Perfectly calibrated contrast */
+            --text-primary: oklch(0.15 0.02 280);          /* Near black, high contrast */
+            --text-secondary: oklch(0.45 0.02 280);        /* Medium contrast for secondary info */
+            --text-tertiary: oklch(0.65 0.01 280);         /* Low contrast for hints */
+            
+            /* Premium Accent Colors */
+            --accent-primary: oklch(0.55 0.2 150);         /* Premium green - CBD themed */
+            --accent-secondary: oklch(0.65 0.15 280);      /* Sophisticated purple */
+            --accent-success: oklch(0.6 0.15 140);         /* Success green */
+            --accent-warning: oklch(0.7 0.15 60);          /* Warning amber */
+            
+            /* Glass Effects */
+            --glass-border: oklch(0.9 0.01 280 / 0.2);
+            --glass-shadow-sm: 0 1px 3px oklch(0.2 0.02 280 / 0.1);
+            --glass-shadow-md: 0 4px 12px oklch(0.2 0.02 280 / 0.15);
+            --glass-shadow-lg: 0 10px 30px oklch(0.2 0.02 280 / 0.2);
+            
+            /* Gradients for Depth */
+            --gradient-glass: linear-gradient(135deg, 
+                oklch(0.99 0.003 280 / 0.9) 0%, 
+                oklch(0.97 0.005 280 / 0.7) 100%);
+            --gradient-primary: linear-gradient(135deg, 
+                var(--accent-primary) 0%, 
+                oklch(0.6 0.18 160) 100%);
+            
+            /* Border Radius - Consistent, Apple-like */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            
+            /* Transitions - Smooth, premium feel */
+            --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            
+            /* Font System */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        /* Dark Mode - Perfectly inverted with maintained contrast ratios */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --glass-bg-primary: oklch(0.1 0.01 280);
+                --glass-bg-secondary: oklch(0.12 0.015 280);
+                --glass-bg-card: oklch(0.15 0.02 280 / 0.8);
+                
+                --text-primary: oklch(0.95 0.005 280);
+                --text-secondary: oklch(0.7 0.01 280);
+                --text-tertiary: oklch(0.5 0.015 280);
+                
+                --glass-border: oklch(0.3 0.02 280 / 0.3);
+                --glass-shadow-sm: 0 1px 3px oklch(0.05 0.01 280 / 0.3);
+                --glass-shadow-md: 0 4px 12px oklch(0.05 0.01 280 / 0.4);
+                --glass-shadow-lg: 0 10px 30px oklch(0.05 0.01 280 / 0.5);
+                
+                --gradient-glass: linear-gradient(135deg, 
+                    oklch(0.18 0.02 280 / 0.9) 0%, 
+                    oklch(0.12 0.015 280 / 0.7) 100%);
+            }
+        }
+        
+        /* RESET & BASE STYLES */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            font-size: var(--text-base);
+            line-height: var(--leading-normal);
+            color: var(--text-primary);
+            background: var(--glass-bg-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+        
+        /* PREMIUM GLASSY CONTAINER */
+        .app-container {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--gradient-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid var(--glass-border);
+            border-right: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Subtle ambient light effect */
+        .app-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: radial-gradient(ellipse at center top, 
+                var(--accent-primary) 0%, 
+                transparent 70%);
+            opacity: 0.03;
+            pointer-events: none;
+        }
+        
+        /* === CORE COMPONENT: PREMIUM HEADER === */
+        .header {
+            padding: var(--space-6) var(--space-4) var(--space-4);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .logo {
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+            letter-spacing: -0.02em;
+        }
+        
+        .tagline {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+        
+        /* === CORE COMPONENT: GLASSY NAVIGATION === */
+        .nav-container {
+            padding: 0 var(--space-4) var(--space-6);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: var(--glass-bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-1);
+            box-shadow: var(--glass-shadow-sm);
+            gap: var(--space-1);
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: var(--space-3) var(--space-4);
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-family: var(--font-primary);
+            text-align: center;
+        }
+        
+        .nav-tab.active {
+            background: var(--gradient-primary);
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--glass-shadow-sm);
+        }
+        
+        .nav-tab:hover:not(.active) {
+            background: var(--glass-bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        /* === CORE FUNCTIONALITY: PRODUCT GRID === */
+        .content-section {
+            padding: 0 var(--space-4) var(--space-8);
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .section-title {
+            font-size: var(--text-xl);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-6);
+            text-align: center;
+        }
+        
+        /* PREMIUM PRODUCT CARDS - The core element */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: var(--space-4);
+            margin-bottom: var(--space-8);
+        }
+        
+        .product-card {
+            background: var(--gradient-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            box-shadow: var(--glass-shadow-md);
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--accent-primary) 50%, 
+                transparent 100%);
+            opacity: 0.6;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glass-shadow-lg);
+            border-color: var(--accent-primary);
+        }
+        
+        .product-card:active {
+            transform: translateY(0);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+            color: white;
+        }
+        
+        .product-name {
+            font-size: var(--text-base);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-1);
+            line-height: var(--leading-tight);
+        }
+        
+        .product-type {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-2);
+        }
+        
+        .product-price {
+            font-size: var(--text-lg);
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: var(--space-3);
+        }
+        
+        /* PREMIUM BUTTON SYSTEM */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-4);
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-primary);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            min-height: 44px; /* Touch target */
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--glass-shadow-sm);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--glass-shadow-md);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: var(--glass-bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--glass-bg-secondary);
+        }
+        
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: var(--space-3);
+            }
+            
+            .nav-container {
+                padding: 0 var(--space-3) var(--space-4);
+            }
+            
+            .content-section {
+                padding: 0 var(--space-3) var(--space-6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- PREMIUM HEADER -->
+        <header class="header">
+            <h1 class="logo">NEXUS</h1>
+            <p class="tagline">Premium CBD Experience</p>
+        </header>
+        
+        <!-- GLASSY NAVIGATION -->
+        <div class="nav-container">
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="products">Products</button>
+                <button class="nav-tab" data-tab="cart">Cart</button>
+                <button class="nav-tab" data-tab="profile">Profile</button>
+            </nav>
+        </div>
+        
+        <!-- CORE FUNCTIONALITY: PRODUCT CATALOG -->
+        <main>
+            <section class="content-section active" id="products">
+                <h2 class="section-title">Premium Selection</h2>
+                
+                <div class="products-grid">
+                    <!-- Product Card Examples -->
+                    <div class="product-card">
+                        <div class="product-image">🌿</div>
+                        <div class="product-name">Northern Lights</div>
+                        <div class="product-type">Indica</div>
+                        <div class="product-price">€25.99</div>
+                        <button class="btn btn-primary">Add to Cart</button>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-image">🍃</div>
+                        <div class="product-name">Sour Diesel</div>
+                        <div class="product-type">Sativa</div>
+                        <div class="product-price">€28.50</div>
+                        <button class="btn btn-primary">Add to Cart</button>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-image">🌱</div>
+                        <div class="product-name">Blue Dream</div>
+                        <div class="product-type">Hybrid</div>
+                        <div class="product-price">€32.00</div>
+                        <button class="btn btn-primary">Add to Cart</button>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-image">🍀</div>
+                        <div class="product-name">OG Kush</div>
+                        <div class="product-type">Hybrid</div>
+                        <div class="product-price">€30.75</div>
+                        <button class="btn btn-primary">Add to Cart</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script>
+        // Tab Navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
