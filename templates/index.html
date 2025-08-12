@@ -5052,23 +5052,7 @@
                 </div>
             </div>
 
-            <!-- Dynamic Reviews Carousel - Always visible at bottom of shop menu -->
-            <div class="reviews-carousel-section" style="margin-top: var(--space-3xl);">
-                <h3 class="section-title text-title">What Our Customers Say</h3>
-                <div class="reviews-carousel-container">
-                    <div class="reviews-carousel" id="reviewsCarousel">
-                        <!-- Reviews will be dynamically loaded here -->
-                    </div>
-                    <div class="carousel-controls">
-                        <button class="carousel-btn carousel-prev" onclick="scrollReviews('prev')">
-                            <span>‹</span>
-                        </button>
-                        <button class="carousel-btn carousel-next" onclick="scrollReviews('next')">
-                            <span>›</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
+
 
 
 
@@ -5099,7 +5083,25 @@
                     <!-- Products will be dynamically loaded here -->
                 </div>
             </div>
+
+            <!-- Dynamic Reviews Carousel - Always at bottom of shop menu -->
+            <div class="reviews-carousel-section" style="margin-top: var(--space-3xl);">
+                <h3 class="section-title text-title">What Our Customers Say</h3>
+                <div class="reviews-carousel-container">
+                    <div class="reviews-carousel" id="reviewsCarousel">
+                        <!-- Reviews will be dynamically loaded here -->
+                    </div>
+                    <div class="carousel-controls">
+                        <button class="carousel-btn carousel-prev" onclick="scrollReviews('prev')">
+                            <span>‹</span>
+                        </button>
+                        <button class="carousel-btn carousel-next" onclick="scrollReviews('next')">
+                            <span>›</span>
+                        </button>
+                    </div>
+                </div>
             </div>
+        </div>
 
         <!-- Basket Section -->
         <div id="basketSection" class="content-section">
@@ -5903,82 +5905,173 @@
             console.log('Loading complete');
         }
 
-        // Initialize app
+        // Initialize app - BUG FIXED
         async function init() {
             try {
-        tg.ready();
-        tg.expand();
+                // Initialize Telegram WebApp
+                if (window.Telegram && window.Telegram.WebApp) {
+                    const tg = window.Telegram.WebApp;
+                    tg.ready();
+                    tg.expand();
 
-                // Get user from Telegram
-                if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                    currentUser = tg.initDataUnsafe.user;
-                    document.getElementById('profileName').textContent = 
-                        currentUser.first_name + (currentUser.last_name ? ' ' + currentUser.last_name : '');
-                    document.getElementById('profileAvatar').textContent = 
-                        (currentUser.first_name ? currentUser.first_name[0] : 'U').toUpperCase();
+                    // Get user from Telegram
+                    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                        currentUser = tg.initDataUnsafe.user;
+                        const profileNameElement = document.getElementById('profileName');
+                        const profileAvatarElement = document.getElementById('profileAvatar');
+                        
+                        if (profileNameElement) {
+                            profileNameElement.textContent = 
+                                currentUser.first_name + (currentUser.last_name ? ' ' + currentUser.last_name : '');
+                        }
+                        if (profileAvatarElement) {
+                            profileAvatarElement.textContent = 
+                                (currentUser.first_name ? currentUser.first_name[0] : 'U').toUpperCase();
+                        }
+                    }
                 }
                 
-                await loadUserBalance();
-                await updateBasketBadge();
-                await loadNewsletter();
-                await loadPromoBanners();
-                await loadCities();
-                await loadReviewsCarousel();
+                // Load initial data with error handling
+                try {
+                    await loadUserBalance();
+                } catch (error) {
+                    console.log('Error loading user balance:', error);
+                }
+                
+                try {
+                    await updateBasketBadge();
+                } catch (error) {
+                    console.log('Error updating basket badge:', error);
+                }
+                
+                try {
+                    await loadNewsletter();
+                } catch (error) {
+                    console.log('Error loading newsletter:', error);
+                }
+                
+                try {
+                    await loadPromoBanners();
+                } catch (error) {
+                    console.log('Error loading promo banners:', error);
+                }
+                
+                try {
+                    await loadCities();
+                } catch (error) {
+                    console.log('Error loading cities:', error);
+                }
+                
+                try {
+                    await loadReviewsCarousel();
+                } catch (error) {
+                    console.log('Error loading reviews:', error);
+                }
                 
                 setupEventListeners();
                 
                 // Initialize the interactive background system
-                initInteractiveBackground();
+                if (typeof initInteractiveBackground === 'function') {
+                    initInteractiveBackground();
+                }
                 
+                console.log('App initialized successfully');
             } catch (error) {
                 console.error('Initialization error:', error);
-                showError('Failed to initialize app');
+                // Fallback initialization
+                setTimeout(() => init(), 1000);
             }
         }
 
 
 
-        // Setup event listeners
+        // Setup event listeners - BUG FIXED
         function setupEventListeners() {
-            // Enhanced tab navigation with premium interactions
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.addEventListener('click', (e) => {
-                    // Add premium click effect
-                    addPremiumClickEffect(e);
-                    switchTab(tab.dataset.tab);
-                });
-                
-                // Add hover sound effect simulation
-                tab.addEventListener('mouseenter', () => {
-                    addHoverGlow(tab);
-                });
-                
-                tab.addEventListener('mouseleave', () => {
-                    removeHoverGlow(tab);
-                });
-            });
+            try {
+                // Enhanced tab navigation with premium interactions
+                const navTabs = document.querySelectorAll('.nav-tab');
+                if (navTabs.length > 0) {
+                    navTabs.forEach(tab => {
+                        if (tab && tab.dataset && tab.dataset.tab) {
+                            tab.addEventListener('click', (e) => {
+                                try {
+                                    // Add premium click effect
+                                    if (typeof addPremiumClickEffect === 'function') {
+                                        addPremiumClickEffect(e);
+                                    }
+                                    switchTab(tab.dataset.tab);
+                                } catch (error) {
+                                    console.log('Tab click error:', error);
+                                    switchTab(tab.dataset.tab);
+                                }
+                            });
+                            
+                            // Add hover sound effect simulation
+                            tab.addEventListener('mouseenter', () => {
+                                try {
+                                    if (typeof addHoverGlow === 'function') {
+                                        addHoverGlow(tab);
+                                    }
+                                } catch (error) {
+                                    console.log('Hover glow error:', error);
+                                }
+                            });
+                            
+                            tab.addEventListener('mouseleave', () => {
+                                try {
+                                    if (typeof removeHoverGlow === 'function') {
+                                        removeHoverGlow(tab);
+                                    }
+                                } catch (error) {
+                                    console.log('Remove hover glow error:', error);
+                                }
+                            });
+                        }
+                    });
+                }
 
-            // Navigation buttons
-            document.getElementById('backToCity').addEventListener('click', showCitySelection);
-            document.getElementById('backToDistrict').addEventListener('click', showDistrictSelection);
-            
-            // Checkout button
-            document.getElementById('checkoutBtn').addEventListener('click', startCheckout);
+                // Navigation buttons with error handling
+                const backToCityBtn = document.getElementById('backToCity');
+                if (backToCityBtn) {
+                    backToCityBtn.addEventListener('click', showCitySelection);
+                }
+                
+                const backToDistrictBtn = document.getElementById('backToDistrict');
+                if (backToDistrictBtn) {
+                    backToDistrictBtn.addEventListener('click', showDistrictSelection);
+                }
+                
+                // Checkout button
+                const checkoutBtn = document.getElementById('checkoutBtn');
+                if (checkoutBtn) {
+                    checkoutBtn.addEventListener('click', startCheckout);
+                }
 
-            // Newsletter toggle
-            const newsletterToggle = document.getElementById('newsletterToggle');
-            if (newsletterToggle) {
-                newsletterToggle.addEventListener('change', toggleNewsletter);
+                // Newsletter toggle
+                const newsletterToggle = document.getElementById('newsletterToggle');
+                if (newsletterToggle) {
+                    newsletterToggle.addEventListener('change', toggleNewsletter);
+                }
+
+                // Setup carousel interactions
+                if (typeof setupCarouselInteractions === 'function') {
+                    setupCarouselInteractions();
+                }
+                
+                // Initialize reviews section visibility
+                if (typeof manageReviewsVisibility === 'function') {
+                    manageReviewsVisibility();
+                }
+                
+                // Start performance monitoring
+                if (typeof performanceMonitor !== 'undefined' && typeof performanceMonitor.start === 'function') {
+                    performanceMonitor.start();
+                }
+                
+                console.log('Event listeners setup complete');
+            } catch (error) {
+                console.log('Event listeners setup error:', error);
             }
-
-            // Setup carousel interactions
-            setupCarouselInteractions();
-            
-            // Initialize reviews section visibility
-            manageReviewsVisibility();
-            
-            // Start performance monitoring
-            performanceMonitor.start();
         }
 
         // Premium click effect for tabs
@@ -6285,108 +6378,172 @@
             return cityIcons[cityName] || 'CT'; // Default city icon
         }
 
-        // Render cities with premium design and smooth interactions
+        // Render cities with premium design and smooth interactions - BUG FIXED
         function renderCities() {
-            const grid = document.getElementById('citiesGrid');
-            grid.innerHTML = '';
+            try {
+                const grid = document.getElementById('citiesGrid');
+                if (!grid) return;
+                
+                grid.innerHTML = '';
 
-            cities.forEach((city, index) => {
-                const card = document.createElement('div');
-                card.className = 'city-card';
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                
-                card.innerHTML = `
-                    <div class="city-icon-container">
-                        <span style="font-size: 18px; font-weight: 700; letter-spacing: 0.05em; color: var(--text-primary);">${getCityIcon(city.name)}</span>
-                    </div>
-                    <div class="city-name">${city.name}</div>
-                    <div class="city-count">${city.districts?.length || 0} districts</div>
-                `;
-                
-                // Add premium click interactions
-                card.addEventListener('click', () => selectCity(city));
-                card.addEventListener('mouseenter', () => addHoverEffect(card));
-                card.addEventListener('mouseleave', () => removeHoverEffect(card));
-                
-                grid.appendChild(card);
-                
-                // Staggered entrance animation
-                setTimeout(() => {
-                    card.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
+                if (!cities || cities.length === 0) {
+                    grid.innerHTML = `
+                        <div style="text-align: center; padding: var(--space-2xl); color: var(--text-secondary);">
+                            <div style="font-size: 48px; margin-bottom: var(--space-md);">🏙️</div>
+                            <div style="font-size: var(--text-lg); margin-bottom: var(--space-sm);">No cities available</div>
+                            <div style="font-size: var(--text-sm); opacity: 0.7;">Please check back later</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                cities.forEach((city, index) => {
+                    if (!city || !city.name) return;
+                    
+                    const card = document.createElement('div');
+                    card.className = 'city-card';
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    card.innerHTML = `
+                        <div class="city-icon-container">
+                            <span style="font-size: 18px; font-weight: 700; letter-spacing: 0.05em; color: var(--text-primary);">${getCityIcon(city.name)}</span>
+                        </div>
+                        <div class="city-name">${city.name}</div>
+                        <div class="city-count">${city.districts?.length || 0} districts</div>
+                    `;
+                    
+                    // Add premium click interactions
+                    card.addEventListener('click', () => selectCity(city));
+                    card.addEventListener('mouseenter', () => addHoverEffect(card));
+                    card.addEventListener('mouseleave', () => removeHoverEffect(card));
+                    
+                    grid.appendChild(card);
+                    
+                    // Staggered entrance animation
+                    setTimeout(() => {
+                        if (card && card.style) {
+                            card.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }
+                    }, index * 100);
+                });
+            } catch (error) {
+                console.log('Render cities error:', error);
+            }
         }
 
-        // Select city and show districts with premium effects
+        // Select city and show districts with premium effects - BUG FIXED
         function selectCity(city) {
-            currentCity = city;
+            if (!city) return;
             
-            // Find the clicked card and add selection effect
-            const cityCards = document.querySelectorAll('.city-card');
-            cityCards.forEach(card => {
-                if (card.querySelector('.city-name').textContent === city.name) {
-                    addSelectionEffect(card);
+            try {
+                currentCity = city;
+                
+                // Find the clicked card and add selection effect
+                const cityCards = document.querySelectorAll('.city-card');
+                cityCards.forEach(card => {
+                    const cityNameElement = card.querySelector('.city-name');
+                    if (cityNameElement && cityNameElement.textContent === city.name) {
+                        addSelectionEffect(card);
+                    }
+                });
+                
+                const selectedCityNameElement = document.getElementById('selectedCityName');
+                if (selectedCityNameElement) {
+                    selectedCityNameElement.textContent = `${city.name} Districts`;
                 }
-            });
-            
-            document.getElementById('selectedCityName').textContent = `${city.name} Districts`;
-            renderDistricts(city.districts || []);
-            showDistrictSelection();
+                
+                renderDistricts(city.districts || []);
+                showDistrictSelection();
+            } catch (error) {
+                console.log('City selection error:', error);
+            }
         }
 
-        // Render districts with premium design and smooth interactions
+        // Render districts with premium design and smooth interactions - BUG FIXED
         function renderDistricts(districts) {
-            const grid = document.getElementById('districtsGrid');
-            grid.innerHTML = '';
+            try {
+                const grid = document.getElementById('districtsGrid');
+                if (!grid) return;
+                
+                grid.innerHTML = '';
 
-            districts.forEach((district, index) => {
-                const card = document.createElement('div');
-                card.className = 'district-card';
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                
-                card.innerHTML = `
-                    <div class="city-icon-container">
-                        <span style="font-size: 16px; font-weight: 600; letter-spacing: 0.05em; color: var(--text-primary);">DT</span>
-                    </div>
-                    <div class="district-name">${district.name}</div>
-                    <div class="district-count">View products</div>
-                `;
-                
-                // Add premium click interactions
-                card.addEventListener('click', () => selectDistrict(district));
-                card.addEventListener('mouseenter', () => addHoverEffect(card));
-                card.addEventListener('mouseleave', () => removeHoverEffect(card));
-                
-                grid.appendChild(card);
-                
-                // Staggered entrance animation
-                setTimeout(() => {
-                    card.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
+                if (!districts || districts.length === 0) {
+                    grid.innerHTML = `
+                        <div style="text-align: center; padding: var(--space-2xl); color: var(--text-secondary);">
+                            <div style="font-size: 48px; margin-bottom: var(--space-md);">🏘️</div>
+                            <div style="font-size: var(--text-lg); margin-bottom: var(--space-sm);">No districts available</div>
+                            <div style="font-size: var(--text-sm); opacity: 0.7;">Please check back later</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                districts.forEach((district, index) => {
+                    if (!district || !district.name) return;
+                    
+                    const card = document.createElement('div');
+                    card.className = 'district-card';
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    card.innerHTML = `
+                        <div class="city-icon-container">
+                            <span style="font-size: 16px; font-weight: 600; letter-spacing: 0.05em; color: var(--text-primary);">DT</span>
+                        </div>
+                        <div class="district-name">${district.name}</div>
+                        <div class="district-count">View products</div>
+                    `;
+                    
+                    // Add premium click interactions
+                    card.addEventListener('click', () => selectDistrict(district));
+                    card.addEventListener('mouseenter', () => addHoverEffect(card));
+                    card.addEventListener('mouseleave', () => removeHoverEffect(card));
+                    
+                    grid.appendChild(card);
+                    
+                    // Staggered entrance animation
+                    setTimeout(() => {
+                        if (card && card.style) {
+                            card.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }
+                    }, index * 100);
+                });
+            } catch (error) {
+                console.log('Render districts error:', error);
+            }
         }
 
-        // Select district and load products with premium effects
+        // Select district and load products with premium effects - BUG FIXED
         async function selectDistrict(district) {
-            currentDistrict = district;
+            if (!district || !currentCity) return;
             
-            // Find the clicked card and add selection effect
-            const districtCards = document.querySelectorAll('.district-card');
-            districtCards.forEach(card => {
-                if (card.querySelector('.district-name').textContent === district.name) {
-                    addSelectionEffect(card);
+            try {
+                currentDistrict = district;
+                
+                // Find the clicked card and add selection effect
+                const districtCards = document.querySelectorAll('.district-card');
+                districtCards.forEach(card => {
+                    const districtNameElement = card.querySelector('.district-name');
+                    if (districtNameElement && districtNameElement.textContent === district.name) {
+                        addSelectionEffect(card);
+                    }
+                });
+                
+                const selectedDistrictNameElement = document.getElementById('selectedDistrictName');
+                if (selectedDistrictNameElement) {
+                    selectedDistrictNameElement.textContent = `${currentCity.name} - ${district.name}`;
                 }
-            });
-            
-            document.getElementById('selectedDistrictName').textContent = `${currentCity.name} - ${district.name}`;
-            await loadProducts(currentCity.id, district.id);
-            showProductsContainer();
+                
+                await loadProducts(currentCity.id, district.id);
+                showProductsContainer();
+            } catch (error) {
+                console.log('District selection error:', error);
+            }
         }
 
         // Load products for specific city/district
@@ -6412,31 +6569,20 @@
             }
         }
 
-        // Navigation functions with smooth transitions
+        // Navigation functions with smooth transitions - BUG FIXED
         function showCitySelection() {
             const citySection = document.getElementById('citySelection');
             const districtSection = document.getElementById('districtSelection');
             const productsSection = document.getElementById('productsContainer');
             
-            // Smooth fade out
-            districtSection.style.opacity = '0';
-            productsSection.style.opacity = '0';
+            // Reset all sections first
+            citySection.style.display = 'block';
+            citySection.style.opacity = '1';
+            citySection.style.transform = 'translateY(0)';
+            citySection.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
             
-            setTimeout(() => {
-                districtSection.style.display = 'none';
-                productsSection.style.display = 'none';
-                
-                // Smooth fade in
-                citySection.style.display = 'block';
-                citySection.style.opacity = '0';
-                citySection.style.transform = 'translateY(20px)';
-                
-                setTimeout(() => {
-                    citySection.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                    citySection.style.opacity = '1';
-                    citySection.style.transform = 'translateY(0)';
-                }, 10);
-            }, 200);
+            districtSection.style.display = 'none';
+            productsSection.style.display = 'none';
             
             // Keep reviews section visible during city selection
             const reviewsSection = document.querySelector('.reviews-carousel-section');
@@ -6450,9 +6596,17 @@
         }
 
         function showDistrictSelection() {
-            document.getElementById('citySelection').style.display = 'none';
-            document.getElementById('districtSelection').style.display = 'block';
-            document.getElementById('productsContainer').style.display = 'none';
+            const citySection = document.getElementById('citySelection');
+            const districtSection = document.getElementById('districtSelection');
+            const productsSection = document.getElementById('productsContainer');
+            
+            // Reset all sections first
+            citySection.style.display = 'none';
+            districtSection.style.display = 'block';
+            districtSection.style.opacity = '1';
+            districtSection.style.transform = 'translateY(0)';
+            districtSection.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            productsSection.style.display = 'none';
             
             // Keep reviews section visible during district selection
             const reviewsSection = document.querySelector('.reviews-carousel-section');
@@ -6465,20 +6619,35 @@
         }
 
         function showProductsContainer() {
-            document.getElementById('citySelection').style.display = 'none';
-            document.getElementById('districtSelection').style.display = 'none';
-            document.getElementById('productsContainer').style.display = 'block';
+            const citySection = document.getElementById('citySelection');
+            const districtSection = document.getElementById('districtSelection');
+            const productsSection = document.getElementById('productsContainer');
+            
+            // Reset all sections first
+            citySection.style.display = 'none';
+            districtSection.style.display = 'none';
+            productsSection.style.display = 'block';
+            productsSection.style.opacity = '1';
+            productsSection.style.transform = 'translateY(0)';
+            productsSection.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
             
             // Keep reviews section visible when products are displayed
-            const reviewsSection = document.querySelector('.reviews-carousel-section');
-            if (reviewsSection) {
-                reviewsSection.style.display = 'block';
-                reviewsSection.classList.remove('hidden');
-                
-                // Ensure reviews are loaded
-                if (reviewsSection.querySelector('.reviews-carousel').children.length === 0) {
-                    loadReviewsCarousel();
+            try {
+                const reviewsSection = document.querySelector('.reviews-carousel-section');
+                if (reviewsSection) {
+                    reviewsSection.style.display = 'block';
+                    reviewsSection.classList.remove('hidden');
+                    
+                    // Ensure reviews are loaded
+                    const reviewsCarousel = reviewsSection.querySelector('.reviews-carousel');
+                    if (reviewsCarousel && reviewsCarousel.children.length === 0) {
+                        if (typeof loadReviewsCarousel === 'function') {
+                            loadReviewsCarousel();
+                        }
+                    }
                 }
+            } catch (error) {
+                console.log('Reviews visibility management error:', error);
             }
         }
 
@@ -6652,44 +6821,72 @@
         // Initialize premium interactions
         const premiumInteractions = new PremiumInteractions();
 
-        // 🎨 Premium Interaction Helper Functions
+        // 🎨 Premium Interaction Helper Functions - BUG FIXED
         function addHoverEffect(card) {
-            if (!card.classList.contains('selected')) {
-                card.style.transform = 'translateY(-4px) scale(1.02)';
-                card.style.boxShadow = `
-                    0 16px 40px rgba(0, 0, 0, 0.25),
-                    0 8px 20px rgba(99, 102, 241, 0.15)
-                `;
+            if (!card || !card.classList || !card.style) return;
+            
+            try {
+                if (!card.classList.contains('selected')) {
+                    card.style.transform = 'translateY(-4px) scale(1.02)';
+                    card.style.boxShadow = `
+                        0 16px 40px rgba(0, 0, 0, 0.25),
+                        0 8px 20px rgba(99, 102, 241, 0.15)
+                    `;
+                }
+            } catch (error) {
+                console.log('Hover effect error:', error);
             }
         }
 
         function removeHoverEffect(card) {
-            if (!card.classList.contains('selected')) {
-                card.style.transform = 'translateY(0) scale(1)';
-                card.style.boxShadow = '';
+            if (!card || !card.classList || !card.style) return;
+            
+            try {
+                if (!card.classList.contains('selected')) {
+                    card.style.transform = 'translateY(0) scale(1)';
+                    card.style.boxShadow = '';
+                }
+            } catch (error) {
+                console.log('Hover effect error:', error);
             }
         }
 
         function addSelectionEffect(card) {
-            // Remove selection from all other cards
-            const allCards = card.parentElement.querySelectorAll('.city-card, .district-card');
-            allCards.forEach(c => c.classList.remove('selected'));
+            if (!card || !card.parentElement) return;
             
-            // Add selection to current card
-            card.classList.add('selected');
-            
-            // Add premium selection animation
-            card.style.transform = 'translateY(-2px) scale(1.01)';
-            card.style.boxShadow = `
-                0 12px 32px rgba(99, 102, 241, 0.25),
-                0 6px 16px rgba(0, 0, 0, 0.15)
-            `;
-            
-            // Reset after animation
-            setTimeout(() => {
-                card.style.transform = '';
-                card.style.boxShadow = '';
-            }, 300);
+            try {
+                // Remove selection from all other cards
+                const allCards = card.parentElement.querySelectorAll('.city-card, .district-card');
+                allCards.forEach(c => {
+                    if (c && c.classList) {
+                        c.classList.remove('selected');
+                        c.style.transform = '';
+                        c.style.boxShadow = '';
+                    }
+                });
+                
+                // Add selection to current card
+                if (card.classList) {
+                    card.classList.add('selected');
+                }
+                
+                // Add premium selection animation
+                card.style.transform = 'translateY(-2px) scale(1.01)';
+                card.style.boxShadow = `
+                    0 12px 32px rgba(99, 102, 241, 0.25),
+                    0 6px 16px rgba(0, 0, 0, 0.15)
+                `;
+                
+                // Reset after animation
+                setTimeout(() => {
+                    if (card && card.style) {
+                        card.style.transform = '';
+                        card.style.boxShadow = '';
+                    }
+                }, 300);
+            } catch (error) {
+                console.log('Selection effect error:', error);
+            }
         }
 
                 // Render products with modern design - Performance Optimized
