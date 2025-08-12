@@ -4336,6 +4336,24 @@
                 </div>
             </div>
 
+            <!-- Dynamic Reviews Carousel - Always visible at bottom of shop menu -->
+            <div class="reviews-carousel-section" style="margin-top: var(--space-3xl);">
+                <h3 class="section-title">What Our Customers Say</h3>
+                <div class="reviews-carousel-container">
+                    <div class="reviews-carousel" id="reviewsCarousel">
+                        <!-- Reviews will be dynamically loaded here -->
+                    </div>
+                    <div class="carousel-controls">
+                        <button class="carousel-btn carousel-prev" onclick="scrollReviews('prev')">
+                            <span>‹</span>
+                        </button>
+                        <button class="carousel-btn carousel-next" onclick="scrollReviews('next')">
+                            <span>›</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
 
 
             <!-- District Selection -->
@@ -4357,24 +4375,6 @@
                 </div>
                 <div id="productsGrid" class="products-grid">
                     <!-- Products will be loaded here -->
-                    </div>
-                    
-                    <!-- Dynamic Reviews Carousel - Now positioned after products -->
-                    <div class="reviews-carousel-section" style="margin-top: var(--space-3xl);">
-                        <h3 class="section-title">What Our Customers Say</h3>
-                        <div class="reviews-carousel-container">
-                            <div class="reviews-carousel" id="reviewsCarousel">
-                                <!-- Reviews will be dynamically loaded here -->
-                            </div>
-                            <div class="carousel-controls">
-                                <button class="carousel-btn carousel-prev" onclick="scrollReviews('prev')">
-                                    <span>‹</span>
-                                </button>
-                                <button class="carousel-btn carousel-next" onclick="scrollReviews('next')">
-                                    <span>›</span>
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -5648,13 +5648,11 @@
             document.getElementById('districtSelection').style.display = 'none';
             document.getElementById('productsContainer').style.display = 'none';
             
-            // Hide reviews section during city selection with smooth transition
+            // Keep reviews section visible during city selection
             const reviewsSection = document.querySelector('.reviews-carousel-section');
             if (reviewsSection) {
-                reviewsSection.classList.add('hidden');
-                setTimeout(() => {
-                    reviewsSection.style.display = 'none';
-                }, 500);
+                reviewsSection.style.display = 'block';
+                reviewsSection.classList.remove('hidden');
             }
             
             currentCity = null;
@@ -5666,13 +5664,11 @@
             document.getElementById('districtSelection').style.display = 'block';
             document.getElementById('productsContainer').style.display = 'none';
             
-            // Hide reviews section during district selection with smooth transition
+            // Keep reviews section visible during district selection
             const reviewsSection = document.querySelector('.reviews-carousel-section');
             if (reviewsSection) {
-                reviewsSection.classList.add('hidden');
-                setTimeout(() => {
-                    reviewsSection.style.display = 'none';
-                }, 500);
+                reviewsSection.style.display = 'block';
+                reviewsSection.classList.remove('hidden');
             }
             
             currentDistrict = null;
@@ -5683,40 +5679,31 @@
             document.getElementById('districtSelection').style.display = 'none';
             document.getElementById('productsContainer').style.display = 'block';
             
-            // Show reviews section when products are displayed with smooth transition
+            // Keep reviews section visible when products are displayed
             const reviewsSection = document.querySelector('.reviews-carousel-section');
             if (reviewsSection) {
                 reviewsSection.style.display = 'block';
-                // Small delay to ensure display is set before removing hidden class
-                setTimeout(() => {
-                    reviewsSection.classList.remove('hidden');
-                }, 10);
+                reviewsSection.classList.remove('hidden');
                 
-                // Ensure reviews are loaded when products are shown
+                // Ensure reviews are loaded
                 if (reviewsSection.querySelector('.reviews-carousel').children.length === 0) {
                     loadReviewsCarousel();
                 }
             }
         }
 
-        // Function to manage reviews section visibility - Performance Optimized
+        // Function to manage reviews section visibility - Always visible in shop menu
         function manageReviewsVisibility() {
             const reviewsSection = document.querySelector('.reviews-carousel-section');
             if (!reviewsSection) return;
             
-            // Only show reviews when products are visible
-            const productsContainer = document.getElementById('productsContainer');
-            if (productsContainer && productsContainer.style.display === 'block') {
-                reviewsSection.style.display = 'block';
-                // Use requestAnimationFrame for smooth transitions
-                requestAnimationFrame(() => {
-                    reviewsSection.classList.remove('hidden');
-                });
-            } else {
-                reviewsSection.classList.add('hidden');
-                setTimeout(() => {
-                    reviewsSection.style.display = 'none';
-                }, 300); // Reduced from 500ms for better performance
+            // Keep reviews section always visible in shop menu
+            reviewsSection.style.display = 'block';
+            reviewsSection.classList.remove('hidden');
+            
+            // Ensure reviews are loaded
+            if (reviewsSection.querySelector('.reviews-carousel').children.length === 0) {
+                loadReviewsCarousel();
             }
         }
 
