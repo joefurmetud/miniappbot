@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS • Premium Bot Experience</title>
+    <title>Arunas21 • Premium Bot Experience</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
         
@@ -859,21 +859,7 @@
             line-height: var(--leading-tight);
         }
 
-        .product-emoji {
-            font-size: 24px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: var(--apple-gray-6);
-            transition: var(--apple-transition-smooth);
-        }
 
-        .product-card:hover .product-emoji {
-            transform: scale(1.1) rotate(5deg);
-        }
 
         .product-city {
             font-size: var(--text-sm);
@@ -1347,24 +1333,50 @@
         }
 
         .city-icon-container {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto var(--space-4);
-            background: var(--gradient-primary);
-            border-radius: var(--radius-lg);
+            width: 56px;
+            height: 56px;
+            margin: 0 auto var(--space-lg);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(236, 72, 153, 0.9) 100%);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: var(--text-2xl);
             color: white;
-            box-shadow: var(--glass-shadow-md);
-            transition: var(--transition-smooth);
-            border: 1px solid var(--glass-border);
+            box-shadow: 
+                0 8px 24px rgba(99, 102, 241, 0.3),
+                0 4px 12px rgba(236, 72, 153, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .city-icon-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .city-icon-container:hover {
-            transform: scale(1.05);
-            box-shadow: var(--glass-shadow-lg);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                0 12px 32px rgba(99, 102, 241, 0.4),
+                0 8px 20px rgba(236, 72, 153, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .city-icon-container:hover::before {
+            opacity: 1;
         }
 
         .city-name, .district-name {
@@ -1650,7 +1662,7 @@
                 <!-- Header -->
         <div class="header">
 
-            <div class="logo">NEXUS</div>
+            <div class="logo">Arunas21</div>
             <div class="tagline">Premium Bot Experience</div>
             </div>
             
@@ -2260,7 +2272,6 @@
             {
                 id: 1,
                 type: 'Premium Cannabis',
-                emoji: '🌿',
                 city: 'Vilnius',
                 district: 'Senamiestis',
                 price: 25.99,
@@ -2270,7 +2281,6 @@
             {
                 id: 2,
                 type: 'Blue Dream',
-                emoji: '💙',
                 city: 'Vilnius',
                 district: 'Senamiestis',
                 price: 32.50,
@@ -2280,7 +2290,6 @@
             {
                 id: 3,
                 type: 'OG Kush',
-                emoji: '🔥',
                 city: 'Vilnius',
                 district: 'Senamiestis',
                 price: 28.75,
@@ -2290,7 +2299,6 @@
             {
                 id: 4,
                 type: 'White Widow',
-                emoji: '❄️',
                 city: 'Vilnius',
                 district: 'Senamiestis',
                 price: 30.00,
@@ -2300,7 +2308,6 @@
             {
                 id: 5,
                 type: 'Sour Diesel',
-                emoji: '⚡',
                 city: 'Vilnius',
                 district: 'Senamiestis',
                 price: 27.25,
@@ -2338,21 +2345,21 @@
             }
         }
 
-        // Get city-specific icon
+        // Get city-specific icon (professional text-based)
         function getCityIcon(cityName) {
             const cityIcons = {
-                'Vilnius': '🏛️',      // Capital with historic buildings
-                'Kaunas': '🌉',       // Known for bridges and rivers
-                'Klaipėda': '⚓',     // Port city
-                'Šiauliai': '🌟',    // Hill of Crosses
-                'Panevėžys': '🏭',   // Industrial city
-                'Alytus': '🌲',      // Forest city
-                'Marijampolė': '🌾', // Agricultural region
-                'Mažeikiai': '⚡',    // Oil refinery
-                'Jonava': '🏗️',      // Industrial center
-                'Utena': '🏞️'        // Lake region
+                'Vilnius': 'VL',      // Capital with historic buildings
+                'Kaunas': 'KA',       // Known for bridges and rivers
+                'Klaipėda': 'KL',     // Port city
+                'Šiauliai': 'ŠA',    // Hill of Crosses
+                'Panevėžys': 'PN',   // Industrial city
+                'Alytus': 'AL',      // Forest city
+                'Marijampolė': 'MR', // Agricultural region
+                'Mažeikiai': 'MZ',    // Oil refinery
+                'Jonava': 'JN',      // Industrial center
+                'Utena': 'UT'        // Lake region
             };
-            return cityIcons[cityName] || '🏘️'; // Default city icon
+            return cityIcons[cityName] || 'CT'; // Default city icon
         }
 
         // Render cities
@@ -2364,7 +2371,9 @@
                 const card = document.createElement('div');
                 card.className = 'city-card';
                 card.innerHTML = `
-                    <div class="city-icon-container">${getCityIcon(city.name)}</div>
+                    <div class="city-icon-container">
+                        <span style="font-size: 18px; font-weight: 700; letter-spacing: 0.05em;">${getCityIcon(city.name)}</span>
+                    </div>
                     <div class="city-name">${city.name}</div>
                     <div class="city-count">${city.districts?.length || 0} districts</div>
                 `;
@@ -2390,7 +2399,9 @@
                 const card = document.createElement('div');
                 card.className = 'district-card';
                 card.innerHTML = `
-                    <div class="city-icon-container">🏘️</div>
+                    <div class="city-icon-container">
+                        <span style="font-size: 16px; font-weight: 600; letter-spacing: 0.05em;">DT</span>
+                    </div>
                     <div class="district-name">${district.name}</div>
                     <div class="district-count">View products</div>
                 `;
@@ -2474,11 +2485,10 @@
                     <div class="product-header">
                         <div>
                             <div class="product-title">
-                                <div class="product-emoji">${product.emoji || '📦'}</div>
                                 ${product.type || product.name || 'Product'}
                             </div>
                             <div class="product-city">
-                                <div class="city-icon">🏙️</div>
+                                <div class="city-icon">📍</div>
                                 ${product.city} - ${product.district}
                             </div>
                         </div>
@@ -2621,12 +2631,12 @@
                 card.className = 'basket-item';
                 card.innerHTML = `
                     <div class="basket-item-image">
-                        ${item.emoji || '📦'}
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(236, 72, 153, 0.8) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">PD</div>
                     </div>
                     <div class="basket-item-details">
                         <div class="basket-item-name">${item.name || item.type || 'Product'}</div>
                         <div class="basket-item-price">€${item.price} × ${item.quantity} = €${(item.price * item.quantity).toFixed(2)}</div>
-                        <div style="font-size: 12px; color: var(--apple-text-tertiary); margin-top: 4px;">
+                        <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">
                             ${item.city} - ${item.district || 'District'}
                         </div>
                     </div>
