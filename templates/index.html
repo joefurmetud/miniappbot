@@ -253,63 +253,184 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Optimized Header - Clear hierarchy */
+        /* PREMIUM MODERN HEADER - Floating Letters with Backlighting */
         .header {
             text-align: center;
-            /* Refined spacing for better flow */
             margin-bottom: var(--space-3xl);
             position: relative;
+            padding: var(--space-2xl) 0;
+            overflow: hidden;
         }
 
+        /* Premium Backlighting Effect */
         .header::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(
+                circle,
+                rgba(99, 102, 241, 0.3) 0%,
+                rgba(236, 72, 153, 0.2) 30%,
+                rgba(255, 255, 255, 0.1) 60%,
+                transparent 100%
+            );
+            transform: translate(-50%, -50%);
+            animation: headerGlow 6s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Floating Particles Background */
+        .header::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: 
-                linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 40%, rgba(255, 255, 255, 0.08) 100%),
-                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
-            pointer-events: none;
-            animation: headerShimmer 8s ease-in-out infinite;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.1), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(99, 102, 241, 0.1), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(236, 72, 153, 0.1), transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.08), transparent);
+            background-repeat: repeat;
+            background-size: 150px 150px;
+            animation: floatingParticles 20s linear infinite;
+            opacity: 0.4;
+            z-index: 0;
         }
 
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        /* Logo Container with Glassmorphism */
+        .logo-container {
+            position: relative;
+            z-index: 2;
+            display: inline-block;
+            padding: var(--space-lg) var(--space-2xl);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            margin-bottom: var(--space-lg);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        @keyframes headerShimmer {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+        .logo-container:hover {
+            transform: translateY(-4px) scale(1.02);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 16px 48px rgba(0, 0, 0, 0.4),
+                0 8px 24px rgba(99, 102, 241, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
 
-        /* Brand Logo - Strong visual hierarchy */
+        .logo-container:active {
+            transform: translateY(-2px) scale(1.01);
+            transition: all 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Brand Logo - Individual Floating Letters */
         .logo {
-            font-size: var(--text-3xl);
-            font-weight: 800;
+            font-size: var(--text-4xl);
+            font-weight: 900;
             color: var(--text-primary);
             font-family: var(--font-mono);
-            letter-spacing: 0.05em;
-            /* Optimized spacing */
-            margin-bottom: var(--space-md);
-            line-height: var(--leading-tight);
+            letter-spacing: 0.1em;
+            margin: 0;
+            line-height: 1.2;
+            position: relative;
+            z-index: 3;
         }
 
+        .logo span {
+            display: inline-block;
+            animation: letterFloat 3s ease-in-out infinite;
+            transform-origin: center bottom;
+        }
+
+        .logo span:nth-child(1) { animation-delay: 0s; }
+        .logo span:nth-child(2) { animation-delay: 0.1s; }
+        .logo span:nth-child(3) { animation-delay: 0.2s; }
+        .logo span:nth-child(4) { animation-delay: 0.3s; }
+        .logo span:nth-child(5) { animation-delay: 0.4s; }
+        .logo span:nth-child(6) { animation-delay: 0.5s; }
+        .logo span:nth-child(7) { animation-delay: 0.6s; }
+
+        /* Premium Tagline with Glow */
         .tagline {
             color: var(--text-secondary);
-            font-size: var(--text-sm);
-            font-weight: 500;
-            /* Better contrast for readability */
-            opacity: 0.85;
+            font-size: var(--text-base);
+            font-weight: 600;
+            opacity: 0.9;
             line-height: var(--leading-normal);
-            letter-spacing: 0.01em;
+            letter-spacing: 0.02em;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+            animation: taglineGlow 4s ease-in-out infinite;
+            overflow: hidden;
+        }
+
+        .tagline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: taglineShimmer 3s ease-in-out infinite;
+        }
+
+        /* Header Animations */
+        @keyframes headerGlow {
+            0%, 100% { 
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+        }
+
+        @keyframes floatingParticles {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-150px); }
+        }
+
+        @keyframes letterFloat {
+            0%, 100% { 
+                transform: translateY(0px) rotateY(0deg);
+                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+            }
+            50% { 
+                transform: translateY(-8px) rotateY(5deg);
+                filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.5));
+            }
+        }
+
+        @keyframes taglineGlow {
+            0%, 100% { 
+                opacity: 0.9;
+                text-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+            }
+            50% { 
+                opacity: 1;
+                text-shadow: 0 4px 16px rgba(255, 255, 255, 0.4);
+            }
+        }
+
+        @keyframes taglineShimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
 
@@ -644,61 +765,145 @@
         }
 
         /* Apple-style Navigation Tabs */
-        /* OPTIMIZED INTERACTIVE NAVIGATION */
+        /* PREMIUM INTERACTIVE NAVIGATION - Apple Design System */
         .nav-tabs {
             display: flex;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            /* Better spacing for touch targets */
-            padding: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            /* Premium spacing for touch targets */
+            padding: 8px;
             margin-bottom: var(--space-2xl);
-            gap: 4px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            gap: 6px;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             box-shadow: 
-                0 4px 16px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 4px 16px rgba(99, 102, 241, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
             position: relative;
+            animation: navTabsEntrance 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+            overflow: hidden;
         }
 
-        /* FIGMA-STYLE ANIMATED TAB INDICATOR */
+        @keyframes navTabsEntrance {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.9);
+                filter: blur(10px);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateY(-15px) scale(0.95);
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0px);
+            }
+        }
+
+        /* Premium tab entrance stagger */
+        .nav-tab {
+            animation: tabEntrance 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+
+        .nav-tab:nth-child(1) { animation-delay: 0.1s; }
+        .nav-tab:nth-child(2) { animation-delay: 0.15s; }
+        .nav-tab:nth-child(3) { animation-delay: 0.2s; }
+        .nav-tab:nth-child(4) { animation-delay: 0.25s; }
+        .nav-tab:nth-child(5) { animation-delay: 0.3s; }
+        .nav-tab:nth-child(6) { animation-delay: 0.35s; }
+        .nav-tab:nth-child(7) { animation-delay: 0.4s; }
+
+        @keyframes tabEntrance {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.8);
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0px);
+            }
+        }
+
+        /* Premium Navigation Container Entrance */
+        .nav-tabs {
+            animation: navTabsEntrance 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Enhanced Tab Entrance with Stagger */
+        .nav-tab {
+            animation: tabEntrance 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+
+        .nav-tab:nth-child(1) { animation-delay: 0.1s; }
+        .nav-tab:nth-child(2) { animation-delay: 0.15s; }
+        .nav-tab:nth-child(3) { animation-delay: 0.2s; }
+        .nav-tab:nth-child(4) { animation-delay: 0.25s; }
+        .nav-tab:nth-child(5) { animation-delay: 0.3s; }
+        .nav-tab:nth-child(6) { animation-delay: 0.35s; }
+        .nav-tab:nth-child(7) { animation-delay: 0.4s; }
+
+        /* Prevent layout shifts during loading */
+        .nav-tabs {
+            min-height: 80px;
+            contain: layout style paint;
+        }
+
+        /* Smooth tab indicator positioning */
+        .nav-tabs::after {
+            transform-origin: left center;
+        }
+
+        /* PREMIUM ANIMATED TAB INDICATOR - Apple Design System */
         .nav-tabs {
             --indicator-position: 0%;
+            --indicator-width: 14.285%; /* 100% / 7 tabs */
         }
 
         .nav-tabs::after {
             content: '';
             position: absolute;
-            top: 6px;
-            left: 6px;
-            width: calc(33.333% - 4px);
-            height: calc(100% - 12px);
+            top: 8px;
+            left: 8px;
+            width: calc(var(--indicator-width) - 6px);
+            height: calc(100% - 16px);
             background: linear-gradient(135deg, 
-                rgba(99, 102, 241, 0.9) 0%, 
-                rgba(236, 72, 153, 0.9) 100%);
-            border-radius: 12px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                rgba(99, 102, 241, 0.95) 0%, 
+                rgba(236, 72, 153, 0.95) 50%,
+                rgba(99, 102, 241, 0.95) 100%);
+            border-radius: 16px;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             box-shadow: 
-                0 6px 20px rgba(99, 102, 241, 0.4),
-                0 2px 8px rgba(236, 72, 153, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+                0 8px 32px rgba(99, 102, 241, 0.5),
+                0 4px 16px rgba(236, 72, 153, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
             z-index: 1;
-            transform: translateX(var(--indicator-position));
+            transform: translateX(calc(var(--indicator-position) * 1));
+            will-change: transform;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+            filter: blur(0.5px);
         }
 
         .nav-tab {
             flex: 1;
             background: transparent;
             border: none;
-            color: rgba(255, 255, 255, 0.7);
-            /* Optimized padding for better touch targets */
-            padding: var(--space-md) var(--space-lg);
-            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.75);
+            /* Premium padding for better touch targets */
+            padding: var(--space-lg) var(--space-xl);
+            border-radius: 16px;
             font-size: var(--text-sm);
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             text-align: center;
             font-family: var(--font-primary);
             position: relative;
@@ -706,86 +911,159 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: var(--space-xs);
+            gap: var(--space-sm);
             line-height: var(--leading-tight);
-            letter-spacing: 0.01em;
+            letter-spacing: 0.02em;
+            will-change: transform, color, background;
+            backface-visibility: hidden;
+            overflow: hidden;
         }
 
         .nav-tab .nav-icon {
             font-size: 18px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+            backface-visibility: hidden;
         }
 
         .nav-tab span {
             font-size: var(--text-xs);
             font-weight: 500;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             line-height: var(--leading-tight);
+            will-change: transform, color;
+            backface-visibility: hidden;
         }
 
         .nav-tab.active {
             color: white;
-            /* Rule 5: Emphasize active state */
-            font-weight: 600;
+            font-weight: 700;
+            transform: translateY(-2px);
+            text-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 8px 24px rgba(99, 102, 241, 0.3),
+                0 4px 12px rgba(236, 72, 153, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .nav-tab.active .nav-icon {
-            transform: scale(1.1);
+            transform: scale(1.2);
+            filter: drop-shadow(0 4px 16px rgba(255, 255, 255, 0.4));
+        }
+
+        .nav-tab.active span {
+            transform: translateY(-1px);
+            filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.3));
         }
 
         .nav-tab:hover:not(.active) {
-            color: rgba(255, 255, 255, 0.8);
-            transform: translateY(-1px);
+            color: rgba(255, 255, 255, 0.95);
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                0 8px 24px rgba(0, 0, 0, 0.2),
+                0 4px 12px rgba(99, 102, 241, 0.1);
         }
 
         .nav-tab:hover:not(.active) .nav-icon {
-            transform: scale(1.05);
+            transform: scale(1.15);
+            filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.2));
         }
 
-        .nav-tab:hover:not(.active) {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
+        .nav-tab:hover:not(.active) span {
+            transform: translateY(-1px);
+            color: rgba(255, 255, 255, 1);
         }
 
         .nav-tab:active {
-            transform: scale(0.98);
+            transform: scale(0.94) translateY(0);
+            transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 0, 0, 0.2),
+                0 1px 2px rgba(255, 255, 255, 0.1);
         }
 
-        /* Clean Navigation Icons */
+        /* Premium Navigation Icons with Enhanced Interactions */
         .nav-icon {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            transition: var(--apple-transition-smooth);
+            font-size: 20px;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
         }
 
         .nav-tab.active .nav-icon {
-            transform: scale(1.1);
+            transform: scale(1.2);
+        }
+
+        /* Premium Ripple Effect on Tab Click */
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .nav-tab:active::before {
+            width: 120px;
+            height: 120px;
+            opacity: 1;
+        }
+
+        /* Floating Particles Background */
+        .nav-tabs::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.1), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(99, 102, 241, 0.1), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(236, 72, 153, 0.1), transparent);
+            background-repeat: repeat;
+            background-size: 100px 100px;
+            animation: floatingParticles 20s linear infinite;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        @keyframes floatingParticles {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-100px); }
         }
 
         /* Content Sections */
         .content-section {
             display: none;
             padding: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .content-section.active {
             display: block;
-            animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .content-section.fade-out {
+            opacity: 0;
+            transform: translateY(20px);
         }
 
         /* Optimized Product Grid */
@@ -1159,26 +1437,56 @@
             width: 100%;
         }
 
-        /* Basket Badge */
+        /* Premium Interactive Basket Badge */
         .basket-badge {
             position: absolute;
-            top: -6px;
-            right: -6px;
-            background: var(--apple-red);
-            color: var(--apple-text-white);
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #FF3B30 0%, #FF6B6B 100%);
+            color: white;
             border-radius: 50%;
-            min-width: 18px;
-            height: 18px;
-            font-size: 11px;
-            font-weight: 600;
+            min-width: 22px;
+            height: 22px;
+            font-size: 12px;
+            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            border: 2px solid var(--apple-bg-primary);
+            padding: 0 6px;
+            box-shadow: 
+                0 4px 12px rgba(255, 59, 48, 0.4),
+                0 2px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
-            transition: var(--apple-transition-smooth);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            animation: badgePulse 2s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        .basket-badge:hover {
+            transform: scale(1.1);
+            box-shadow: 
+                0 6px 20px rgba(255, 59, 48, 0.6),
+                0 4px 16px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 
+                    0 4px 12px rgba(255, 59, 48, 0.4),
+                    0 2px 8px rgba(0, 0, 0, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 
+                    0 6px 20px rgba(255, 59, 48, 0.6),
+                    0 4px 16px rgba(0, 0, 0, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            }
         }
 
         /* Loading States */
@@ -1757,30 +2065,60 @@
             
             .header {
                 margin-bottom: var(--space-2xl);
+                padding: var(--space-xl) 0;
+            }
+            
+            .logo-container {
+                padding: var(--space-md) var(--space-xl);
+                border-radius: 20px;
             }
             
             .logo {
                 font-size: var(--text-2xl);
+                letter-spacing: 0.05em;
+            }
+            
+            .logo span {
+                animation: letterFloat 2s ease-in-out infinite;
             }
             
             .tagline {
                 font-size: var(--text-xs);
             }
             
+            .header::before {
+                width: 200px;
+                height: 200px;
+            }
+            
             .nav-tabs {
                 margin-bottom: var(--space-xl);
+                padding: 6px;
+                gap: 4px;
             }
             
             .nav-tab {
-                padding: var(--space-sm) var(--space-md);
+                padding: var(--space-md) var(--space-lg);
+                border-radius: 14px;
             }
             
             .nav-tab .nav-icon {
-                font-size: 16px;
+                font-size: 18px;
+                width: 20px;
+                height: 20px;
             }
             
             .nav-tab span {
-                font-size: 10px;
+                font-size: 11px;
+                font-weight: 600;
+            }
+
+            .basket-badge {
+                min-width: 20px;
+                height: 20px;
+                font-size: 11px;
+                top: -6px;
+                right: -6px;
             }
             
             .section-title {
@@ -3038,10 +3376,20 @@
     <div class="container">
                 <!-- Header -->
         <div class="header">
-
-            <div class="logo">Arunas21</div>
-            <div class="tagline">Premium Bot Experience</div>
+            <div class="logo-container">
+                <div class="logo">
+                    <span>A</span>
+                    <span>r</span>
+                    <span>u</span>
+                    <span>n</span>
+                    <span>a</span>
+                    <span>s</span>
+                    <span>2</span>
+                    <span>1</span>
+                </div>
             </div>
+            <div class="tagline">Premium Bot Experience</div>
+        </div>
             
         <!-- Newsletter Banner -->
         <div id="newsletterBanner" class="newsletter-banner" style="display: none;">
@@ -3960,9 +4308,22 @@
 
         // Setup event listeners
         function setupEventListeners() {
-            // Tab navigation
+            // Enhanced tab navigation with premium interactions
             document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+                tab.addEventListener('click', (e) => {
+                    // Add premium click effect
+                    addPremiumClickEffect(e);
+                    switchTab(tab.dataset.tab);
+                });
+                
+                // Add hover sound effect simulation
+                tab.addEventListener('mouseenter', () => {
+                    addHoverGlow(tab);
+                });
+                
+                tab.addEventListener('mouseleave', () => {
+                    removeHoverGlow(tab);
+                });
             });
 
             // Navigation buttons
@@ -3976,6 +4337,58 @@
             const newsletterToggle = document.getElementById('newsletterToggle');
             if (newsletterToggle) {
                 newsletterToggle.addEventListener('change', toggleNewsletter);
+            }
+        }
+
+        // Premium click effect for tabs
+        function addPremiumClickEffect(event) {
+            const tab = event.currentTarget;
+            const ripple = document.createElement('div');
+            ripple.className = 'tab-ripple';
+            ripple.style.cssText = `
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                z-index: 1;
+                pointer-events: none;
+            `;
+            
+            tab.appendChild(ripple);
+            
+            // Animate ripple
+            setTimeout(() => {
+                ripple.style.width = '200px';
+                ripple.style.height = '200px';
+                ripple.style.opacity = '0';
+            }, 10);
+            
+            // Remove ripple after animation
+            setTimeout(() => {
+                if (ripple.parentNode) {
+                    ripple.parentNode.removeChild(ripple);
+                }
+            }, 600);
+        }
+
+        // Add hover glow effect
+        function addHoverGlow(tab) {
+            tab.style.boxShadow = `
+                0 8px 32px rgba(99, 102, 241, 0.2),
+                0 4px 16px rgba(236, 72, 153, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1)
+            `;
+        }
+
+        // Remove hover glow effect
+        function removeHoverGlow(tab) {
+            if (!tab.classList.contains('active')) {
+                tab.style.boxShadow = 'none';
             }
         }
 
@@ -3999,10 +4412,22 @@
             // Update active content with smooth transition
             document.querySelectorAll('.content-section').forEach(section => {
                 const isActive = section.id === tabName + 'Section';
-                section.classList.toggle('active', isActive);
                 
                 if (isActive) {
-                    section.style.animation = 'fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                    // Add fade-out to all sections first
+                    document.querySelectorAll('.content-section').forEach(s => {
+                        if (s !== section) {
+                            s.classList.remove('active');
+                            s.classList.add('fade-out');
+                        }
+                    });
+                    
+                    // Small delay for smooth transition
+                    setTimeout(() => {
+                        // Remove fade-out and add active to current section
+                        section.classList.remove('fade-out');
+                        section.classList.add('active');
+                    }, 50);
                 }
             });
 
@@ -4029,8 +4454,20 @@
         function updateTabIndicator(activeIndex) {
             const tabsContainer = document.querySelector('.nav-tabs');
             if (tabsContainer && tabsContainer.style) {
-                const translateX = activeIndex * (100/3); // 33.33% per tab
+                // Calculate precise position for each tab
+                // Each tab takes up 1/7 of the width, so we multiply by the index
+                const translateX = activeIndex * (100/7); // 14.285% per tab (7 tabs total)
+                
+                // Apply the position with smooth transition
                 tabsContainer.style.setProperty('--indicator-position', `${translateX}%`);
+                
+                // Force a reflow to ensure smooth animation
+                tabsContainer.offsetHeight;
+                
+                // Add a small delay to ensure smooth animation
+                setTimeout(() => {
+                    tabsContainer.style.setProperty('--indicator-position', `${translateX}%`);
+                }, 10);
             }
         }
 
@@ -4917,48 +5354,7 @@
             }
         }
 
-        // Enhanced tab switching to handle new sections
-        function switchTab(tabName) {
-            // Hide all content sections
-            const sections = document.querySelectorAll('.content-section');
-            sections.forEach(section => section.classList.remove('active'));
-
-            // Remove active class from all tabs
-            const tabs = document.querySelectorAll('.nav-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-
-            // Show selected section and activate tab
-            const selectedSection = document.getElementById(tabName + 'Section');
-            const selectedTab = document.querySelector(`[data-tab="${tabName}"]`);
-            
-            if (selectedSection) {
-                selectedSection.classList.add('active');
-            }
-            if (selectedTab) {
-                selectedTab.classList.add('active');
-            }
-
-            // Load section-specific data
-            switch(tabName) {
-                case 'products':
-                    // Reset to city selection when switching to products
-                    showCitySelection();
-                    break;
-                case 'refill':
-                    loadUserBalance();
-                    document.getElementById('refillCurrentBalance').textContent = document.getElementById('profileBalance').textContent;
-                    break;
-                case 'reviews':
-                    loadReviews();
-                    break;
-                case 'pricelist':
-                    loadPriceList();
-                    break;
-                case 'settings':
-                    loadUserSettings();
-                    break;
-            }
-        }
+        // Enhanced tab switching to handle new sections - REMOVED DUPLICATE
 
         async function loadUserSettings() {
             try {
