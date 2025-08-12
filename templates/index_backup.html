@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS • Premium Bot Experience</title>
+    <title>Premium Bot Shop</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@100;200;300;400;500;600;700;800;900&family=SF+Pro+Text:wght@100;200;300;400;500;600;700;800;900&display=swap');
         
         :root {
             /* Apple Design System Colors */
@@ -83,15 +83,14 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #0a0a0a;
-            color: #ffffff;
+            font-family: 'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--apple-bg-grouped-primary);
+            color: var(--apple-text-primary);
             line-height: 1.47;
             overflow-x: hidden;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            position: relative;
         }
 
         /* Enhanced Apple-style background with dynamic effects */
@@ -103,9 +102,10 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(240, 147, 251, 0.3) 0%, transparent 50%);
+                radial-gradient(circle at 20% 20%, rgba(0, 122, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(88, 86, 214, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(255, 45, 146, 0.06) 0%, transparent 50%),
+                linear-gradient(135deg, #f2f2f7 0%, rgba(242, 242, 247, 0.95) 100%);
             z-index: -2;
             animation: backgroundFlow 20s ease-in-out infinite;
         }
@@ -118,27 +118,26 @@
             width: 100%;
             height: 100%;
             background: 
-                linear-gradient(45deg, transparent 30%, rgba(0, 212, 255, 0.15) 50%, transparent 70%),
-                linear-gradient(-45deg, transparent 30%, rgba(183, 148, 246, 0.15) 50%, transparent 70%);
-            animation: shimmerFlow 15s ease-in-out infinite;
+                linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.03) 50%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(0, 122, 255, 0.02) 50%, transparent 52%);
+            background-size: 60px 60px;
             z-index: -1;
+            animation: subtleMove 15s linear infinite;
         }
 
         @keyframes backgroundFlow {
-            0%, 100% { transform: translateX(0) translateY(0) scale(1); }
-            25% { transform: translateX(-20px) translateY(-20px) scale(1.05); }
-            50% { transform: translateX(20px) translateY(-10px) scale(0.95); }
-            75% { transform: translateX(-10px) translateY(20px) scale(1.02); }
+            0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+            25% { filter: hue-rotate(5deg) brightness(1.02); }
+            50% { filter: hue-rotate(-3deg) brightness(0.98); }
+            75% { filter: hue-rotate(8deg) brightness(1.01); }
         }
 
-        @keyframes shimmerFlow {
-            0%, 100% { opacity: 0.3; transform: translateX(-100px); }
-            50% { opacity: 0.6; transform: translateX(100px); }
-        }
-
-        @keyframes containerFloat {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
+        @keyframes subtleMove {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(10px, -5px); }
+            50% { transform: translate(-5px, 10px); }
+            75% { transform: translate(5px, -8px); }
+            100% { transform: translate(0, 0); }
         }
 
 
@@ -148,17 +147,13 @@
             max-width: 400px;
             margin: 0 auto;
             min-height: 100vh;
-            background: rgba(20, 20, 20, 0.85);
+            background: var(--apple-bg-grouped-secondary);
             position: relative;
-            border-radius: 24px;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-radius: var(--apple-radius-xl);
+            box-shadow: var(--apple-shadow-card);
             overflow: hidden;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: containerFloat 6s ease-in-out infinite;
         }
 
         /* Enhanced Apple-style Header */
@@ -1396,8 +1391,8 @@
             <div class="theme-switcher">
                 <button id="themeSwitcher" class="theme-btn">🎨</button>
                 </div>
-            <div class="logo">NEXUS</div>
-            <div class="tagline">Premium Bot Experience</div>
+            <div class="logo">🛍️ Premium Shop</div>
+            <div class="tagline">Experience luxury shopping</div>
             </div>
             
         <!-- Newsletter Banner -->
