@@ -120,25 +120,7 @@
             letter-spacing: -0.01em;
         }
 
-        /* CINEMATIC VIDEO BACKGROUND */
-        .video-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .video-background video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.3) contrast(1.2) saturate(0.8);
-        }
-
-        /* FIGMA-QUALITY OVERLAY */
+        /* PREMIUM SEAMLESS BACKGROUND OVERLAY - Enhanced depth and contrast */
         .video-overlay {
             position: fixed;
             top: 0;
@@ -146,15 +128,15 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 30% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 70% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
+                radial-gradient(circle at 30% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(236, 72, 153, 0.06) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
             z-index: -1;
-            backdrop-filter: blur(1px);
-            -webkit-backdrop-filter: blur(1px);
+            backdrop-filter: blur(0.5px);
+            -webkit-backdrop-filter: blur(0.5px);
         }
 
-        /* Enhanced Apple-style background with dynamic effects */
+        /* PREMIUM SEAMLESS FLOWING BACKGROUND - Video-like continuous motion */
         body::before {
             content: '';
             position: fixed;
@@ -163,11 +145,12 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(240, 147, 251, 0.3) 0%, transparent 50%);
-            z-index: -2;
-            animation: backgroundFlow 20s ease-in-out infinite;
+                radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(240, 147, 251, 0.2) 0%, transparent 50%);
+            z-index: -3;
+            animation: seamlessFlow 30s linear infinite;
+            filter: blur(0.5px);
         }
 
         body::after {
@@ -178,22 +161,259 @@
             width: 100%;
             height: 100%;
             background: 
-                linear-gradient(45deg, transparent 30%, rgba(0, 212, 255, 0.15) 50%, transparent 70%),
-                linear-gradient(-45deg, transparent 30%, rgba(183, 148, 246, 0.15) 50%, transparent 70%);
-            animation: shimmerFlow 15s ease-in-out infinite;
-            z-index: -1;
+                linear-gradient(45deg, transparent 30%, rgba(0, 212, 255, 0.1) 50%, transparent 70%),
+                linear-gradient(-45deg, transparent 30%, rgba(183, 148, 246, 0.1) 50%, transparent 70%);
+            animation: shimmerFlow 25s linear infinite;
+            z-index: -2;
+            filter: blur(0.3px);
         }
 
-        @keyframes backgroundFlow {
-            0%, 100% { transform: translateX(0) translateY(0) scale(1); }
-            25% { transform: translateX(-20px) translateY(-20px) scale(1.05); }
-            50% { transform: translateX(20px) translateY(-10px) scale(0.95); }
-            75% { transform: translateX(-10px) translateY(20px) scale(1.02); }
+        /* Additional seamless background layers for depth */
+        .seamless-bg-layer-1 {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 60% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 30% 70%, rgba(236, 72, 153, 0.12) 0%, transparent 60%);
+            z-index: -4;
+            animation: depthFlow 40s linear infinite;
+            filter: blur(0.8px);
+        }
+
+        .seamless-bg-layer-2 {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.03) 25%, transparent 50%, rgba(255, 255, 255, 0.03) 75%, transparent 100%);
+            z-index: -5;
+            animation: horizontalFlow 35s linear infinite;
+            filter: blur(1px);
+        }
+
+        .seamless-bg-layer-3 {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(99, 102, 241, 0.08) 90deg, transparent 180deg, rgba(236, 72, 153, 0.08) 270deg, transparent 360deg);
+            z-index: -6;
+            animation: conicFlow 50s linear infinite;
+            filter: blur(1.2px);
+        }
+
+        /* Floating particles for premium atmosphere */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -7;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: particleFloat 20s linear infinite;
+        }
+
+        .particle:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { top: 30%; left: 80%; animation-delay: 2s; }
+        .particle:nth-child(3) { top: 60%; left: 10%; animation-delay: 4s; }
+        .particle:nth-child(4) { top: 80%; left: 70%; animation-delay: 6s; }
+        .particle:nth-child(5) { top: 40%; left: 50%; animation-delay: 8s; }
+        .particle:nth-child(6) { top: 70%; left: 30%; animation-delay: 10s; }
+        .particle:nth-child(7) { top: 20%; left: 60%; animation-delay: 12s; }
+        .particle:nth-child(8) { top: 90%; left: 40%; animation-delay: 14s; }
+
+        @keyframes seamlessFlow {
+            0% { 
+                transform: translateX(0) translateY(0) scale(1) rotate(0deg);
+                filter: hue-rotate(0deg);
+            }
+            25% { 
+                transform: translateX(-15px) translateY(-15px) scale(1.02) rotate(1deg);
+                filter: hue-rotate(90deg);
+            }
+            50% { 
+                transform: translateX(15px) translateY(-10px) scale(0.98) rotate(2deg);
+                filter: hue-rotate(180deg);
+            }
+            75% { 
+                transform: translateX(-10px) translateY(15px) scale(1.01) rotate(1deg);
+                filter: hue-rotate(270deg);
+            }
+            100% { 
+                transform: translateX(0) translateY(0) scale(1) rotate(0deg);
+                filter: hue-rotate(360deg);
+            }
         }
 
         @keyframes shimmerFlow {
-            0%, 100% { opacity: 0.3; transform: translateX(-100px); }
-            50% { opacity: 0.6; transform: translateX(100px); }
+            0% { 
+                opacity: 0.2; 
+                transform: translateX(-100px) translateY(0) scale(1);
+            }
+            50% { 
+                opacity: 0.4; 
+                transform: translateX(100px) translateY(-20px) scale(1.1);
+            }
+            100% { 
+                opacity: 0.2; 
+                transform: translateX(-100px) translateY(0) scale(1);
+            }
+        }
+
+        @keyframes depthFlow {
+            0% { 
+                transform: translateX(0) translateY(0) scale(1) rotate(0deg);
+                opacity: 0.8;
+            }
+            33% { 
+                transform: translateX(20px) translateY(-15px) scale(1.05) rotate(1deg);
+                opacity: 1;
+            }
+            66% { 
+                transform: translateX(-20px) translateY(20px) scale(0.95) rotate(-1deg);
+                opacity: 0.6;
+            }
+            100% { 
+                transform: translateX(0) translateY(0) scale(1) rotate(0deg);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes horizontalFlow {
+            0% { 
+                transform: translateX(-100%) translateY(0) scale(1);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translateX(0%) translateY(-10px) scale(1.02);
+                opacity: 0.6;
+            }
+            100% { 
+                transform: translateX(100%) translateY(0) scale(1);
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes conicFlow {
+            0% { 
+                transform: rotate(0deg) scale(1);
+                opacity: 0.4;
+            }
+            50% { 
+                transform: rotate(180deg) scale(1.1);
+                opacity: 0.7;
+            }
+            100% { 
+                transform: rotate(360deg) scale(1);
+                opacity: 0.4;
+            }
+        }
+
+        @keyframes particleFloat {
+            0% { 
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0.1;
+            }
+            25% { 
+                transform: translateY(-20px) translateX(10px) scale(1.2);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translateY(-40px) translateX(-10px) scale(0.8);
+                opacity: 0.1;
+            }
+            75% { 
+                transform: translateY(-20px) translateX(15px) scale(1.1);
+                opacity: 0.2;
+            }
+            100% { 
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0.1;
+            }
+        }
+
+        /* Interactive background response to user movement */
+        .container:hover ~ .seamless-bg-layer-1 {
+            animation-duration: 25s;
+        }
+
+        .container:hover ~ .seamless-bg-layer-2 {
+            animation-duration: 20s;
+        }
+
+        .container:hover ~ .seamless-bg-layer-3 {
+            animation-duration: 35s;
+        }
+
+        /* Smooth performance optimizations */
+        .seamless-bg-layer-1,
+        .seamless-bg-layer-2,
+        .seamless-bg-layer-3,
+        .floating-particles,
+        .particle {
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+        }
+
+        /* Enhanced mobile responsiveness for background */
+        @media (max-width: 480px) {
+            .seamless-bg-layer-1,
+            .seamless-bg-layer-2,
+            .seamless-bg-layer-3 {
+                filter: blur(0.3px);
+            }
+            
+            .particle {
+                width: 1px;
+                height: 1px;
+            }
+        }
+
+        /* Tab ripple effect styles */
+        .tab-ripple {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Ensure background layers are properly positioned */
+        .seamless-bg-layer-1,
+        .seamless-bg-layer-2,
+        .seamless-bg-layer-3 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
         }
 
         @keyframes containerFloat {
@@ -768,7 +988,10 @@
         /* PREMIUM INTERACTIVE NAVIGATION - Apple Design System */
         .nav-tabs {
             display: flex;
-            background: rgba(255, 255, 255, 0.08);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.08) 0%, 
+                rgba(255, 255, 255, 0.05) 50%, 
+                rgba(255, 255, 255, 0.08) 100%);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 20px;
             /* Premium spacing for touch targets */
@@ -780,11 +1003,42 @@
             box-shadow: 
                 0 8px 32px rgba(0, 0, 0, 0.3),
                 0 4px 16px rgba(99, 102, 241, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 0 20px rgba(99, 102, 241, 0.05);
             position: relative;
-            animation: navTabsEntrance 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            animation: navTabsEntrance 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), navTabsBreathing 4s ease-in-out infinite;
             will-change: transform;
             overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes navTabsBreathing {
+            0%, 100% { 
+                box-shadow: 
+                    0 8px 32px rgba(0, 0, 0, 0.3),
+                    0 4px 16px rgba(99, 102, 241, 0.1),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                    0 0 0 1px rgba(255, 255, 255, 0.05),
+                    inset 0 0 20px rgba(99, 102, 241, 0.05);
+            }
+            50% { 
+                box-shadow: 
+                    0 10px 36px rgba(0, 0, 0, 0.32),
+                    0 5px 18px rgba(99, 102, 241, 0.12),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+                    0 0 0 1px rgba(255, 255, 255, 0.06),
+                    inset 0 0 24px rgba(99, 102, 241, 0.06);
+            }
+        }
+
+        .nav-tabs:hover {
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.35),
+                0 6px 20px rgba(99, 102, 241, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
         }
 
         @keyframes navTabsEntrance {
@@ -874,22 +1128,21 @@
             width: calc(var(--indicator-width) - 6px);
             height: calc(100% - 16px);
             background: linear-gradient(135deg, 
-                rgba(99, 102, 241, 0.95) 0%, 
-                rgba(236, 72, 153, 0.95) 50%,
-                rgba(99, 102, 241, 0.95) 100%);
+                rgba(99, 102, 241, 0.85) 0%, 
+                rgba(236, 72, 153, 0.85) 50%,
+                rgba(99, 102, 241, 0.85) 100%);
             border-radius: 16px;
-            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             box-shadow: 
-                0 8px 32px rgba(99, 102, 241, 0.5),
-                0 4px 16px rgba(236, 72, 153, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
+                0 8px 24px rgba(99, 102, 241, 0.3),
+                0 4px 12px rgba(236, 72, 153, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
             z-index: 1;
-            transform: translateX(calc(var(--indicator-position) * 1));
             will-change: transform;
             backface-visibility: hidden;
             transform-style: preserve-3d;
             filter: blur(0.5px);
+            transform: translateX(var(--indicator-position));
         }
 
         .nav-tab {
@@ -903,7 +1156,7 @@
             font-size: var(--text-sm);
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             text-align: center;
             font-family: var(--font-primary);
             position: relative;
@@ -920,8 +1173,14 @@
         }
 
         .nav-tab .nav-icon {
-            font-size: 18px;
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
             will-change: transform;
             backface-visibility: hidden;
         }
@@ -944,11 +1203,39 @@
                 0 8px 24px rgba(99, 102, 241, 0.3),
                 0 4px 12px rgba(236, 72, 153, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            animation: activeTabShimmer 2s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes activeTabShimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         .nav-tab.active .nav-icon {
             transform: scale(1.2);
             filter: drop-shadow(0 4px 16px rgba(255, 255, 255, 0.4));
+            animation: activeIconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes activeIconFloat {
+            0%, 100% { transform: scale(1.2) translateY(0); }
+            50% { transform: scale(1.2) translateY(-2px); }
         }
 
         .nav-tab.active span {
@@ -962,7 +1249,9 @@
             background: rgba(255, 255, 255, 0.08);
             box-shadow: 
                 0 8px 24px rgba(0, 0, 0, 0.2),
-                0 4px 12px rgba(99, 102, 241, 0.1);
+                0 4px 12px rgba(99, 102, 241, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .nav-tab:hover:not(.active) .nav-icon {
@@ -982,6 +1271,18 @@
             box-shadow: 
                 inset 0 2px 8px rgba(0, 0, 0, 0.2),
                 0 1px 2px rgba(255, 255, 255, 0.1);
+            filter: brightness(1.1);
+        }
+
+        /* Tab Click Feedback */
+        .nav-tab.clicked {
+            animation: tabClickFeedback 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes tabClickFeedback {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
         }
 
         /* Premium Navigation Icons with Enhanced Interactions */
@@ -1020,6 +1321,61 @@
             width: 120px;
             height: 120px;
             opacity: 1;
+        }
+
+        /* Tab Ripple Effect */
+        .tab-ripple {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: tabRippleExpand 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes tabRippleExpand {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            100% {
+                width: 200px;
+                height: 200px;
+                opacity: 0;
+            }
+        }
+
+        /* Active Tab Glow Effect */
+        .tab-glow-active {
+            animation: activeTabGlow 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes activeTabGlow {
+            0% {
+                box-shadow: 
+                    0 8px 24px rgba(99, 102, 241, 0.3),
+                    0 4px 12px rgba(236, 72, 153, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            }
+            50% {
+                box-shadow: 
+                    0 12px 32px rgba(99, 102, 241, 0.4),
+                    0 6px 16px rgba(236, 72, 153, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                    0 0 20px rgba(99, 102, 241, 0.2);
+            }
+            100% {
+                box-shadow: 
+                    0 8px 24px rgba(99, 102, 241, 0.3),
+                    0 4px 12px rgba(236, 72, 153, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            }
         }
 
         /* Floating Particles Background */
@@ -3361,13 +3717,21 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <!-- CINEMATIC VIDEO BACKGROUND -->
-    <div class="video-background">
-        <video autoplay muted loop playsinline>
-            <source src="https://cdn.coverr.co/videos/coverr-masked-figures-in-dark-alley-6142/1080p.mp4" type="video/mp4">
-            <!-- Fallback for the specific Pexels video you mentioned -->
-            <source src="https://player.vimeo.com/external/458048611.hd.mp4?s=8e8741dbee251fca2cc2078bdabf7ea47a9e6e93&profile_id=175" type="video/mp4">
-        </video>
+    <!-- PREMIUM SEAMLESS FLOWING BACKGROUND LAYERS -->
+    <div class="seamless-bg-layer-1"></div>
+    <div class="seamless-bg-layer-2"></div>
+    <div class="seamless-bg-layer-3"></div>
+    
+    <!-- Floating particles for premium atmosphere -->
+    <div class="floating-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
     </div>
     
     <!-- FIGMA-QUALITY OVERLAY -->
@@ -4298,6 +4662,9 @@
                 
                 setupEventListeners();
                 
+                // Initialize the interactive background system
+                initInteractiveBackground();
+                
             } catch (error) {
                 console.error('Initialization error:', error);
                 showError('Failed to initialize app');
@@ -4458,16 +4825,55 @@
                 // Each tab takes up 1/7 of the width, so we multiply by the index
                 const translateX = activeIndex * (100/7); // 14.285% per tab (7 tabs total)
                 
-                // Apply the position with smooth transition
+                // Apply the position with smooth transition - immediate and fluid
                 tabsContainer.style.setProperty('--indicator-position', `${translateX}%`);
                 
                 // Force a reflow to ensure smooth animation
                 tabsContainer.offsetHeight;
                 
-                // Add a small delay to ensure smooth animation
+                // Add premium click effect for visual feedback
+                addPremiumClickEffect(activeIndex);
+                
+                // Add subtle glow effect to active tab
+                addActiveTabGlow(activeIndex);
+            }
+        }
+
+        // Enhanced Premium Click Effect
+        function addPremiumClickEffect(activeIndex) {
+            const activeTab = document.querySelectorAll('.nav-tab')[activeIndex];
+            if (activeTab) {
+                // Add ripple effect
+                const ripple = document.createElement('div');
+                ripple.className = 'tab-ripple';
+                activeTab.appendChild(ripple);
+                
+                // Add click feedback animation
+                activeTab.classList.add('clicked');
                 setTimeout(() => {
-                    tabsContainer.style.setProperty('--indicator-position', `${translateX}%`);
-                }, 10);
+                    activeTab.classList.remove('clicked');
+                }, 300);
+                
+                // Remove ripple after animation
+                setTimeout(() => {
+                    if (ripple.parentNode) {
+                        ripple.parentNode.removeChild(ripple);
+                    }
+                }, 600);
+            }
+        }
+
+        // Active Tab Glow Effect
+        function addActiveTabGlow(activeIndex) {
+            // Remove previous glow from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('tab-glow-active');
+            });
+            
+            // Add glow to active tab
+            const activeTab = document.querySelectorAll('.nav-tab')[activeIndex];
+            if (activeTab) {
+                activeTab.classList.add('tab-glow-active');
             }
         }
 
@@ -5367,6 +5773,90 @@
             } catch (error) {
                 console.error('Error loading user settings:', error);
             }
+        }
+
+        // Interactive Background System - Creates seamless, responsive motion
+        function initInteractiveBackground() {
+            const layers = document.querySelectorAll('.seamless-bg-layer-1, .seamless-bg-layer-2, .seamless-bg-layer-3');
+            const particles = document.querySelectorAll('.particle');
+            let mouseX = 0, mouseY = 0;
+            let isMoving = false;
+            let moveTimeout;
+
+            // Track mouse movement for interactive background
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX / window.innerWidth;
+                mouseY = e.clientY / window.innerHeight;
+                
+                if (!isMoving) {
+                    isMoving = true;
+                    layers.forEach((layer, index) => {
+                        layer.style.animationPlayState = 'running';
+                        layer.style.animationDuration = `${20 + index * 5}s`;
+                    });
+                }
+
+                // Clear timeout
+                clearTimeout(moveTimeout);
+                moveTimeout = setTimeout(() => {
+                    isMoving = false;
+                    layers.forEach((layer, index) => {
+                        layer.style.animationDuration = `${30 + index * 10}s`;
+                    });
+                }, 1000);
+
+                // Subtle parallax effect on mouse movement
+                layers.forEach((layer, index) => {
+                    const speed = (index + 1) * 0.5;
+                    const x = (mouseX - 0.5) * speed;
+                    const y = (mouseY - 0.5) * speed;
+                    layer.style.transform = `translateX(${x}px) translateY(${y}px)`;
+                });
+            });
+
+            // Touch support for mobile devices
+            document.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 0) {
+                    const touch = e.touches[0];
+                    mouseX = touch.clientX / window.innerWidth;
+                    mouseY = touch.clientY / window.innerHeight;
+                    
+                    layers.forEach((layer, index) => {
+                        const speed = (index + 1) * 0.3;
+                        const x = (mouseX - 0.5) * speed;
+                        const y = (mouseY - 0.5) * speed;
+                        layer.style.transform = `translateX(${x}px) translateY(${y}px)`;
+                    });
+                }
+            });
+
+            // Optimize animations for performance
+            let ticking = false;
+            function updateBackground() {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        if (isMoving) {
+                            particles.forEach((particle, index) => {
+                                const delay = index * 0.5;
+                                particle.style.animationDuration = `${15 + delay}s`;
+                            });
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }
+
+            document.addEventListener('mousemove', updateBackground);
+            document.addEventListener('touchmove', updateBackground);
+
+            // Add subtle breathing effect to particles
+            setInterval(() => {
+                particles.forEach((particle, index) => {
+                    const scale = 1 + Math.sin(Date.now() * 0.001 + index) * 0.1;
+                    particle.style.transform = `scale(${scale})`;
+                });
+            }, 100);
         }
 
         // Initialize the app when DOM is loaded
