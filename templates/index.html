@@ -1642,6 +1642,410 @@
         .mb-4 { margin-bottom: var(--space-lg); }
         .mt-4 { margin-top: var(--space-lg); }
         .mt-2 { margin-top: var(--space-sm); }
+
+        /* New Section Styles */
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+            margin-bottom: var(--space-xl);
+            line-height: var(--leading-normal);
+        }
+
+        /* Refill Section */
+        .refill-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: var(--space-xl);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        .refill-info {
+            margin-bottom: var(--space-xl);
+        }
+
+        .current-balance {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-lg);
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .balance-label {
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+        }
+
+        .balance-value {
+            color: var(--text-primary);
+            font-size: var(--text-xl);
+            font-weight: 600;
+        }
+
+        .refill-amount-input {
+            margin-bottom: var(--space-xl);
+        }
+
+        .refill-amount-input label {
+            display: block;
+            color: var(--text-primary);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            margin-bottom: var(--space-sm);
+        }
+
+        .amount-input {
+            width: 100%;
+            padding: var(--space-md);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: var(--text-base);
+            transition: var(--apple-transition-fast);
+        }
+
+        .amount-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .input-hint {
+            display: block;
+            color: var(--text-tertiary);
+            font-size: var(--text-xs);
+            margin-top: var(--space-xs);
+        }
+
+        /* Reviews Section */
+        .reviews-actions {
+            display: flex;
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+
+        .reviews-container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .review-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: var(--space-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .review-author {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: var(--text-sm);
+        }
+
+        .review-date {
+            color: var(--text-tertiary);
+            font-size: var(--text-xs);
+        }
+
+        .review-rating {
+            display: flex;
+            gap: 2px;
+            margin-bottom: var(--space-sm);
+        }
+
+        .star {
+            color: #FFD700;
+            font-size: 14px;
+        }
+
+        .star.empty {
+            color: var(--text-tertiary);
+        }
+
+        .review-text {
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+            line-height: var(--leading-normal);
+        }
+
+        .loading-reviews, .loading-pricelist {
+            text-align: center;
+            color: var(--text-tertiary);
+            padding: var(--space-2xl);
+        }
+
+        /* Price List Section */
+        .pricelist-city-selector {
+            margin-bottom: var(--space-xl);
+        }
+
+        .pricelist-city-selector label {
+            display: block;
+            color: var(--text-primary);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            margin-bottom: var(--space-sm);
+        }
+
+        .city-select {
+            width: 100%;
+            padding: var(--space-md);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: var(--text-base);
+            transition: var(--apple-transition-fast);
+        }
+
+        .city-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .pricelist-container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .price-category {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: var(--space-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        .price-category-title {
+            color: var(--text-primary);
+            font-size: var(--text-lg);
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .price-item:last-child {
+            border-bottom: none;
+        }
+
+        .price-item-name {
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+        }
+
+        .price-item-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: var(--text-sm);
+        }
+
+        /* Settings Section */
+        .settings-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: var(--space-xl);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-lg) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            flex: 1;
+        }
+
+        .setting-label {
+            display: block;
+            color: var(--text-primary);
+            font-size: var(--text-base);
+            font-weight: 500;
+            margin-bottom: var(--space-xs);
+        }
+
+        .setting-description {
+            color: var(--text-tertiary);
+            font-size: var(--text-xs);
+            line-height: var(--leading-normal);
+        }
+
+        .setting-select {
+            padding: var(--space-sm) var(--space-md);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: var(--text-sm);
+            transition: var(--apple-transition-fast);
+        }
+
+        .setting-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .discount-input-group {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .discount-input {
+            flex: 1;
+            padding: var(--space-sm) var(--space-md);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: var(--text-sm);
+            transition: var(--apple-transition-fast);
+        }
+
+        .discount-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .discount-status {
+            margin-top: var(--space-sm);
+            font-size: var(--text-xs);
+            padding: var(--space-sm);
+            border-radius: 6px;
+        }
+
+        .discount-status.success {
+            background: rgba(48, 209, 88, 0.1);
+            color: #30D158;
+            border: 1px solid rgba(48, 209, 88, 0.2);
+        }
+
+        .discount-status.error {
+            background: rgba(255, 59, 48, 0.1);
+            color: #FF3B30;
+            border: 1px solid rgba(255, 59, 48, 0.2);
+        }
+
+        .newsletter-toggle {
+            position: relative;
+        }
+
+        .toggle-input {
+            display: none;
+        }
+
+        .toggle-label {
+            display: block;
+            width: 44px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: var(--apple-transition-fast);
+        }
+
+        .toggle-label::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--text-tertiary);
+            border-radius: 50%;
+            transition: var(--apple-transition-fast);
+        }
+
+        .toggle-input:checked + .toggle-label {
+            background: var(--primary);
+        }
+
+        .toggle-input:checked + .toggle-label::after {
+            transform: translateX(20px);
+            background: white;
+        }
+
+        /* Review Form Styles */
+        .review-form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .review-form label {
+            color: var(--text-primary);
+            font-size: var(--text-sm);
+            font-weight: 500;
+        }
+
+        .rating-input {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .star-input {
+            font-size: 24px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            transition: var(--apple-transition-fast);
+        }
+
+        .star-input:hover {
+            color: #FFD700;
+        }
+
+        .review-form textarea {
+            width: 100%;
+            padding: var(--space-md);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: var(--text-sm);
+            font-family: var(--font-primary);
+            resize: vertical;
+            transition: var(--apple-transition-fast);
+        }
+
+        .review-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -1683,19 +2087,35 @@
         <!-- Navigation Tabs -->
         <div class="nav-tabs">
             <button class="nav-tab active" data-tab="products">
-                <div class="nav-icon">🛍️</div>
-                <span>Products</span>
+                <span class="nav-icon">🛍️</span>
+                <span>Shop</span>
             </button>
             <button class="nav-tab" data-tab="basket">
-                <div class="nav-icon">🛒</div>
+                <span class="nav-icon">🛒</span>
                 <span>Basket</span>
                 <span id="basketBadge" class="basket-badge" style="display: none;">0</span>
             </button>
             <button class="nav-tab" data-tab="profile">
-                <div class="nav-icon">👤</div>
+                <span class="nav-icon">👤</span>
                 <span>Profile</span>
             </button>
-                    </div>
+            <button class="nav-tab" data-tab="refill">
+                <span class="nav-icon">💸</span>
+                <span>Refill</span>
+            </button>
+            <button class="nav-tab" data-tab="reviews">
+                <span class="nav-icon">📝</span>
+                <span>Reviews</span>
+            </button>
+            <button class="nav-tab" data-tab="pricelist">
+                <span class="nav-icon">📋</span>
+                <span>Prices</span>
+            </button>
+            <button class="nav-tab" data-tab="settings">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </button>
+        </div>
 
         <!-- Products Section -->
         <div id="productsSection" class="content-section active">
@@ -1758,9 +2178,127 @@
                 <button class="btn btn-secondary btn-full mt-2" onclick="showFavorites()">
                     <span>❤️ My Favorites</span>
                 </button>
+            </div>
+        </div>
+
+        <!-- Refill Section -->
+        <div id="refillSection" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">💸 Balance Refill</h2>
+                <p class="section-subtitle">Add funds to your account balance</p>
+            </div>
+            
+            <div class="refill-card">
+                <div class="refill-info">
+                    <div class="current-balance">
+                        <span class="balance-label">Current Balance:</span>
+                        <span class="balance-value" id="refillCurrentBalance">€0.00</span>
+                    </div>
+                </div>
+                
+                <div class="refill-amount-input">
+                    <label for="refillAmount">Amount (EUR):</label>
+                    <input type="number" id="refillAmount" placeholder="Enter amount" min="5" step="0.01" class="amount-input">
+                    <small class="input-hint">Minimum: €5.00</small>
+                </div>
+                
+                <button class="btn btn-primary btn-full" onclick="startRefill()">
+                    <span>💳 Pay with Crypto</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div id="reviewsSection" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">📝 Customer Reviews</h2>
+                <p class="section-subtitle">See what others are saying about our service</p>
+            </div>
+            
+            <div class="reviews-actions">
+                <button class="btn btn-primary" onclick="showLeaveReview()">
+                    <span>✍️ Leave Review</span>
+                </button>
+                <button class="btn btn-secondary" onclick="loadReviews()">
+                    <span>🔄 Refresh</span>
+                </button>
+            </div>
+            
+            <div class="reviews-container" id="reviewsContainer">
+                <div class="loading-reviews">Loading reviews...</div>
+            </div>
+        </div>
+
+        <!-- Price List Section -->
+        <div id="pricelistSection" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">📋 Price List</h2>
+                <p class="section-subtitle">View all product prices by city</p>
+            </div>
+            
+            <div class="pricelist-city-selector">
+                <label for="pricelistCity">Select City:</label>
+                <select id="pricelistCity" class="city-select" onchange="loadPriceList()">
+                    <option value="">All Cities</option>
+                </select>
+            </div>
+            
+            <div class="pricelist-container" id="pricelistContainer">
+                <div class="loading-pricelist">Loading price list...</div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div id="settingsSection" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">⚙️ Settings</h2>
+                <p class="section-subtitle">Customize your experience</p>
+            </div>
+            
+            <div class="settings-card">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">🌐 Language</span>
+                        <span class="setting-description">Choose your preferred language</span>
+                    </div>
+                    <select id="languageSelect" class="setting-select" onchange="changeLanguage()">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="it">Italiano</option>
+                        <option value="pt">Português</option>
+                        <option value="ru">Русский</option>
+                        <option value="ar">العربية</option>
+                        <option value="zh">中文</option>
+                        <option value="ja">日本語</option>
+                    </select>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">🏷️ Discount Code</span>
+                        <span class="setting-description">Apply a discount code to your purchases</span>
+                    </div>
+                    <div class="discount-input-group">
+                        <input type="text" id="discountCode" placeholder="Enter discount code" class="discount-input">
+                        <button class="btn btn-secondary" onclick="applyDiscountCode()">Apply</button>
+                    </div>
+                    <div id="discountStatus" class="discount-status"></div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">📧 Newsletter</span>
+                        <span class="setting-description">Receive updates and promotions</span>
+                    </div>
+                    <div class="newsletter-toggle">
+                        <input type="checkbox" id="newsletterToggle" class="toggle-input">
+                        <label for="newsletterToggle" class="toggle-label"></label>
                     </div>
                 </div>
             </div>
+        </div>
 
     <!-- Payment Modal -->
     <div id="paymentModal" class="modal" style="display: none;">
@@ -2165,7 +2703,11 @@
             // Checkout button
             document.getElementById('checkoutBtn').addEventListener('click', startCheckout);
 
-
+            // Newsletter toggle
+            const newsletterToggle = document.getElementById('newsletterToggle');
+            if (newsletterToggle) {
+                newsletterToggle.addEventListener('change', toggleNewsletter);
+            }
         }
 
         // Tab switching
@@ -2202,6 +2744,15 @@
                 loadBasket();
             } else if (tabName === 'profile') {
                 loadUserProfile();
+            } else if (tabName === 'refill') {
+                loadUserBalance();
+                document.getElementById('refillCurrentBalance').textContent = document.getElementById('profileBalance').textContent;
+            } else if (tabName === 'reviews') {
+                loadReviews();
+            } else if (tabName === 'pricelist') {
+                loadPriceList();
+            } else if (tabName === 'settings') {
+                loadUserSettings();
             }
         }
 
@@ -2738,6 +3289,357 @@
             setTimeout(() => {
                 element.style.display = 'none';
             }, 5000);
+        }
+
+        // ===== NEW FUNCTIONS FOR ALL BOT FEATURES =====
+
+        // Refill Functions
+        async function startRefill() {
+            const amount = parseFloat(document.getElementById('refillAmount').value);
+            if (!amount || amount < 5) {
+                showError('Please enter a valid amount (minimum €5.00)');
+                return;
+            }
+
+            try {
+                showLoading('Creating payment...');
+                const response = await fetch(`${API_BASE}/payment/refill`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount: amount })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.payment_url) {
+                        // Open payment in new window or redirect
+                        window.open(data.payment_url, '_blank');
+                        showSuccess('Payment window opened. Please complete the payment.');
+                    } else {
+                        showError('Failed to create payment');
+                    }
+                } else {
+                    const error = await response.json();
+                    showError(error.error || 'Failed to create payment');
+                }
+            } catch (error) {
+                console.error('Error starting refill:', error);
+                showError('Failed to create payment');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Reviews Functions
+        async function loadReviews() {
+            try {
+                const response = await fetch(`${API_BASE}/reviews`);
+                if (response.ok) {
+                    const data = await response.json();
+                    renderReviews(data.reviews || []);
+                } else {
+                    showError('Failed to load reviews');
+                }
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+                showError('Failed to load reviews');
+            }
+        }
+
+        function renderReviews(reviews) {
+            const container = document.getElementById('reviewsContainer');
+            if (reviews.length === 0) {
+                container.innerHTML = '<div class="text-center">No reviews yet. Be the first to leave one!</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            reviews.forEach(review => {
+                const card = document.createElement('div');
+                card.className = 'review-card';
+                card.innerHTML = `
+                    <div class="review-header">
+                        <span class="review-author">${review.author_name || 'Anonymous'}</span>
+                        <span class="review-date">${new Date(review.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <div class="review-rating">
+                        ${generateStars(review.rating)}
+                    </div>
+                    <div class="review-text">${review.text}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += `<span class="star ${i <= rating ? '' : 'empty'}">★</span>`;
+            }
+            return stars;
+        }
+
+        function showLeaveReview() {
+            // Create a simple review form modal
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'block';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>✍️ Leave Review</h2>
+                        <button class="modal-close" onclick="this.parentElement.parentElement.parentElement.remove()">✕</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="review-form">
+                            <label>Rating:</label>
+                            <div class="rating-input">
+                                <span class="star-input" data-rating="1">★</span>
+                                <span class="star-input" data-rating="2">★</span>
+                                <span class="star-input" data-rating="3">★</span>
+                                <span class="star-input" data-rating="4">★</span>
+                                <span class="star-input" data-rating="5">★</span>
+                            </div>
+                            <label>Review:</label>
+                            <textarea id="reviewText" placeholder="Share your experience..." rows="4"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="this.parentElement.parentElement.parentElement.remove()">Cancel</button>
+                        <button class="btn btn-primary" onclick="submitReview()">Submit Review</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Add star rating functionality
+            const stars = modal.querySelectorAll('.star-input');
+            let selectedRating = 0;
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    selectedRating = parseInt(star.dataset.rating);
+                    stars.forEach((s, index) => {
+                        s.style.color = index < selectedRating ? '#FFD700' : '#666';
+                    });
+                });
+            });
+        }
+
+        async function submitReview() {
+            const rating = document.querySelector('.star-input[style*="FFD700"]')?.dataset.rating || 0;
+            const text = document.getElementById('reviewText').value;
+
+            if (!rating || !text.trim()) {
+                showError('Please provide both rating and review text');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/reviews`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ rating: parseInt(rating), text: text })
+                });
+
+                if (response.ok) {
+                    showSuccess('Review submitted successfully!');
+                    document.querySelector('.modal').remove();
+                    loadReviews();
+                } else {
+                    const error = await response.json();
+                    showError(error.error || 'Failed to submit review');
+                }
+            } catch (error) {
+                console.error('Error submitting review:', error);
+                showError('Failed to submit review');
+            }
+        }
+
+        // Price List Functions
+        async function loadPriceList() {
+            const cityId = document.getElementById('pricelistCity').value;
+            try {
+                const url = cityId ? `${API_BASE}/pricelist/${cityId}` : `${API_BASE}/pricelist`;
+                const response = await fetch(url);
+                if (response.ok) {
+                    const data = await response.json();
+                    renderPriceList(data.prices || []);
+                } else {
+                    showError('Failed to load price list');
+                }
+            } catch (error) {
+                console.error('Error loading price list:', error);
+                showError('Failed to load price list');
+            }
+        }
+
+        function renderPriceList(prices) {
+            const container = document.getElementById('pricelistContainer');
+            if (prices.length === 0) {
+                container.innerHTML = '<div class="text-center">No prices available</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            const categories = groupPricesByCategory(prices);
+            
+            Object.keys(categories).forEach(category => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'price-category';
+                categoryDiv.innerHTML = `
+                    <div class="price-category-title">${category}</div>
+                    ${categories[category].map(item => `
+                        <div class="price-item">
+                            <span class="price-item-name">${item.name}</span>
+                            <span class="price-item-value">€${item.price.toFixed(2)}</span>
+                        </div>
+                    `).join('')}
+                `;
+                container.appendChild(categoryDiv);
+            });
+        }
+
+        function groupPricesByCategory(prices) {
+            const categories = {};
+            prices.forEach(price => {
+                if (!categories[price.category]) {
+                    categories[price.category] = [];
+                }
+                categories[price.category].push(price);
+            });
+            return categories;
+        }
+
+        // Settings Functions
+        async function changeLanguage() {
+            const language = document.getElementById('languageSelect').value;
+            try {
+                const response = await fetch(`${API_BASE}/user/language`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ language: language })
+                });
+
+                if (response.ok) {
+                    showSuccess('Language updated successfully!');
+                    // Reload the page to apply new language
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    showError('Failed to update language');
+                }
+            } catch (error) {
+                console.error('Error changing language:', error);
+                showError('Failed to update language');
+            }
+        }
+
+        async function applyDiscountCode() {
+            const code = document.getElementById('discountCode').value.trim();
+            if (!code) {
+                showError('Please enter a discount code');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/discount/apply`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: code })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const statusDiv = document.getElementById('discountStatus');
+                    statusDiv.textContent = `Discount applied: ${data.discount_value}% off!`;
+                    statusDiv.className = 'discount-status success';
+                    showSuccess('Discount code applied successfully!');
+                } else {
+                    const error = await response.json();
+                    const statusDiv = document.getElementById('discountStatus');
+                    statusDiv.textContent = error.error || 'Invalid discount code';
+                    statusDiv.className = 'discount-status error';
+                    showError(error.error || 'Invalid discount code');
+                }
+            } catch (error) {
+                console.error('Error applying discount:', error);
+                showError('Failed to apply discount code');
+            }
+        }
+
+        async function toggleNewsletter() {
+            const isEnabled = document.getElementById('newsletterToggle').checked;
+            try {
+                const response = await fetch(`${API_BASE}/user/newsletter`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ enabled: isEnabled })
+                });
+
+                if (response.ok) {
+                    showSuccess(`Newsletter ${isEnabled ? 'enabled' : 'disabled'} successfully!`);
+                } else {
+                    showError('Failed to update newsletter preference');
+                }
+            } catch (error) {
+                console.error('Error toggling newsletter:', error);
+                showError('Failed to update newsletter preference');
+            }
+        }
+
+        // Enhanced tab switching to handle new sections
+        function switchTab(tabName) {
+            // Hide all content sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected section and activate tab
+            const selectedSection = document.getElementById(tabName + 'Section');
+            const selectedTab = document.querySelector(`[data-tab="${tabName}"]`);
+            
+            if (selectedSection) {
+                selectedSection.classList.add('active');
+            }
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+
+            // Load section-specific data
+            switch(tabName) {
+                case 'products':
+                    // Reset to city selection when switching to products
+                    showCitySelection();
+                    break;
+                case 'refill':
+                    loadUserBalance();
+                    document.getElementById('refillCurrentBalance').textContent = document.getElementById('profileBalance').textContent;
+                    break;
+                case 'reviews':
+                    loadReviews();
+                    break;
+                case 'pricelist':
+                    loadPriceList();
+                    break;
+                case 'settings':
+                    loadUserSettings();
+                    break;
+            }
+        }
+
+        async function loadUserSettings() {
+            try {
+                const response = await fetch(`${API_BASE}/user/settings`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('languageSelect').value = data.language || 'en';
+                    document.getElementById('newsletterToggle').checked = data.newsletter_enabled || false;
+                }
+            } catch (error) {
+                console.error('Error loading user settings:', error);
+            }
         }
 
         // Initialize the app when DOM is loaded

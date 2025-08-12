@@ -657,6 +657,226 @@ def create_refill_payment(user):
         logger.error(f"Error creating refill payment: {e}")
         return jsonify({'error': 'Failed to create refill payment'}), 500
 
+@miniapp_bp.route('/api/reviews', methods=['GET'])
+def get_reviews():
+    """Get all reviews"""
+    try:
+        conn = get_db_connection()
+        c = conn.cursor()
+        c.execute("""
+            SELECT r.*, u.username, u.first_name, u.last_name 
+            FROM reviews r 
+            LEFT JOIN users u ON r.user_id = u.user_id 
+            WHERE r.is_active = 1 
+            ORDER BY r.created_at DESC 
+            LIMIT 50
+        """)
+        reviews = []
+        for row in c.fetchall():
+            reviews.append({
+                'id': row['id'],
+                'rating': row['rating'],
+                'text': row['text'],
+                'author_name': row['first_name'] or row['username'] or 'Anonymous',
+                'created_at': row['created_at']
+            })
+        return jsonify({'reviews': reviews})
+    except Exception as e:
+        logger.error(f"Error fetching reviews: {e}")
+        return jsonify({'error': 'Failed to load reviews'}), 500
+    finally:
+        if conn:
+            conn.close()
+
+@miniapp_bp.route('/api/reviews', methods=['POST'])
+@require_auth
+def create_review(user):
+    """Create a new review"""
+    data = request.get_json()
+    rating = data.get('rating')
+    text = data.get('text')
+
+    if not rating or not text or rating < 1 or rating > 5:
+        return jsonify({'error': 'Invalid review data'}), 400
+
+    try:
+        conn = get_db_connection()
+        c = conn.cursor()
+        c.execute("""
+            INSERT INTO reviews (user_id, rating, text, created_at, is_active) 
+            VALUES (?, ?, ?, datetime('now'), 1)
+        """, (user['id'], rating, text))
+        conn.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        logger.error(f"Error creating review: {e}")
+        return jsonify({'error': 'Failed to submit review'}), 500
+    finally:
+        if conn:
+            conn.close()
+
+@miniapp_bp.route('/api/pricelist')
+@miniapp_bp.route('/api/pricelist/<city_id>')
+def get_price_list(city_id=None):
+    """Get price list for all cities or specific city"""
+    try:
+        conn = get_db_connection()
+        c = conn.cursor()
+        
+        if city_id:
+            c.execute("""
+                SELECT p.*, pt.name as type_name, pt.emoji as type_emoji
+                FROM products p
+                JOIN product_types pt ON p.type_id = pt.id
+                JOIN districts d ON p.district_id = d.id
+                JOIN cities c ON d.city_id = c.id
+                WHERE c.id = ? AND p.is_active = 1
+                ORDER BY pt.name, p.name
+            """, (city_id,))
+        else:
+            c.execute("""
+                SELECT p.*, pt.name as type_name, pt.emoji as type_emoji, c.name as city_name
+                FROM products p
+                JOIN product_types pt ON p.type_id = pt.id
+                JOIN districts d ON p.district_id = d.id
+                JOIN cities c ON d.city_id = c.id
+                WHERE p.is_active = 1
+                ORDER BY c.name, pt.name, p.name
+            """)
+        
+        prices = []
+        for row in c.fetchall():
+            prices.append({
+                'id': row['id'],
+                'name': row['name'],
+                'price': float(row['price']),
+                'category': row['type_name'],
+                'city': row.get('city_name', '')
+            })
+        
+        return jsonify({'prices': prices})
+    except Exception as e:
+        logger.error(f"Error fetching price list: {e}")
+        return jsonify({'error': 'Failed to load price list'}), 500
+    finally:
+        if conn:
+            conn.close()
+
+@miniapp_bp.route('/api/user/language', methods=['POST'])
+@require_auth
+def update_user_language(user):
+    """Update user language preference"""
+    data = request.get_json()
+    language = data.get('language')
+    
+    if not language or language not in LANGUAGES:
+        return jsonify({'error': 'Invalid language'}), 400
+
+    try:
+        conn = get_db_connection()
+        c = conn.cursor()
+        c.execute("UPDATE users SET language = ? WHERE user_id = ?", (language, user['id']))
+        conn.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        logger.error(f"Error updating user language: {e}")
+        return jsonify({'error': 'Failed to update language'}), 500
+    finally:
+        if conn:
+            conn.close()
+
+@miniapp_bp.route('/api/discount/apply', methods=['POST'])
+@require_auth
+def apply_discount(user):
+    """Apply discount code"""
+    data = request.get_json()
+    code = data.get('code')
+    
+    if not code:
+        return jsonify({'error': 'Discount code required'}), 400
+
+    try:
+        conn = get_db_connection()
+        c = conn.cursor()
+        c.execute("""
+            SELECT * FROM discount_codes 
+            WHERE code = ? AND is_active = 1 AND (expires_at IS NULL OR expires_at > datetime('now'))
+        """, (code,))
+        discount = c.fetchone()
+        
+        if not discount:
+            return jsonify({'error': 'Invalid or expired discount code'}), 400
+        
+        # Check if user already used this code
+        c.execute("""
+            SELECT COUNT(*) as used_count FROM user_discounts 
+            WHERE user_id = ? AND discount_code_id = ?
+        """, (user['id'], discount['id']))
+        used = c.fetchone()
+        
+        if used['used_count'] > 0:
+            return jsonify({'error': 'You have already used this discount code'}), 400
+        
+        # Apply discount to user
+        c.execute("""
+            INSERT INTO user_discounts (user_id, discount_code_id, applied_at) 
+            VALUES (?, ?, datetime('now'))
+        """, (user['id'], discount['id']))
+        conn.commit()
+        
+        return jsonify({
+            'success': True,
+            'discount_value': discount['discount_percent'],
+            'message': f'{discount["discount_percent"]}% discount applied!'
+        })
+    except Exception as e:
+        logger.error(f"Error applying discount: {e}")
+        return jsonify({'error': 'Failed to apply discount'}), 500
+    finally:
+        if conn:
+            conn.close()
+
+@miniapp_bp.route('/api/user/newsletter', methods=['POST'])
+@require_auth
+def update_newsletter_preference(user):
+    """Update user newsletter preference"""
+    data = request.get_json()
+    enabled = data.get('enabled', False)
+
+    try:
+        conn = get_db_connection()
+        c = conn.cursor()
+        c.execute("UPDATE users SET newsletter_enabled = ? WHERE user_id = ?", (1 if enabled else 0, user['id']))
+        conn.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        logger.error(f"Error updating newsletter preference: {e}")
+        return jsonify({'error': 'Failed to update newsletter preference'}), 500
+    finally:
+        if conn:
+            conn.close()
+
+@miniapp_bp.route('/api/user/settings')
+@require_auth
+def get_user_settings(user):
+    """Get user settings"""
+    try:
+        conn = get_db_connection()
+        c = conn.cursor()
+        c.execute("SELECT language, newsletter_enabled FROM users WHERE user_id = ?", (user['id'],))
+        user_data = c.fetchone()
+        
+        return jsonify({
+            'language': user_data['language'] if user_data else 'en',
+            'newsletter_enabled': bool(user_data['newsletter_enabled']) if user_data else False
+        })
+    except Exception as e:
+        logger.error(f"Error fetching user settings: {e}")
+        return jsonify({'error': 'Failed to load settings'}), 500
+    finally:
+        if conn:
+            conn.close()
+
 # Error handlers for the blueprint
 @miniapp_bp.errorhandler(404)
 def not_found(error):
