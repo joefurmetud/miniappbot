@@ -12,6 +12,10 @@ import time
 from datetime import datetime
 from decimal import Decimal
 from typing import Dict, List, Optional, Tuple
+from collections import defaultdict, deque
+from functools import wraps, lru_cache
+from threading import Lock
+import threading
 
 from flask import Flask, request, jsonify, render_template, Response
 import sqlite3
@@ -223,11 +227,6 @@ def require_telegram_ip(f):
     return decorated_function
 
 # Rate Limiting for Security
-from collections import defaultdict, deque
-from functools import wraps, lru_cache
-from threading import Lock
-import threading
-import time
 
 # Optimized rate limiter with automatic cleanup
 class RateLimiter:
