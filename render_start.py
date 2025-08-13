@@ -5,7 +5,6 @@ This file is used by Render to start the application
 
 import os
 import logging
-from main import main
 
 # Configure logging for production
 logging.basicConfig(
@@ -14,6 +13,16 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
+
+# Apply database optimizations before starting
+try:
+    from optimize_startup import optimize_database
+    logger.info("🚀 Running ultra-performance database optimizations...")
+    optimize_database()
+except Exception as e:
+    logger.warning(f"Could not run optimizations: {e}")
+
+from main import main
 
 if __name__ == "__main__":
     logger.info("Starting Telegram Mini App Bot...")
