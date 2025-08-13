@@ -1956,28 +1956,59 @@ async def handle_language_selection(update: Update, context: ContextTypes.DEFAUL
         await _display_language_menu(update, context, current_lang, current_lang_data)
 
 async def _display_language_menu(update: Update, context: ContextTypes.DEFAULT_TYPE, current_lang: str, current_lang_data: dict):
-     """Helper function to display the language selection keyboard."""
+     """Helper function to display the modern language selection keyboard."""
      query = update.callback_query
      # Need LANGUAGES here
      try: from utils import LANGUAGES as UTILS_LANGUAGES_DISPLAY
      except ImportError: UTILS_LANGUAGES_DISPLAY = {'en': {}}
 
+     # Modern language selection with flags and better layout
+     lang_select_prompt = f"🌐 **{current_lang_data.get('language', 'Select Language')}**\n\n✨ Choose your preferred language for the best experience:"
+     
+     # Create a modern 2-column layout for languages
      keyboard = []
-     for lang_code, lang_dict_for_name in UTILS_LANGUAGES_DISPLAY.items():
-         lang_name = lang_dict_for_name.get("native_name", lang_code.upper())
-         keyboard.append([InlineKeyboardButton(f"{lang_name} {'✅' if lang_code == current_lang else ''}", callback_data=f"language|{lang_code}")])
+     current_row = []
+     
+     # Only show the specified languages in the order requested
+     specified_languages = [
+         ("lt", "🇱🇹 Lietuvių"),
+         ("en", "🇺🇸 English"), 
+         ("ru", "🇷🇺 Русский"),
+         ("ua", "🇺🇦 Українська"),
+         ("lv", "🇱🇻 Latviešu"),
+         ("et", "🇪🇪 Eesti"),
+         ("pl", "🇵🇱 Polski"),
+         ("de", "🇩🇪 Deutsch")
+     ]
+     
+     for lang_code, lang_name in specified_languages:
+         if lang_code in UTILS_LANGUAGES_DISPLAY:
+             # Add checkmark for current language
+             display_name = f"{lang_name} {'✅' if lang_code == current_lang else ''}"
+             current_row.append(InlineKeyboardButton(display_name, callback_data=f"language|{lang_code}"))
+             
+             # Create new row every 2 languages for better layout
+             if len(current_row) == 2:
+                 keyboard.append(current_row)
+                 current_row = []
+     
+     # Add any remaining language to the last row
+     if current_row:
+         keyboard.append(current_row)
+     
+     # Add back button
      back_button_text = current_lang_data.get("back_button", "Back")
      keyboard.append([InlineKeyboardButton(f"{EMOJI_BACK} {back_button_text}", callback_data="back_start")])
-     lang_select_prompt = current_lang_data.get("language", "🌐 Select Language:")
+     
      try:
         if query and query.message:
-            await query.edit_message_text(lang_select_prompt, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=None)
+            await query.edit_message_text(lang_select_prompt, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
         else:
-             await send_message_with_retry(context.bot, update.effective_chat.id, lang_select_prompt, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=None)
+             await send_message_with_retry(context.bot, update.effective_chat.id, lang_select_prompt, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
      except Exception as e:
          logger.error(f"Error displaying language menu: {e}")
          try:
-             await send_message_with_retry(context.bot, update.effective_chat.id, lang_select_prompt, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=None)
+             await send_message_with_retry(context.bot, update.effective_chat.id, lang_select_prompt, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
          except Exception as send_e:
              logger.error(f"Failed to send language menu after edit error: {send_e}")
 

@@ -118,11 +118,11 @@ THEMES = {
 # ==============================================================
 # ===== V V V V V      LANGUAGE DICTIONARY     V V V V V ======
 # ==============================================================
-# Define LANGUAGES dictionary FIRST
+# Define LANGUAGES dictionary FIRST - MODERNIZED VERSION
 LANGUAGES = {
     # --- English ---
     "en": {
-        "native_name": "English",
+        "native_name": "🇺🇸 English",
         # --- General & Menu ---
         "welcome": "🌟 <b>Welcome to Arunas21 Bot Shop!</b> 🌟\n\n👋 Hello, <b>{username}</b>! Welcome to the most premium bot experience!\n\n✨ <b>Your Profile:</b>\n👤 Status: <b>{status}</b> {progress_bar}\n💰 Balance: <b>{balance_str} EUR</b>\n📦 Total Purchases: <b>{purchases}</b>\n🛒 Basket Items: <b>{basket_count}</b>\n\n🚀 <b>Ready to Shop?</b>\nExperience our modern, premium interface with:\n• 🛍️ Beautiful product catalog\n• 🛒 Smart shopping basket\n• 💳 Secure crypto payments\n• ⭐ Customer reviews\n• 🎯 Personalized recommendations\n\n💎 <b>Premium Features:</b>\n• Glassmorphic design\n• Smooth animations\n• Mobile-optimized\n• Real-time updates\n• Multi-language support\n\n🎉 <b>Click the button below to open our Mini App!</b>", # <<< Default Welcome Message Format
         "status_label": "Status",
@@ -479,7 +479,7 @@ LANGUAGES = {
     },
     # --- Lithuanian ---
     "lt": {
-        "native_name": "Lietuvių",
+        "native_name": "🇱🇹 Lietuvių",
         # --- General & Menu ---
         "welcome": "🌟 <b>Sveiki atvykę į Arunas21 Bot Shop!</b> 🌟\n\n👋 Sveiki, <b>{username}</b>! Sveiki atvykę į patį geriausią bot patyrimą!\n\n✨ <b>Jūsų profilis:</b>\n👤 Būsena: <b>{status}</b> {progress_bar}\n💰 Balansas: <b>{balance_str} EUR</b>\n📦 Viso pirkimų: <b>{purchases}</b>\n🛒 Krepšelyje: <b>{basket_count}</b>\n\n🚀 <b>Pasiruošę apsipirkti?</b>\nPatirkite mūsų modernų, premium sąsają su:\n• 🛍️ Gražiu produktų katalogu\n• 🛒 Išmaniu apsipirkimo krepšeliu\n• 💳 Saugiais kripto mokėjimais\n• ⭐ Klientų atsiliepimais\n• 🎯 Personalizuotais pasiūlymais\n\n💎 <b>Premium funkcijos:</b>\n• Stiklo morfizmo dizainas\n• Sklandūs animacijos\n• Mobiliesiems optimizuotas\n• Realaus laiko atnaujinimai\n• Daugiakalbė palaikymas\n\n🎉 <b>Spustelėkite mygtuką žemiau, kad atidarytumėte mūsų Mini programą!</b>",
         "status_label": "Būsena",
@@ -835,7 +835,7 @@ LANGUAGES = {
     },
     # --- Russian ---
     "ru": {
-        "native_name": "Русский",
+        "native_name": "🇷🇺 Русский",
         # --- General & Menu ---
         "welcome": "🌟 <b>Добро пожаловать в Arunas21 Bot Shop!</b> 🌟\n\n👋 Привет, <b>{username}</b>! Добро пожаловать в самый премиум бот-опыт!\n\n✨ <b>Ваш профиль:</b>\n👤 Статус: <b>{status}</b> {progress_bar}\n💰 Баланс: <b>{balance_str} EUR</b>\n📦 Всего покупок: <b>{purchases}</b>\n🛒 В корзине: <b>{basket_count}</b>\n\n🚀 <b>Готовы к покупкам?</b>\nИспытайте наш современный, премиум интерфейс с:\n• 🛍️ Красивым каталогом продуктов\n• 🛒 Умной корзиной покупок\n• 💳 Безопасными крипто-платежами\n• ⭐ Отзывами клиентов\n• 🎯 Персонализированными предложениями\n\n💎 <b>Премиум функции:</b>\n• Стеклянный морфизм дизайн\n• Плавные анимации\n• Оптимизация для мобильных\n• Обновления в реальном времени\n• Многоязычная поддержка\n\n🎉 <b>Нажмите кнопку ниже, чтобы открыть наше Mini приложение!</b>",
         "status_label": "Статус",
@@ -1062,11 +1062,163 @@ LANGUAGES = {
         "credit_underpayment_purchase": "ℹ️ Ваша покупка не удалась из-за недоплаты, но полученная сумма ({amount} EUR) зачислена на ваш баланс. Ваш новый баланс: {new_balance} EUR.",
         "crypto_purchase_underpaid_credited": "⚠️ Покупка не удалась: Обнаружена недоплата. Требовалась сумма {needed_eur} EUR. Ваш баланс пополнен на полученную сумму ({paid_eur} EUR). Ваши товары не были доставлены.",
         "credit_refill": "✅ Ваш баланс пополнен на {amount} EUR. Причина: {reason}. Новый баланс: {new_balance} EUR.",
-    }
+    },
+
+    # --- Ukrainian ---
+    "ua": {
+        "native_name": "🇺🇦 Українська",
+        # --- General & Menu ---
+        "welcome": "🌟 <b>Ласкаво просимо до Arunas21 Bot Shop!</b> 🌟\n\n👋 Привіт, <b>{username}</b>! Ласкаво просимо до найкращого бот-досвіду!\n\n✨ <b>Ваш профіль:</b>\n👤 Статус: <b>{status}</b> {progress_bar}\n💰 Баланс: <b>{balance_str} EUR</b>\n📦 Всього покупок: <b>{purchases}</b>\n🛒 У кошику: <b>{basket_count}</b>\n\n🚀 <b>Готові до покупок?</b>\nСпробуйте наш сучасний, преміум інтерфейс з:\n• 🛍️ Красивим каталогом продуктів\n• 🛒 Розумним кошиком покупок\n• 💳 Безпечними крипто-платежами\n• ⭐ Відгуками клієнтів\n• 🎯 Персоналізованими пропозиціями\n\n💎 <b>Преміум функції:</b>\n• Скляний морфізм дизайн\n• Плавні анімації\n• Оптимізація для мобільних\n• Оновлення в реальному часі\n• Багатомовна підтримка\n\n🎉 <b>Натисніть кнопку нижче, щоб відкрити наше Mini додаток!</b>",
+        "status_label": "Статус",
+        "balance_label": "Баланс",
+        "purchases_label": "Всього покупок",
+        "basket_label": "У кошику",
+        "shopping_prompt": "Почніть покупки або перегляньте варіанти нижче.",
+        "refund_note": "Примітка: Гроші не повертаються.",
+        "shop_button": "Магазин",
+        "profile_button": "Профіль",
+        "top_up_button": "Поповнити",
+        "reviews_button": "Відгуки",
+        "price_list_button": "Прайс-лист",
+        "language_button": "Мова",
+        "admin_button": "🔧 Панель адміністратора",
+        "mini_app_button": "🚀 Відкрити Mini додаток",
+        "home_button": "Головна",
+        "back_button": "Назад",
+        "cancel_button": "Скасувати",
+        "error_occurred_answer": "Сталася помилка. Спробуйте ще раз.",
+        "success_label": "Успіх!",
+        "error_unexpected": "Сталася неочікувана помилка",
+        "language_set_answer": "Мову встановлено на {lang}!",
+        "error_saving_language": "Помилка збереження мови.",
+        "invalid_language_answer": "Невірна мова вибрана.",
+        "language": "🌐 Мова",
+    },
+
+    # --- Latvian ---
+    "lv": {
+        "native_name": "🇱🇻 Latviešu",
+        # --- General & Menu ---
+        "welcome": "🌟 <b>Laipni lūdzam Arunas21 Bot Shop!</b> 🌟\n\n👋 Sveiki, <b>{username}</b>! Laipni lūdzam pie vislabākā bot pieredzes!\n\n✨ <b>Jūsu profils:</b>\n👤 Statuss: <b>{status}</b> {progress_bar}\n💰 Bilance: <b>{balance_str} EUR</b>\n📦 Kopējie pirkumi: <b>{purchases}</b>\n🛒 Grozā: <b>{basket_count}</b>\n\n🚀 <b>Gatavi iepirkties?</b>\nIzbaudiet mūsu moderno, premium saskarni ar:\n• 🛍️ Skaistu produktu katalogu\n• 🛒 Gudru iepirkšanās grozu\n• 💳 Drošiem kripto maksājumiem\n• ⭐ Klientu atsauksmēm\n• 🎯 Personalizētiem piedāvājumiem\n\n💎 <b>Premium funkcijas:</b>\n• Stikla morfisma dizains\n• Gludās animācijas\n• Mobilajiem optimizēts\n• Reāllaika atjauninājumi\n• Daudzvalodu atbalsts\n\n🎉 <b>Noklikšķiniet uz pogas zemāk, lai atvērtu mūsu Mini lietotni!</b>",
+        "status_label": "Statuss",
+        "balance_label": "Bilance",
+        "purchases_label": "Kopējie pirkumi",
+        "basket_label": "Grozā",
+        "shopping_prompt": "Sāciet iepirkties vai pārlūkojiet iespējas zemāk.",
+        "refund_note": "Piezīme: Nauda netiek atgriezta.",
+        "shop_button": "Veikals",
+        "profile_button": "Profils",
+        "top_up_button": "Papildināt",
+        "reviews_button": "Atsauksmes",
+        "price_list_button": "Cenu saraksts",
+        "language_button": "Valoda",
+        "admin_button": "🔧 Administratora panelis",
+        "mini_app_button": "🚀 Atvērt Mini lietotni",
+        "home_button": "Sākums",
+        "back_button": "Atpakaļ",
+        "cancel_button": "Atcelt",
+        "error_occurred_answer": "Radās kļūda. Lūdzu, mēģiniet vēlreiz.",
+        "success_label": "Veiksmīgi!",
+        "error_unexpected": "Radās negaidīta kļūda",
+        "language_set_answer": "Valoda iestatīta uz {lang}!",
+        "error_saving_language": "Kļūda valodas saglabāšanā.",
+        "invalid_language_answer": "Nederīga valoda izvēlēta.",
+        "language": "🌐 Valoda",
+    },
+
+    # --- Estonian ---
+    "et": {
+        "native_name": "🇪🇪 Eesti",
+        # --- General & Menu ---
+        "welcome": "🌟 <b>Tere tulemast Arunas21 Bot Shop!</b> 🌟\n\n👋 Tere, <b>{username}</b>! Tere tulemast parimasse bot kogemusse!\n\n✨ <b>Teie profiil:</b>\n👤 Staatus: <b>{status}</b> {progress_bar}\n💰 Saldo: <b>{balance_str} EUR</b>\n📦 Kokku ostudeid: <b>{purchases}</b>\n🛒 Ostukorvis: <b>{basket_count}</b>\n\n🚀 <b>Valmis ostlema?</b>\nKoge meie kaasaegset, premium kasutajaliidest:\n• 🛍️ Ilus tootekataloog\n• 🛒 Nutikas ostukorv\n• 💳 Turvalised krüpto maksed\n• ⭐ Kliendi tagasiside\n• 🎯 Isikupärastatud pakkumised\n\n💎 <b>Premium funktsioonid:</b>\n• Klaas morfism disain\n• Sujuvad animatsioonid\n• Mobiilile optimeeritud\n• Reaalajas värskendused\n• Mitmekeelne tugi\n\n🎉 <b>Klõpsake allpool olevat nuppu, et avada meie Mini rakendus!</b>",
+        "status_label": "Staatus",
+        "balance_label": "Saldo",
+        "purchases_label": "Kokku ostudeid",
+        "basket_label": "Ostukorvis",
+        "shopping_prompt": "Alustage ostlemist või vaadake võimalusi allpool.",
+        "refund_note": "Märge: Raha ei tagastata.",
+        "shop_button": "Pood",
+        "profile_button": "Profiil",
+        "top_up_button": "Täiendada",
+        "reviews_button": "Arvustused",
+        "price_list_button": "Hinnakiri",
+        "language_button": "Keel",
+        "admin_button": "🔧 Administraatori paneel",
+        "mini_app_button": "🚀 Ava Mini rakendus",
+        "home_button": "Kodu",
+        "back_button": "Tagasi",
+        "cancel_button": "Tühista",
+        "error_occurred_answer": "Tekkis viga. Palun proovige uuesti.",
+        "success_label": "Edukas!",
+        "error_unexpected": "Tekkis ootamatu viga",
+        "language_set_answer": "Keel seatud {lang}!",
+        "error_saving_language": "Viga keele salvestamisel.",
+        "invalid_language_answer": "Vigane keel valitud.",
+        "language": "🌐 Keel",
+    },
+
+    # --- Polish ---
+    "pl": {
+        "native_name": "🇵🇱 Polski",
+        # --- General & Menu ---
+        "welcome": "🌟 <b>Witamy w Arunas21 Bot Shop!</b> 🌟\n\n👋 Cześć, <b>{username}</b>! Witamy w najlepszym bot doświadczeniu!\n\n✨ <b>Twój profil:</b>\n👤 Status: <b>{status}</b> {progress_bar}\n💰 Saldo: <b>{balance_str} EUR</b>\n📦 Łączne zakupy: <b>{purchases}</b>\n🛒 W koszyku: <b>{basket_count}</b>\n\n🚀 <b>Gotowy do zakupów?</b>\nDoświadcz naszego nowoczesnego, premium interfejsu z:\n• 🛍️ Pięknym katalogiem produktów\n• 🛒 Inteligentnym koszykiem zakupów\n• 💳 Bezpiecznymi płatnościami krypto\n• ⭐ Recenzjami klientów\n• 🎯 Spersonalizowanymi ofertami\n\n💎 <b>Funkcje premium:</b>\n• Design w stylu glassmorphism\n• Płynne animacje\n• Zoptymalizowane dla mobilnych\n• Aktualizacje w czasie rzeczywistym\n• Wsparcie wielojęzyczne\n\n🎉 <b>Kliknij przycisk poniżej, aby otworzyć naszą Mini aplikację!</b>",
+        "status_label": "Status",
+        "balance_label": "Saldo",
+        "purchases_label": "Łączne zakupy",
+        "basket_label": "W koszyku",
+        "shopping_prompt": "Rozpocznij zakupy lub przeglądaj opcje poniżej.",
+        "refund_note": "Uwaga: Pieniądze nie są zwracane.",
+        "shop_button": "Sklep",
+        "profile_button": "Profil",
+        "top_up_button": "Doładuj",
+        "reviews_button": "Recenzje",
+        "price_list_button": "Cennik",
+        "language_button": "Język",
+        "admin_button": "🔧 Panel administratora",
+        "mini_app_button": "🚀 Otwórz Mini aplikację",
+        "home_button": "Strona główna",
+        "back_button": "Wstecz",
+        "cancel_button": "Anuluj",
+        "error_occurred_answer": "Wystąpił błąd. Spróbuj ponownie.",
+        "success_label": "Sukces!",
+        "error_unexpected": "Wystąpił nieoczekiwany błąd",
+        "language_set_answer": "Język ustawiony na {lang}!",
+        "error_saving_language": "Błąd zapisywania języka.",
+        "invalid_language_answer": "Wybrano nieprawidłowy język.",
+        "language": "🌐 Język",
+    },
+
+    # --- German ---
+    "de": {
+        "native_name": "🇩🇪 Deutsch",
+        # --- General & Menu ---
+        "welcome": "🌟 <b>Willkommen bei Arunas21 Bot Shop!</b> 🌟\n\n👋 Hallo, <b>{username}</b>! Willkommen bei der besten Bot-Erfahrung!\n\n✨ <b>Ihr Profil:</b>\n👤 Status: <b>{status}</b> {progress_bar}\n💰 Guthaben: <b>{balance_str} EUR</b>\n📦 Gesamtkäufe: <b>{purchases}</b>\n🛒 Im Warenkorb: <b>{basket_count}</b>\n\n🚀 <b>Bereit zum Einkaufen?</b>\nErleben Sie unsere moderne, Premium-Oberfläche mit:\n• 🛍️ Schönem Produktkatalog\n• 🛒 Intelligentem Einkaufswagen\n• 💳 Sicheren Krypto-Zahlungen\n• ⭐ Kundenbewertungen\n• 🎯 Personalisierten Angeboten\n\n💎 <b>Premium-Funktionen:</b>\n• Glassmorphismus-Design\n• Sanfte Animationen\n• Mobiloptimiert\n• Echtzeit-Updates\n• Mehrsprachige Unterstützung\n\n🎉 <b>Klicken Sie auf den Button unten, um unsere Mini-App zu öffnen!</b>",
+        "status_label": "Status",
+        "balance_label": "Guthaben",
+        "purchases_label": "Gesamtkäufe",
+        "basket_label": "Im Warenkorb",
+        "shopping_prompt": "Beginnen Sie mit dem Einkaufen oder erkunden Sie die Optionen unten.",
+        "refund_note": "Hinweis: Geld wird nicht zurückerstattet.",
+        "shop_button": "Shop",
+        "profile_button": "Profil",
+        "top_up_button": "Aufladen",
+        "reviews_button": "Bewertungen",
+        "price_list_button": "Preisliste",
+        "language_button": "Sprache",
+        "admin_button": "🔧 Admin-Panel",
+        "mini_app_button": "🚀 Mini-App öffnen",
+        "home_button": "Startseite",
+        "back_button": "Zurück",
+        "cancel_button": "Abbrechen",
+        "error_occurred_answer": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+        "success_label": "Erfolg!",
+        "error_unexpected": "Ein unerwarteter Fehler ist aufgetreten",
+        "language_set_answer": "Sprache auf {lang} gesetzt!",
+        "error_saving_language": "Fehler beim Speichern der Sprache.",
+        "invalid_language_answer": "Ungültige Sprache ausgewählt.",
+        "language": "🌐 Sprache",
+    },
 }
-# ==============================================================
-# ===== ^ ^ ^ ^ ^      LANGUAGE DICTIONARY     ^ ^ ^ ^ ^ ======
-# ==============================================================
 
 # <<< Default Welcome Message (Fallback) >>>
 DEFAULT_WELCOME_MESSAGE = LANGUAGES['en']['welcome']
