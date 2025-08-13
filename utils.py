@@ -25,9 +25,26 @@ logger = logging.getLogger(__name__)
 
 # --- Render Disk Path Configuration ---
 RENDER_DISK_MOUNT_PATH = '/mnt/data'
-DATABASE_PATH = os.path.join(RENDER_DISK_MOUNT_PATH, 'shop.db')
-MEDIA_DIR = os.path.join(RENDER_DISK_MOUNT_PATH, 'media')
-BOT_MEDIA_JSON_PATH = os.path.join(RENDER_DISK_MOUNT_PATH, 'bot_media.json')
+
+def get_paths():
+    """Get database and media paths based on environment"""
+    # Check if we're actually on Render by looking for specific environment variables
+    # and checking if the path is actually writable
+    if (os.path.exists(RENDER_DISK_MOUNT_PATH) and 
+        os.environ.get('RENDER') == 'true' and
+        os.access(RENDER_DISK_MOUNT_PATH, os.W_OK)):
+        # Running on Render
+        return (
+            os.path.join(RENDER_DISK_MOUNT_PATH, 'shop.db'),
+            os.path.join(RENDER_DISK_MOUNT_PATH, 'media'),
+            os.path.join(RENDER_DISK_MOUNT_PATH, 'bot_media.json')
+        )
+    else:
+        # Running locally
+        return ('shop.db', 'media', 'bot_media.json')
+
+# Initialize paths
+DATABASE_PATH, MEDIA_DIR, BOT_MEDIA_JSON_PATH = get_paths()
 
 # Ensure the base media directory exists on the disk when the script starts
 try:
