@@ -175,14 +175,31 @@ TELEGRAM_IP_RANGES = [
     "::1"                   # Localhost IPv6 for development
 ]
 
+# Pre-compile IP networks for faster checking
+TELEGRAM_IP_NETWORKS = []
+
+def initialize_ip_networks():
+    """Pre-compile IP networks on startup"""
+    import ipaddress
+    global TELEGRAM_IP_NETWORKS
+    for range_str in TELEGRAM_IP_RANGES:
+        try:
+            TELEGRAM_IP_NETWORKS.append(ipaddress.ip_network(range_str, strict=False))
+        except ValueError:
+            pass
+
+# Initialize on import
+initialize_ip_networks()
+
+@lru_cache(maxsize=1000)
 def is_ip_in_whitelist(ip_address: str) -> bool:
-    """Check if IP address is in Telegram's whitelist"""
+    """Check if IP address is in Telegram's whitelist (cached)"""
     import ipaddress
     
     try:
         ip = ipaddress.ip_address(ip_address)
-        for range_str in TELEGRAM_IP_RANGES:
-            if ip in ipaddress.ip_network(range_str, strict=False):
+        for network in TELEGRAM_IP_NETWORKS:
+            if ip in network:
                 return True
         return False
     except ValueError:
@@ -206,31 +223,44 @@ def require_telegram_ip(f):
     return decorated_function
 
 # Rate Limiting for Security
-from collections import defaultdict
+from collections import defaultdict, deque
+from functools import wraps, lru_cache
+from threading import Lock
+import threading
 import time
 
-# Simple in-memory rate limiter
-request_counts = defaultdict(list)
-RATE_LIMIT_WINDOW = 60  # 1 minute
-RATE_LIMIT_MAX_REQUESTS = 100  # Max requests per minute per IP
+# Optimized rate limiter with automatic cleanup
+class RateLimiter:
+    def __init__(self, window=60, max_requests=100):
+        self.window = window
+        self.max_requests = max_requests
+        self.requests = {}
+        self.lock = Lock()
+    
+    def check_rate_limit(self, ip_address: str) -> bool:
+        current_time = time.time()
+        
+        with self.lock:
+            if ip_address not in self.requests:
+                self.requests[ip_address] = deque(maxlen=self.max_requests)
+            
+            # Remove old requests
+            self.requests[ip_address] = deque(
+                (t for t in self.requests[ip_address] if current_time - t < self.window),
+                maxlen=self.max_requests
+            )
+            
+            if len(self.requests[ip_address]) >= self.max_requests:
+                return False
+            
+            self.requests[ip_address].append(current_time)
+            return True
+
+rate_limiter = RateLimiter(60, 100)
 
 def check_rate_limit(ip_address: str) -> bool:
     """Check if IP address has exceeded rate limit"""
-    current_time = time.time()
-    
-    # Clean old requests outside the window
-    request_counts[ip_address] = [
-        req_time for req_time in request_counts[ip_address] 
-        if current_time - req_time < RATE_LIMIT_WINDOW
-    ]
-    
-    # Check if limit exceeded
-    if len(request_counts[ip_address]) >= RATE_LIMIT_MAX_REQUESTS:
-        return False
-    
-    # Add current request
-    request_counts[ip_address].append(current_time)
-    return True
+    return rate_limiter.check_rate_limit(ip_address)
 
 def require_rate_limit(f):
     """Decorator to add rate limiting"""
@@ -415,14 +445,20 @@ def get_user_profile(user):
         if 'conn' in locals():
             conn.close()
 
+# Cache for static data
+cities_cache = None
+districts_cache = {}
+
 @miniapp_bp.route('/api/cities')
 @require_telegram_ip
 def get_cities():
-    """Get all available cities"""
+    """Get all available cities (cached)"""
+    global cities_cache
     try:
-        cities = [{'id': city_id, 'name': city_name} 
-                 for city_id, city_name in CITIES.items()]
-        return jsonify({'cities': cities})
+        if cities_cache is None:
+            cities_cache = [{'id': city_id, 'name': city_name} 
+                          for city_id, city_name in CITIES.items()]
+        return jsonify({'cities': cities_cache})
     except Exception as e:
         logger.error(f"Error getting cities: {e}")
         return jsonify({'error': 'Failed to get cities'}), 500
@@ -430,13 +466,16 @@ def get_cities():
 @miniapp_bp.route('/api/districts/<city_id>')
 @require_telegram_ip
 def get_districts(city_id):
-    """Get districts for a specific city"""
+    """Get districts for a specific city (cached)"""
+    global districts_cache
     try:
-        districts = []
-        if city_id in DISTRICTS:
-            districts = [{'id': dist_id, 'name': dist_name} 
-                        for dist_id, dist_name in DISTRICTS[city_id].items()]
-        return jsonify({'districts': districts})
+        if city_id not in districts_cache:
+            districts = []
+            if city_id in DISTRICTS:
+                districts = [{'id': dist_id, 'name': dist_name} 
+                            for dist_id, dist_name in DISTRICTS[city_id].items()]
+            districts_cache[city_id] = districts
+        return jsonify({'districts': districts_cache[city_id]})
     except Exception as e:
         logger.error(f"Error getting districts: {e}")
         return jsonify({'error': 'Failed to get districts'}), 500
@@ -464,12 +503,13 @@ def get_products(user, city_id, district_id):
             return jsonify({'error': 'District not found'}), 404
         district_name = district_row['name']
         
-        # Get products with stock count using the actual names
+        # Optimized query with better performance
         cursor.execute("""
             SELECT p.id, p.product_type, p.size, p.price, p.city, p.district,
                    COUNT(CASE WHEN p.reserved = 0 AND p.available = 1 THEN 1 END) as stock_count
             FROM products p
             WHERE p.city = ? AND p.district = ?
+              AND p.available = 1
             GROUP BY p.product_type, p.size, p.price, p.city, p.district
             HAVING stock_count > 0
             ORDER BY p.product_type, p.size
@@ -869,17 +909,56 @@ def create_refill_payment(user):
         user_id = user['id']
         data = request.get_json()
         amount = data.get('amount')
+        currency = data.get('currency', 'btc')  # Default to BTC
         
         if not amount or amount < float(MIN_DEPOSIT_EUR):
             return jsonify({'error': f'Minimum refill amount is €{MIN_DEPOSIT_EUR}'}), 400
         
-        # Create refill payment URL (simplified)
-        payment_url = f"https://t.me/your_bot?start=refill_{user_id}_{amount}"
+        if amount > 10000:
+            return jsonify({'error': 'Maximum refill amount is €10,000'}), 400
         
+        # Create NOWPayments invoice for refill
+        import asyncio
+        from payment import create_nowpayments_payment
+        from decimal import Decimal
+        
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
+        try:
+            payment_result = loop.run_until_complete(
+                create_nowpayments_payment(
+                    user_id=user_id,
+                    target_eur_amount=Decimal(str(amount)),
+                    pay_currency_code=currency,
+                    is_purchase=False  # This is a refill
+                )
+            )
+            logger.info(f"Refill payment creation result: {payment_result}")
+        except Exception as e:
+            logger.error(f"Exception during refill payment creation: {e}", exc_info=True)
+            return jsonify({'error': f'Payment creation failed: {str(e)}'}), 500
+        finally:
+            loop.close()
+        
+        if 'error' in payment_result:
+            error_msg = payment_result.get('error', 'Payment creation failed')
+            logger.error(f"Refill payment creation error: {error_msg}")
+            return jsonify({'error': error_msg}), 400
+        
+        # Return the payment invoice details
         return jsonify({
             'success': True,
-            'payment_url': payment_url,
-            'message': 'Refill payment created successfully'
+            'payment_id': payment_result['payment_id'],
+            'pay_address': payment_result['pay_address'],
+            'pay_amount': payment_result['pay_amount'],
+            'pay_currency': payment_result['pay_currency'].upper(),
+            'price_amount': float(amount),
+            'price_currency': 'EUR',
+            'order_id': payment_result['order_id'],
+            'expiration_estimate_date': payment_result.get('expiration_estimate_date'),
+            'payment_status': payment_result['payment_status'],
+            'message': 'Refill payment invoice created successfully'
         })
         
     except Exception as e:
@@ -1112,6 +1191,48 @@ def get_user_settings(user):
     finally:
         if conn:
             conn.close()
+
+@miniapp_bp.route('/api/payment/status/<payment_id>')
+@require_telegram_ip
+@require_auth
+def check_payment_status_endpoint(user, payment_id):
+    """Check payment status and process if completed"""
+    try:
+        user_id = user['id']
+        
+        # Import required modules
+        import asyncio
+        from payment import check_and_process_payment_status
+        from telegram.ext import ContextTypes
+        
+        # Create dummy context for processing
+        dummy_context = ContextTypes.DEFAULT_TYPE(application=None, chat_id=user_id, user_id=user_id)
+        
+        # Check and process payment status
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
+        try:
+            result = loop.run_until_complete(
+                check_and_process_payment_status(payment_id, dummy_context)
+            )
+        finally:
+            loop.close()
+        
+        if 'error' in result:
+            return jsonify({'error': result['error'], 'details': result.get('details')}), 400
+        
+        return jsonify({
+            'success': True,
+            'payment_id': payment_id,
+            'status': result.get('status'),
+            'processed': result.get('processed', False),
+            'type': result.get('type')
+        })
+        
+    except Exception as e:
+        logger.error(f"Error checking payment status: {e}")
+        return jsonify({'error': 'Failed to check payment status'}), 500
 
 # Error handlers for the blueprint
 @miniapp_bp.errorhandler(404)

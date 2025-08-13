@@ -1371,4 +1371,88 @@ async def handle_cancel_crypto_payment(update: Update, context: ContextTypes.DEF
 
 
 
+# --- Payment Status Checking Function ---
+async def check_and_process_payment_status(payment_id: str, context: ContextTypes.DEFAULT_TYPE) -> dict:
+    """Check payment status and process if completed."""
+    try:
+        # Check current status from NOWPayments
+        status_result = await check_payment_status(payment_id)
+        
+        if 'error' in status_result:
+            logger.error(f"Error checking payment status for {payment_id}: {status_result}")
+            return {'error': 'status_check_failed', 'details': status_result}
+        
+        payment_status = status_result.get('payment_status')
+        actually_paid = status_result.get('actually_paid')
+        
+        logger.info(f"Payment {payment_id} status check: {payment_status}, actually_paid: {actually_paid}")
+        
+        if payment_status in ['finished', 'confirmed', 'partially_paid'] and actually_paid:
+            # Get pending deposit info
+            pending_info = get_pending_deposit(payment_id)
+            
+            if not pending_info:
+                return {'error': 'pending_deposit_not_found'}
+            
+            user_id = pending_info['user_id']
+            is_purchase = pending_info.get('is_purchase') == 1
+            
+            if is_purchase:
+                # Process purchase
+                basket_snapshot = pending_info.get('basket_snapshot')
+                discount_code_used = pending_info.get('discount_code_used')
+                
+                success = await process_successful_crypto_purchase(
+                    user_id, basket_snapshot, discount_code_used, payment_id, context
+                )
+                
+                if success:
+                    remove_pending_deposit(payment_id, trigger="manual_status_check")
+                    return {'success': True, 'type': 'purchase', 'processed': True}
+                else:
+                    return {'error': 'purchase_processing_failed'}
+            else:
+                # Process refill
+                target_eur_amount = Decimal(str(pending_info['target_eur_amount']))
+                
+                success = await process_successful_refill(
+                    user_id, target_eur_amount, payment_id, context
+                )
+                
+                if success:
+                    remove_pending_deposit(payment_id, trigger="manual_status_check")
+                    return {'success': True, 'type': 'refill', 'processed': True}
+                else:
+                    return {'error': 'refill_processing_failed'}
+        
+        return {'success': True, 'status': payment_status, 'processed': False}
+        
+    except Exception as e:
+        logger.error(f"Error in check_and_process_payment_status for {payment_id}: {e}", exc_info=True)
+        return {'error': 'unexpected_error', 'details': str(e)}
+
+# --- Helper Function to Get Crypto Price in EUR ---
+def get_crypto_price_eur(currency_code: str) -> Decimal | None:
+    """Get current crypto price in EUR from NOWPayments or fallback API."""
+    try:
+        # First try NOWPayments estimate API
+        import requests
+        estimate_url = f"{NOWPAYMENTS_API_URL}/v1/estimate"
+        params = {
+            'amount': 1,  # 1 unit of crypto
+            'currency_from': currency_code.lower(),
+            'currency_to': 'eur'
+        }
+        headers = {'x-api-key': NOWPAYMENTS_API_KEY} if NOWPAYMENTS_API_KEY else {}
+        
+        response = requests.get(estimate_url, params=params, headers=headers, timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            if 'estimated_amount' in data:
+                return Decimal(str(data['estimated_amount']))
+    except Exception as e:
+        logger.warning(f"Could not get crypto price for {currency_code} from NOWPayments: {e}")
+    
+    return None
+
 # --- END OF FILE payment.py ---

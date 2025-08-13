@@ -208,6 +208,79 @@ def _build_start_menu_content(user_id: int, username: str, lang_data: dict, cont
     return full_welcome, reply_markup
 
 
+# --- Start Command Parameter Handler ---
+async def handle_start_command_params(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handles /start command with parameters for direct payment links."""
+    user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+    lang, lang_data = _get_lang_data(context)
+    
+    if not context.args:
+        return
+    
+    param = context.args[0]
+    logger.info(f"Start command parameter received from user {user_id}: {param}")
+    
+    # Handle refill parameter: /start refill_<user_id>_<amount>
+    if param.startswith('refill_'):
+        try:
+            parts = param.split('_')
+            if len(parts) >= 3:
+                target_user_id = int(parts[1])
+                amount = float(parts[2])
+                
+                if target_user_id != user_id:
+                    await send_message_with_retry(context.bot, chat_id, 
+                        lang_data.get("invalid_payment_link", "❌ Invalid payment link."), 
+                        parse_mode=None)
+                    return
+                
+                if amount < float(MIN_DEPOSIT_EUR):
+                    min_amount_str = format_currency(MIN_DEPOSIT_EUR)
+                    await send_message_with_retry(context.bot, chat_id, 
+                        lang_data.get("amount_too_low_msg", "Amount too low. Min: {amount} EUR.").format(amount=min_amount_str), 
+                        parse_mode=None)
+                    return
+                
+                # Set up refill flow
+                context.user_data['refill_eur_amount'] = amount
+                context.user_data['state'] = 'awaiting_refill_crypto_choice'
+                
+                # Generate crypto selection buttons
+                asset_buttons = []
+                row = []
+                for code, display_name in SUPPORTED_CRYPTO.items():
+                    row.append(InlineKeyboardButton(display_name, callback_data=f"select_refill_crypto|{code}"))
+                    if len(row) >= 3:
+                        asset_buttons.append(row)
+                        row = []
+                if row:
+                    asset_buttons.append(row)
+                
+                cancel_button_text = lang_data.get("cancel_top_up_button", "Cancel Top Up")
+                asset_buttons.append([InlineKeyboardButton(f"❌ {cancel_button_text}", callback_data="back_start")])
+                
+                refill_amount_str = format_currency(amount)
+                choose_crypto_msg = lang_data.get("choose_crypto_prompt", "Top up {amount} EUR. Choose crypto:").format(amount=refill_amount_str)
+                
+                await send_message_with_retry(context.bot, chat_id, choose_crypto_msg, 
+                    reply_markup=InlineKeyboardMarkup(asset_buttons), parse_mode=None)
+                return
+                
+        except (ValueError, IndexError) as e:
+            logger.error(f"Error parsing refill parameter {param}: {e}")
+            await send_message_with_retry(context.bot, chat_id, 
+                lang_data.get("invalid_payment_link", "❌ Invalid payment link."), 
+                parse_mode=None)
+            return
+    
+    # Handle other parameters (can be extended for product purchases, etc.)
+    else:
+        logger.warning(f"Unknown start parameter from user {user_id}: {param}")
+        await send_message_with_retry(context.bot, chat_id, 
+            lang_data.get("unknown_command_param", "❌ Unknown command parameter."), 
+            parse_mode=None)
+
 # --- User Command Handlers ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handles the /start command and the initial welcome message."""
@@ -216,6 +289,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     is_callback = update.callback_query is not None
     user_id = user.id
     username = user.username or user.first_name or f"User_{user_id}"
+    
+    # Handle start command parameters for direct payment links
+    if not is_callback and context.args:
+        await handle_start_command_params(update, context)
+        return
 
     # Send Bot Media (Only on direct /start, not callbacks)
     if not is_callback and BOT_MEDIA.get("type") and BOT_MEDIA.get("path"):
